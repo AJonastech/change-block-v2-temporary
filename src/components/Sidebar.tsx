@@ -144,8 +144,8 @@ const Sidebar = () => {
                 height={100}
               />
               {!isCollapsed && (
-                <div className="-mb-4">
-                  <p>Mary Jane</p>
+                <div className="">
+                  <p className="-mb-4">Mary Jane</p>
                   <p className="text-xs text-gray-600">m.jane@changeblock.co</p>
                 </div>
               )}
