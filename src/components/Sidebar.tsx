@@ -135,7 +135,7 @@ const Sidebar = () => {
             )}
           </div>
           <div className="p-4 w-full  mx-auto">
-            <motion.div className="flex items-center w-full  mx-auto">
+            <motion.div className="flex gap-x-4 items-center w-full  mx-auto">
               <Image
                 src="/profile.png"
                 alt="Profile"
@@ -144,7 +144,7 @@ const Sidebar = () => {
                 height={100}
               />
               {!isCollapsed && (
-                <div className="ml-4">
+                <div className="-mb-4">
                   <p>Mary Jane</p>
                   <p className="text-xs text-gray-600">m.jane@changeblock.co</p>
                 </div>
