@@ -2,9 +2,9 @@
 
 import React from "react";
 import EMPAReportCards from "./EMPAReportSummaryCard";
-import { EMPAReportSteps } from "./EMPAGeneratorNav";
+import { EMPAReportSteps } from "@/config/reportStepConfig";
 import EMPAReportProjectTimeline from "./EMPAReportProjectTimeLine";
-import useIsMounted from "@/lib/hooks/useIsMounted";
+import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
 
 const EMPAReportHome = () => {
@@ -28,7 +28,9 @@ const EMPAReportHome = () => {
           >
             <Skeleton isLoaded={isMounted} className="max-w-[40%] rounded-lg">
               {" "}
-              <h2 className="font-bold text-3xl capitalize ">{steps.title}</h2>
+              <h4 className="heading-h4 font-generalSans font-semibold leading-[40.3px] text-grey-700 capitalize w-fit !my-0">
+            {steps.title}
+          </h4>
             </Skeleton>
             <EMPAReportCards cards={cards} />
           </section>

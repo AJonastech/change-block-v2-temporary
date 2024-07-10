@@ -10,7 +10,7 @@ const page = ({
   searchParams: { data: string; section: string };
 }) => {
   const currentSegment = params?.segment;
-  console.log({ currentSegment, searchParams });
+
   return (
     <div className="!max-w-full w-full h-full bg-white p-6 px-[2rem] shadow-md rounded-2xl overflow-y-auto">
       {currentSegment === "home" ? (

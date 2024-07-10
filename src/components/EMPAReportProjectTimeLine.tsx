@@ -1,5 +1,5 @@
 "use client";
-import useIsMounted from "@/lib/hooks/useIsMounted";
+import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
 import React, { LegacyRef, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -80,15 +80,15 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
     <DndProvider backend={HTML5Backend}>
       <div className="rounded-lg flex flex-col gap-6 !max-w-full w-full">
         <Skeleton isLoaded={isMounted} className="rounded-lg max-w-[80%]">
-          <h2 className=" capitalize w-fit !my-0">
+          <h4 className="heading-h4 font-generalSans font-semibold leading-[40.3px] text-grey-700 capitalize w-fit !my-0">
             Approach - Project timeline and governance
-          </h2>
+          </h4>
         </Skeleton>
 
         <div className="relative text-dark-200">
           <div className="relative z-30 bg-secondary-100 p-4  rounded-lg">
             <Skeleton isLoaded={isMounted} className="rounded-lg">
-              <p className="!my-0">
+              <p className="!my-0 font-satoshi text-lg text-grey-300">
                 We propose completing this engagement within a 17 week
                 timeframe, with regular progress updates and checkpoints. The
                 iterative approach to rapid design and prototyping will both
@@ -99,7 +99,7 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
               </p>
             </Skeleton>
           </div>
-          <div className="absolute z-10 h-full w-[10rem] bg-black rounded-xl -translate-x-[5px] left-0 top-0"></div>
+          <div className="absolute z-10 h-full w-[10rem] bg-grey-700 rounded-xl -translate-x-[5px] left-0 top-0"></div>
         </div>
 
         <div className="overflow-x-auto !max-w-full pb-[2rem] not-prose mx-auto ">

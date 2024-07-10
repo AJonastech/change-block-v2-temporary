@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-use";
 import EMPAReportSegmentHeaderCard from "./EMPAReportSegmentHeaderCard";
-import { EMPAReportSteps } from "./EMPAGeneratorNav";
+import { EMPAReportSteps } from "@/config/reportStepConfig";
 import RichInput from "./RichInput";
 
 const EMPAReportSegment = ({

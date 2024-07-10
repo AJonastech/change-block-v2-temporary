@@ -21,6 +21,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
       color="primary"
       radius="sm"
       isLoading={pending}
+    
       {...props} // Spread the additional props
     >
       {pending ? "processing" : props.children || "submit"}

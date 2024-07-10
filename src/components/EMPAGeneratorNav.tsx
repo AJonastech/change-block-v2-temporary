@@ -4,100 +4,13 @@ import { ReactElement, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
-import {
-  AnalysisIcon,
-  AssessmentIcon,
-  HomeIcon,
-  InsightIcon,
-  LockIcon,
-  MethodologyIcon,
-  OverviewIcon,
-  RecommendationIcon,
-  RegulatoryIcon,
-  UnlockIcon,
-} from "@/icons";
-import { useParams, useSearchParams } from "next/navigation";
+import { LockIcon, UnlockIcon } from "@/icons";
+import { useParams } from "next/navigation";
 import SlideIntoView from "./SlideIntoView";
+import { EMPAReportSteps } from "@/config/reportStepConfig";
 
-interface SubStep {
-  title: string;
-  isLocked: boolean;
-}
 
-interface Step {
-  title: string;
-  path?: string;
-  substeps: SubStep[];
-  icon: ReactElement;
-  isLocked: boolean;
-}
 
-export const EMPAReportSteps: Step[] = [
-  {
-    title: "home",
-    isLocked: false,
-    substeps: [],
-    icon: <HomeIcon />,
-  },
-  {
-    isLocked: false,
-    title: "overview",
-    substeps: [
-      { title: "Statement of Work", isLocked: false },
-      { title: "Executive Summary", isLocked: false },
-      { title: "EMPA Outcomes", isLocked: false },
-      { title: "Goals and Aims", isLocked: false },
-    ],
-    icon: <OverviewIcon />,
-  },
-
-  {
-    isLocked: false,
-    title: "methodology",
-    substeps: [
-      { title: "Data Gathering", isLocked: false },
-      { title: "Standards Screening", isLocked: false },
-      { title: "Project Evaluation", isLocked: false },
-    ],
-    icon: <MethodologyIcon />,
-  },
-  {
-    isLocked: false,
-    title: "analysis",
-    substeps: [{ title: "Substep 1", isLocked: false }],
-    icon: <AnalysisIcon />,
-  },
-  { title: "Insights", substeps: [], icon: <InsightIcon />, isLocked: false },
-  {
-    isLocked: false,
-    title: "regulatory",
-    substeps: [
-      { title: "Substep 1", isLocked: false },
-      { title: "Substep 2", isLocked: false },
-    ],
-    icon: <RegulatoryIcon />,
-  },
-  {
-    isLocked: false,
-    title: "assessment",
-    substeps: [
-      { title: "Substep 1", isLocked: false },
-      { title: "Substep 2", isLocked: false },
-      { title: "Substep 3", isLocked: false },
-    ],
-    icon: <AssessmentIcon />,
-  },
-  {
-    isLocked: false,
-    title: "recommendation",
-    substeps: [
-      { title: "Substep 1", isLocked: false },
-      { title: "Substep 2", isLocked: false },
-      { title: "Substep 3", isLocked: false },
-    ],
-    icon: <RecommendationIcon />,
-  },
-];
 
 const EMPAGeneratorNav = ({
   data,
@@ -133,7 +46,7 @@ const EMPAGeneratorNav = ({
 
   return (
     <div className="w-full pb-[2rem] flex flex-col h-full overflow-x-hidden ">
-      <h3 className="  mb-4 pb-3 px-4 ">Report Steps</h3>
+      <h6 className=" heading-h6 text-grey-500 font-generalSans font-semibold mb-4 pb-3 px-4 mt-7 ">Report Steps</h6>
       <ul className="h-full flex flex-col px-3 not-prose">
         {reportSteps.map((step, index) => (
           <li key={index} className="mb-2 ">
@@ -141,25 +54,25 @@ const EMPAGeneratorNav = ({
               <SlideIntoView from="left" index={index}>
                 <Link
                   href={`/EMPA-generator/${step.title}?data=report`}
-                  className={`w-full  rounded-full  flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-base capitalize ${
+                  className={`w-full  rounded-full  flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
                     segment === step.title
-                      ? "text-dark-300  font-semibold"
-                      : "text-dark-200"
+                      ? "text-grey-700 font-satoshi font-medium"
+                      : "text-grey-300 font-light"
                   } hover:bg-gray-300/20`}
                   onClick={() => toggleStep(index)}
                 >
-                  <span className=" "> {step.icon}</span>
+                  <span className=" "> {<step.icon/>}</span>
                   <span className="pl-2"> {step.title}</span>
                 </Link>
               </SlideIntoView>
             ) : (
               <SlideIntoView from="left" index={index}>
                 <Button
-                  startContent={step.icon}
-                  className={`w-full rounded-full justify-start bg-transparent hover text-base capitalize ${
+                  startContent={<step.icon/>}
+                  className={`w-full  rounded-full  flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
                     segment === step.title
-                      ? "text-dark-300  font-semibold"
-                      : "text-dark-200"
+                      ? "text-grey-700 font-satoshi font-medium"
+                      : "text-grey-300 font-light"
                   } hover:bg-gray-300/20`}
                   onClick={() => toggleStep(index)}
                 >

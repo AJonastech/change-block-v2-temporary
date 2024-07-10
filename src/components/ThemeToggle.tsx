@@ -9,7 +9,7 @@ import {
   Button,
   Skeleton,
 } from "@nextui-org/react";
-import useIsMounted from "@/lib/hooks/useIsMounted";
+import useIsMounted from "@/hooks/useIsMounted";
 import { Moon, Sun } from "iconsax-react";
 
 const ThemeToggle = () => {

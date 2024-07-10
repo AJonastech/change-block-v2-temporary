@@ -22,29 +22,31 @@ const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
   const { pending } = useFormStatus();
 
   return (
-    <div className="flex  justify-between items-center  h-full my-auto w-fit ">
+    <div className="flex  justify-between items-center  h-full my-auto">
       {" "}
       <SubmitButton
         onPress={() => {
           onConfirmOpen();
         }}
+        className="rounded-xl"
+        size="lg"
       >
         Generate EMPA
       </SubmitButton>
-      <Modal isOpen={isConfirmOpen} onOpenChange={onConfirmOpenChange}>
+      <Modal size="xl" isOpen={isConfirmOpen} onOpenChange={onConfirmOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalBody className=" bg-gradient-to-b from-secondary to-white">
+              <ModalBody  className=" bg-gradient-to-b from-secondary  to-white">
                 <div className="flex items-center justify-center  bg-gradient-to-b from-secondary to-white">
-                  <div className=" p-6 rounded-lg  text-center max-w-md">
+                  <div className=" p-6 rounded-lg  text-center ">
                     <div className="flex justify-center mb-4">
-                      <span className="animate-spin h-8 w-[2rem] border-s-green-500 border-t-green-500 rounded-full border-4 flex text-green-500"></span>
+                      <span className="animate-spin w-10 h-10 aspect-square border-s-primary border-t-primary rounded-full border-4 flex text-primary"></span>
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                    <h4 className="heading-h4 font-generalSans font-bold text-grey-700 mb-2">
                       Generating Your EMPA Report
-                    </h2>
-                    <p className="text-gray-600">
+                    </h4>
+                    <p className="text-grey-100 font-satoshi text-lg font-light">
                       Thank you for submitting your details, please wait a
                       moment while we gather and process the necessary data to
                       provide you with an accurate and robust assessment. Your

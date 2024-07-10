@@ -120,10 +120,11 @@ const EMPAInitiationForm: React.FC = () => {
                 name={field.name}
                 type={field.type}
                 onChange={handleChange}
-                className=""
+                className="placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-300 placeholder:leading-[25.2px]"
                 classNames={{
-                  label: "!text-dark-100 font-normal pb-4 !text-base",
+                  label: " font-normal font-satoshi !text-grey-500 pb-4 !text-lg leading-[25.2px]",
                   input: ["bg-transparent"],
+                
                   innerWrapper: "bg-transparent px-4  ",
                   inputWrapper: ["bg-transparent border-[1px] !h-[3.5rem]"],
                 }}
@@ -148,9 +149,9 @@ const EMPAInitiationForm: React.FC = () => {
                       ? "Select industry"
                       : "Select country"
                   }
-                  className="w-full "
+                  className="w-full placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-300 placeholder:leading-[25.2px]  "
                   classNames={{
-                    label: "!text-dark-100 font-normal pb-4 !text-base",
+                    label: " font-normal pb-4  font-normal font-satoshi !text-grey-500 pb-4 !text-lg leading-[25.2px]",
                     innerWrapper: "bg-transparent px-4 !",
                     trigger: "!border-[1px] !h-[3.5rem]",
                     listbox: "!bg-background",

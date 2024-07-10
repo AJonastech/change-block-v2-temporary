@@ -1,4 +1,4 @@
-import useIsMounted from "@/lib/hooks/useIsMounted";
+import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
 import React, { ReactNode } from "react";
 

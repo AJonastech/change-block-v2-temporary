@@ -62,12 +62,12 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full">
-      <label className="font-Satoshi font-normal  !text-dark-100 pb-2 !text-base pl-1">
+    <div className="flex flex-col gap-4 w-full">
+      <label className=" font-normal font-satoshi !text-grey-500  !text-lg leading-[25.2px] pl-1">
         Upload File
       </label>
       <div
-        className="px-5 border-[1px] border-grey rounded-lg py-[1rem]"
+        className="px-5 border-[1px] border-grey rounded-2xl py-[1rem]"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
@@ -101,15 +101,15 @@ const FileUploader: React.FC<FileUploaderProps> = ({
             </svg>
 
             <div>
-              <h1 className="capitalize text-black-50 font-Satoshi font-extrabold text-base sm:text-sm">
+              <h1 className=" text-grey-300  font-satoshi  text-lg leading-[25.2px] sm:text-sm">
                 Drag and drop file here
               </h1>
-              <p className="text-black-30 font-Satoshi leading-5 font-medium text-sm sm:text-[12px]">
+              <p className="text-grey-100 font-satoshi leading-[21px]  text-[15px] sm:text-[12px]">
                 Limit 200MB per file • PDF, DOCX
               </p>
             </div>
           </div>
-          <div className="rounded-md px-5 py-1 font-Satoshi font-medium text-sm pb-2 bg-transparent text-black-50 cursor-pointer transition-all ease-in duration-150 border-[1px] border-grey">
+          <div className="rounded-xl  font-satoshi  text-base bg-transparent py-4 px-6 text-grey-500 cursor-pointer transition-all ease-in duration-150 border-[1px] border-grey">
             Browse Files
           </div>
         </label>
