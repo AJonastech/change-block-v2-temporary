@@ -1,19 +1,14 @@
 // components/Sidebar.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button, Image, Skeleton, Tooltip } from "@nextui-org/react";
 import { LuArrowLeftToLine, LuArrowRightToLine } from "react-icons/lu";
-import { BoxTick, Briefcase } from "iconsax-react";
 import Link from "next/link";
 import SideBarDrawer from "./SideBarDrawer";
 import EMPAGeneratorNav from "./EMPAGeneratorNav";
-
-import { useSearchParam } from "react-use";
 import useIsMounted from "@/hooks/useIsMounted";
 import SlideIntoView from "./SlideIntoView";
-import { usePathname } from "next/navigation";
-import { EMPAIcon, ToolsIcon } from "@/icons";
 import { menuItems } from "@/config/panelConfig";
 import useGetApp from "@/hooks/useGetApp";
 
@@ -31,12 +26,14 @@ const Sidebar = () => {
 
 
   return (
-    <div className={` transition-all duration-200 flex gap-1 h-full `}>
+    <Suspense>
+  <div className={` transition-all duration-200 flex gap-1 h-full `}>
       <motion.div
         className={`h-full bg-white shadow-md overflow-x-hidden flex flex-col justify-center items-center   rounded-lg pb-[1.5rem] transition-width duration-300`}
         initial={{ width: isCollapsed ? 80 : 290 }}
         animate={{ width: isCollapsed ? 80 : 290 }}
       >
+        
         <div className="flex flex-col h-full py-5">
           <div
             className={`${isCollapsed ? "flex-col items-center  " : "flex-row items-center"
@@ -143,6 +140,8 @@ const Sidebar = () => {
         </SideBarDrawer>
       </motion.div>
     </div>
+    </Suspense>
+  
   );
 };
 
