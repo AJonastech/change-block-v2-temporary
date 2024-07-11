@@ -23,10 +23,20 @@ import Image from "next/image";
 
 export const HomeIcon = () => {
   return (
-    <span className="">
-      {" "}
-      <FaHouse color="#333530" />
-    </span>
+    <Image src="/home.svg" width={16} height={15.75} alt="T" />
+
+  );
+};
+export const ChannelIcon = () => {
+  return (
+    <Image src="/channel.svg" width={16} height={15.75} alt="T" />
+
+  );
+};
+export const ChatIcon = () => {
+  return (
+    <Image src="/chat.svg" width={20} height={20} alt="T" />
+
   );
 };
 
@@ -150,13 +160,7 @@ export const AddPersonIcon = () => {
   );
 };
 
-export const ChatIcon = () => {
-  return (
-    <span>
-      <BsChatSquare />
-    </span>
-  );
-};
+
 
 export const StackIcon = () => {
   return (

@@ -1,6 +1,6 @@
 "use client";
 import { useParams, useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-use";
 import EMPAReportSegmentHeaderCard from "./EMPAReportSegmentHeaderCard";
 import { EMPAReportSteps } from "@/config/reportStepConfig";
@@ -31,9 +31,12 @@ const EMPAReportSegment = ({
     setStep(newStep as TStep);
   }, [curentSegment, section, segment]);
 
-  console.log({ section });
+  
 
   return (
+    <Suspense>
+
+
     <div className="flex  flex-col justify-between gap-4 relative h-full ">
       <div className="flex flex-col gap-4 h-full">
         <div className=" bg-background items-center rounded-full py-2 w-fit px-4 flex gap-2 capitalize">
@@ -54,6 +57,7 @@ const EMPAReportSegment = ({
       {data}
       <RichInput />
     </div>
+    </Suspense>
   );
 };
 

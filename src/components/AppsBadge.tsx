@@ -11,7 +11,7 @@ import React from "react";
 const AppsBadge = () => {
   const isMounted = useIsMounted();
   const router = usePathname();
-  const currentPath = router?.split("/")[1];
+  const currentPath = router?.split("/")[router?.split("/").length-1];
   const currentApp = currentPath?.split("-").join(" ");
   
   return (
@@ -25,7 +25,7 @@ const AppsBadge = () => {
         </Link>
       </span>
       <ArrowRight2 size={18} />
-      <span className="rounded-full py-1.5 font-Satoshi font-bold text-black-500 sm:text-sm capitalize">
+      <span className="rounded-full py-1.5 font-satoshi font-semibold text-grey-700 text-lg capitalize">
         {isMounted && (currentApp as unknown as string)}
       </span>
     </div>

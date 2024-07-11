@@ -20,7 +20,7 @@ export default function page() {
           {applications?.map((a, index) => (
             <SlideIntoView key={index} index={index}>
               <Link
-                href={`#`}
+                href={`${a.href}`}
                 className="  border-[1px]  border-grey/20 shadow-sm rounded-xl p-4  flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-G10 hover:bg-G10/80 h-full "
               >
                 <div

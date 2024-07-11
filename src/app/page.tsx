@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function page() {
     return (
-        <main className="w-full min-h-full  flex flex-col gap-10 bg-white rounded-3xl p-8 pt-12  !min-w-full ">
+        <main className="w-full min-h-full  flex flex-col gap-10 bg-white rounded-3xl p-8 py-12  !min-w-full ">
             <div className="flex justify-between items-center">
                 <h6 className="heading-h6 font-semibold font-generalSans text-grey-700">
                     EMPA Generator
@@ -25,15 +25,15 @@ export default function page() {
                     reports.map((report, id) => (
                         <SlideIntoView key={id} index={id}>
                         <Link
-                          href={`#`}
-                          className="  border-[1px]  border-grey/20 shadow-sm rounded-xl p-4  flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-white hover:bg-G10/80 h-full "
+                          href={`/EMPA-generator/home?data=report`}
+                          className="  border-[1px] w-full border-grey/20 shadow-sm rounded-xl p-4  flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-white hover:bg-G10/80 h-full "
                         >
                          <Image
                           src={report.image}
                           alt=""
                           width={300}
                           height={400}
-                          className="w-full h-[233px] aspect-square bg-cover bg-center rounded-md"
+                          className="w-full h-[233px] aspect-square object-cover object-left-top rounded-md"
                          />
                          <h6 className="heading-h6 font-generalSans font-semibold text-grey-500 leading-[28.6px]">
                            {report.title}

@@ -11,6 +11,7 @@ export const applications = [
       name: "Team Summarizer",
       desc: "Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.",
       text: "Hi there! Looking to gauge your project's potential for an EMPA? Whether it's assessing your sustainability goals, project size, or regulatory concerns, I'll guide you through.",
+      href:"/internal-tools/team-summarizer",
       cards: [
         {
           heading: "Generate",
@@ -35,6 +36,7 @@ export const applications = [
       name: "Newsletter",
       desc: "Effortlessly curate and create engaging newsletters with our intuitive newsletter generator tool.",
       text: "Hi there! Ready to optimize your EMPA journey? From data collection to analysis and report generation, I've got you covered. Let's streamline your environmental market positioning analysis together.",
+      href:"/internal-tools/newsletter",
       cards: [
         {
           heading: "Show examples",
@@ -59,6 +61,7 @@ export const applications = [
       name: "Social Media Post Generator",
       desc: "Generate captivating and engaging social media posts effortlessly, saving you time and boosting engagement.",
       text: "Hi there! Need to document your environmental projects? Creates unique Environmental Asset Identifiers (EAIs) and detailed JSON structures, ensuring transparency and traceability for your carbon credit projects.",
+      href:"/internal-tools/social-media-post-generator",
       cards: [
         {
           heading: "Generate",
@@ -84,6 +87,7 @@ export const applications = [
       name: "Translator",
       desc: "Translate seamlessly and easily between languages, making communication across borders effortless.",
       text: "Hi there! Do you need to understand policies, compliance checks, or navigating regulatory frameworks for your business, I'm here to assist.  Share your queries, and I'll provide the guidance you need.",
+      href:"/internal-tools/translator",
       cards: [
         {
           heading: "Optimize",
@@ -108,6 +112,7 @@ export const applications = [
       name: "Project Info Generator",
       desc: "Instantly generate comprehensive project details, simplifying your workflow and enhancing project management efficiency.",
       text: "Hi there! Need to document your environmental projects? Creates unique Environmental Asset Identifiers (EAIs) and detailed JSON structures, ensuring transparency and traceability for your carbon credit projects.",
+      href:"/internal-tools/project-info-generator",
       cards: [
         {
           heading: "Generate",
@@ -132,6 +137,7 @@ export const applications = [
       name: "Automated Issue System",
       desc: "Automates the creation of Environmental Asset Identifier reports, saving time and ensuring accuracy in assessment.",
       text: "Hi there! Looking to streamline your project information gathering process? Whether it's data collection, analysis, or report generation.",
+      href:"/internal-tools/automated-issue-system",
       cards: [
         {
           heading: "Generate",
