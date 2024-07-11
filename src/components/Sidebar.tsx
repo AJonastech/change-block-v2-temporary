@@ -1,4 +1,3 @@
-// components/Sidebar.tsx
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
 import { motion } from "framer-motion";
