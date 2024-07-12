@@ -20,9 +20,6 @@ import FormField from "./FormField";
 
 
 
-const fileSchema = z
-  .instanceof(File)
-  .refine((file) => file.size > 0, "File must not be empty");
 
 const empaInitiationFormSchema = z.object({
   companyName: z.string().min(1, "Please enter your Company's name"),
