@@ -1,17 +1,16 @@
-import AppsBadge from "@/components/AppsBadge";
+import AppsBadge from '@/components/AppsBadge'
+import React from 'react'
 
-import React, { ReactNode } from "react";
+function layout({ children }: { children: React.ReactNode }) {
+    return (
+        <div className="w-full flex flex-col gap-7 h-full">
+            <AppsBadge />
+            <div className=" w-full h-full   flex-grow rounded-xl !max-h-full overflow-y-auto   flex">
 
-const AppLayout = ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="flex flex-col max-h-full h-full justify-between !max-w-full  gap-[2rem] w-full relative bg-background ">
-   
-      {/* <AppsBadge /> */}
-      <div className="w-full h-full !max-w-full  flex flex-col overflow-hidden">
-        {children}
-      </div>
-    </div>
-  );
-};
+            <div className="w-full  overflow-x-hidden  no-scrollbar overflow-auto bg-white  px-6 py-[3rem] rounded-xl ">{children} </div>
+            </div>
+        </div>
+    )
+}
 
-export default AppLayout;
+export default layout

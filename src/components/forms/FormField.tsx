@@ -1,29 +1,21 @@
 import React from "react";
-import { useFormContext, Controller, FieldValues, FieldPath, } from "react-hook-form";
+import { useFormContext, Controller, FieldValues, FieldPath } from "react-hook-form";
 
 
-type FormFieldProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
-> = {
-  name: TName;
-  render: (props: any) => JSX.Element;
+// FormField Component
+type FormFieldProps<TFieldValues extends FieldValues> = {
+  name: FieldPath<TFieldValues>;
+  render: (props: { field: any }) => JSX.Element;
 }
 
-
-const FormField = ({ name, render }:FormFieldProps) => {
-  const { control, formState } = useFormContext();
+const FormField = <TFieldValues extends FieldValues>({ name, render }: FormFieldProps<TFieldValues>) => {
+  const { control } = useFormContext<TFieldValues>();
 
   return (
     <Controller
       control={control}
       name={name}
-      render={({ field }) => (
-        <div className="form-field">
-          {render({ field })}
-
-        </div>
-      )}
+      render={({ field }) => <div className="form-field">{render({ field })}</div>}
     />
   );
 };

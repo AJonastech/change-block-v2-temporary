@@ -19,17 +19,18 @@ const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
     onOpenChange: onConfirmOpenChange,
     onClose: onConfirmClose,
   } = useDisclosure();
-  const { pending } = useFormStatus();
+
 
   return (
     <div className="flex  justify-between items-center  h-full my-auto">
       {" "}
       <SubmitButton
         onPress={() => {
-          onConfirmOpen();
+         valid && onConfirmOpen();
         }}
         className="rounded-xl"
         size="lg"
+        type="submit"
       >
         Generate EMPA
       </SubmitButton>

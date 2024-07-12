@@ -80,11 +80,10 @@ export default async function RootLayout({
               <Sidebar />
             </Suspense>
 
-
-            <div className=" px-[1rem] !max-w-full   max-h-full bg-background  w-full min-h-full flex flex-col gap-[2rem]  overflow-x-hidden ">
+            <div className=" px-[1rem] overflow-auto    max-h-full bg-background  w-full flex flex-col gap-[2rem]  overflow-x-hidden ">
               {children}
             </div>
-          </div>{" "}
+          </div>
         </Providers>
       </body>
     </html>

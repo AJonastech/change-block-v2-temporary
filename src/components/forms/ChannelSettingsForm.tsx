@@ -3,9 +3,7 @@ import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod'
-import { channel } from 'diagnostics_channel'
 import FormField from './FormField'
-import SlideIntoView from '../SlideIntoView'
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
 
 
@@ -15,21 +13,23 @@ const channelSettingsFormSchema = z.object({
     channelName: z.string().min(1, "Please enter the name of the channel"),
     projectKey: z.string().min(1, "Please enter the project key"),
 })
+
+type ChannelSettingsFormType = z.infer<typeof channelSettingsFormSchema>;
 function ChannelSettingsForm() {
-    const form = useForm<z.infer<typeof channelSettingsFormSchema>>({
+    const form = useForm<ChannelSettingsFormType>({
         resolver: zodResolver(channelSettingsFormSchema)
     })
 
     const teamOptions = ["team A", "Team B", "Team C"]
 
-    const onSubmit = (data: z.infer<typeof channelSettingsFormSchema>) => {
+    const onSubmit = (data: ChannelSettingsFormType) => {
 
         //do something with the data here
     }
     return (
         <FormProvider {...form}>
             <form className='flex flex-col gap-10' onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
+                <FormField<ChannelSettingsFormType>
                     name={"team"}
                     render={({ field }) => (
                         <Select
@@ -64,7 +64,7 @@ function ChannelSettingsForm() {
                     )}
 
                 />
-                <FormField
+                <FormField<ChannelSettingsFormType>
                     name={"team"}
                     render={({ field }) => (
 
@@ -101,7 +101,7 @@ function ChannelSettingsForm() {
 
                 />
 
-                <FormField
+                <FormField<ChannelSettingsFormType>
 
                     name={"projectKey"}
                     render={({ field }) => (

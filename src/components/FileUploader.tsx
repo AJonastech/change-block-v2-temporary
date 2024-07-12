@@ -6,7 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 
 interface FileUploaderProps {
   initialFiles?: File[];
-  onFilesChange?: (files: File[]) => void;
+  onFilesChange?: (files: string) => void;
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({
@@ -18,11 +18,12 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   const handleFilesChange = useCallback(
     (newFiles: File[]) => {
       setFiles(newFiles);
-      if (onFilesChange) {
-        onFilesChange(newFiles);
+      if (onFilesChange && files) {
+        const uploadedFileURL = "https://example.com/uploaded-file-url"; // Replace with actual upload logic
+        onFilesChange(uploadedFileURL);
       }
     },
-    [onFilesChange]
+    [files, onFilesChange]
   );
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {

@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function page() {
     return (
-        <main className="w-full min-h-full  flex flex-col gap-10 bg-white rounded-3xl p-8 py-12  !min-w-full ">
+        <main className="w-full min-h-full bg-white overflow-auto rounded-xl no-scrollbar flex flex-col gap-10  p-9 py-12   ">
             <div className="flex justify-between items-center">
                 <h6 className="heading-h6 font-semibold font-generalSans text-grey-700">
                     EMPA Generator
@@ -19,7 +19,7 @@ export default function page() {
                 </Link>
              
             </div>
-            <div className="overflow-y-auto h-full no-scrollbar">
+            <div>
             <div className="grid lg:grid-cols-2 xl:grid-cols-3   justify-start items-stretch !gap-4 !space-y-0   !sm:gap-2 sm:justify-center">
                 {
                     reports.map((report, id) => (

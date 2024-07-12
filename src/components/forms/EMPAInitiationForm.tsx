@@ -9,30 +9,33 @@ import {
 } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod"
-import FileUploader from "./FileUploader";
+import FileUploader from "../FileUploader";
 import { toast } from "react-toastify";
 import EMPAGeneratorLoadingModal from "@/components/EMPAGeneratorLodingModal";
 import { useRouter } from "next/navigation";
-import SlideIntoView from "./SlideIntoView";
+import SlideIntoView from "../SlideIntoView";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormField from "./forms/FormField";
+import FormField from "./FormField";
 
 
 
 
-
+const fileSchema = z
+  .instanceof(File)
+  .refine((file) => file.size > 0, "File must not be empty");
 
 const empaInitiationFormSchema = z.object({
   companyName: z.string().min(1, "Please enter your Company's name"),
   industry: z.string().optional(), // Assuming that the industry dropdown can be empty
   projectName: z.string().min(1, "Please enter the name of your project"),
-  country: z.string().optional(), // Assuming that the country dropdown can be empty
+  country: z.string().optional(), // Assuming that the country dropdown can be empty,
+  file: z.string().url("File must be a valid URL"),
 });
 
 
+type EMPAInitiationFormType = z.infer<typeof empaInitiationFormSchema>;
 
-
-const formFields = [
+const formFields: Array<{ name: keyof EMPAInitiationFormType; label: string; placeholder: string; type: string; required?: boolean }> = [
   {
     name: "companyName",
     label: "Company Name",
@@ -59,7 +62,7 @@ const formFields = [
     type: "text",
     required: true,
   },
-  { name: "file", label: "Upload File", type: "file", required: true },
+  { name: "file", label: "Upload File", type: "file", required: true, placeholder: "Select File" },
 ];
 
 const industryOptions = ["Technology", "Finance", "Healthcare"];
@@ -68,7 +71,7 @@ const countryOptions = ["USA", "Canada", "UK"];
 
 const EMPAInitiationForm: React.FC = () => {
   const router = useRouter();
-  const form = useForm<z.infer<typeof empaInitiationFormSchema>>({
+  const form = useForm<EMPAInitiationFormType>({
     resolver: zodResolver(empaInitiationFormSchema),
     defaultValues: {
       companyName: "Test",
@@ -78,21 +81,24 @@ const EMPAInitiationForm: React.FC = () => {
     }
   })
 
+  console.log(form.formState.isValid)
 
-  const onSubmit = async (values: z.infer<typeof empaInitiationFormSchema>) => {
-    console.log(values, "here")
+  const onSubmit = async (values: EMPAInitiationFormType) => {
+    toast.success("Form submitted successfully!");
+    router.push("/EMPA-generator/home?data=report");
   };
-  console.log(form.formState.errors, "errors")
+
   return (
     <FormProvider {...form}>
+      <></>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="  gap-[3rem] flex flex-col py-[2rem] px-[3rem] w-full !min-w-full "
+        className="  gap-[3rem] flex flex-col py-[2rem] px-[3rem]  w-full "
       >
         {formFields.map((fieldItem, index) => (
-          <div key={fieldItem.name} className="w-full">
+          <React.Fragment key={index}>
             {fieldItem.type === "text" && (
-              <FormField
+              <FormField<EMPAInitiationFormType>
 
                 name={fieldItem.name}
                 render={({ field }) => (
@@ -102,7 +108,7 @@ const EMPAInitiationForm: React.FC = () => {
                       placeholder={fieldItem.placeholder as string}
                       {...field}
                       type={fieldItem.type}
-                      className="placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-300 placeholder:leading-[25.2px]"
+                      className="placeholder:text-lg w-full placeholder:font-satoshi placeholder:text-grey-300 placeholder:leading-[25.2px]"
                       classNames={{
                         label: " font-normal font-satoshi !text-grey-500 pb-4 !text-lg leading-[25.2px]",
                         input: ["bg-transparent"],
@@ -125,7 +131,7 @@ const EMPAInitiationForm: React.FC = () => {
 
 
             {fieldItem.type === "dropdown" && (
-              <FormField
+              <FormField<EMPAInitiationFormType>
                 name={fieldItem.name}
                 render={({ field }) => (
                   <SlideIntoView key={fieldItem.name} index={index}>
@@ -170,18 +176,19 @@ const EMPAInitiationForm: React.FC = () => {
               />
             )}
             {fieldItem.type === "file" && (
-              <FormField
+              <FormField<EMPAInitiationFormType>
                 name={fieldItem.name}
                 render={({ field }) => (<SlideIntoView key={fieldItem.name} index={index}>
-                  <FileUploader />
+                  <FileUploader onFilesChange={field.onChange} />
+                  <span className="text-xs text-red-500">{form.formState.errors[field.name as keyof typeof form.formState.errors]?.message}</span>
                 </SlideIntoView>)}
               />
 
             )}
-          </div>
+          </React.Fragment>
         ))}
-      
-        <EMPAGeneratorLoadingModal valid={true} />
+
+        <EMPAGeneratorLoadingModal valid={form.formState.isValid} /> 
       </form>
     </FormProvider>
   );
