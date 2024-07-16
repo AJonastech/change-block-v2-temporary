@@ -70,7 +70,7 @@ const EMPAGeneratorNav = ({
         )
       );
       router.push(
-        `http://localhost:3000/EMPA/analysis?data=report&&section=${newSubStepTitle}`
+        `/EMPA/analysis?data=report&&section=${newSubStepTitle}`
       );
     }
 
