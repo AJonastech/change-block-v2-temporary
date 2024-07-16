@@ -29,7 +29,7 @@ const Sidebar = () => {
   const handleToggleCollapse = () => setIsCollapsed(prev => !prev);
 
   const sidebarWidth = useMemo(() => (isCollapsed ? 80 : 290), [isCollapsed]);
-  const drawerWidth = useMemo(() => (data === "report" && isMounted || pathName.includes("/internal-tools/automated-issue-system") ? 288 : 0), [data, isMounted, pathName]);
+  const drawerWidth = useMemo(() => (data === "report" && isMounted || pathName.includes("/internal-tools/automated-issue-system") ? 306 : 0), [data, isMounted, pathName]);
 
   return (
     <div className="transition-all duration-200 flex gap-1 h-full">
@@ -117,7 +117,7 @@ const Sidebar = () => {
         animate={{ width: drawerWidth }}
       >
         <SideBarDrawer>
-          {currentApp === "EMPA generator" && data === "report" && (
+          {currentApp === "EMPA" && data === "report" && (
             <EMPAGeneratorNav data={data} section={section} />
           )}
           {pathName.includes("/internal-tools/automated-issue-system") && (

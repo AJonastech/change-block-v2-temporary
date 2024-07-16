@@ -8,14 +8,18 @@ type TEMPAReportSummaryCard = {
   summaries: { title: string; summary: Summary[] }[];
 };
 
-interface TSubstep {
+interface TSubStep {
   title: string;
-  locked: boolean;
+  isLocked: boolean;
+  data?: string;
 }
 
-interface TStep {
+
+type TStep = {
   title: string;
   path?: string;
-  substeps: Substep[];
-  icon: ReactElement;
-}
+  data?: string;
+  substeps: SubStep[];
+  icon: () => JSX.Element;
+  isLocked: boolean;
+};
