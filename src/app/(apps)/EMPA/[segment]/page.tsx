@@ -12,7 +12,7 @@ const page = ({
   const currentSegment = params?.segment;
 
   return (
-    <div className=" w-full h-full  bg-white  rounded-2xl overflow-y-auto  no-scrollbar scroll-smooth">
+    <div className=" w-full h-full  bg-white  rounded-2xl overflow-y-auto  no-scrollbar scroll-smooth outline-none">
       {currentSegment === "home" ? (
         <EMPAReportHome />
       ) : (
