@@ -66,7 +66,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   return (
     <Suspense>
       <div
-        className="flex  flex-col justify-start min-h-full h-full no-scrollbar  overflow-y-auto  "
+        className="flex  flex-col justify-start min-h-full h-full no-scrollbar  overflow-y-auto mb-[3rem]  "
         ref={containerRef}
       >
         <div className="">
@@ -102,8 +102,12 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             isOpen={isChatDrawerOpen}
           />
         </div>
-        <div className="  gap-2 w-full flex flex-col">
-          <div className="h-8 shadow-lg w-full"></div> <RichInput />
+        <div className=" absolute bottom-[32px] left-0  gap-2 w-full flex   ">
+          <div className=" w-full mx-auto flex flex-col ">
+            {" "}
+            <div className="h-8  w-full bg-gradient-to-b  from-transparent via-transparent to-black/10 "></div>{" "}
+            <RichInput />
+          </div>
         </div>
       </div>
     </Suspense>

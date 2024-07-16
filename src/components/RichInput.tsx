@@ -31,7 +31,7 @@ const RichInput = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 p-2 border rounded-xl shadow-sm">
+    <div className="flex flex-col gap-3 p-2 border rounded-xl shadow-sm bg-white w-[calc(100%-64px)] mx-auto">
       <div className="flex items-center">
         <label htmlFor="fileInput">
           <Button isIconOnly as="span" className="bg-transparent text-2xl">
