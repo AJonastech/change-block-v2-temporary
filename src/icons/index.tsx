@@ -2,7 +2,6 @@
 import { RiArchiveStackFill } from "react-icons/ri";
 import { HiMiniCircleStack } from "react-icons/hi2";
 import { BiSolidBarChartSquare } from "react-icons/bi";
-import { FaHouse } from "react-icons/fa6";
 import { PiChartLineFill } from "react-icons/pi";
 import { GrCycle } from "react-icons/gr";
 import { CgTrending } from "react-icons/cg";
@@ -22,26 +21,20 @@ import Image from "next/image";
 // Define the type for the props
 
 export const HomeIcon = () => {
-  return (
-    <Image src="/home.svg" width={16} height={15.75} alt="T" />
-
-  );
+  return <Image src="/icons/home.svg" width={16} height={15.75} alt="T" />;
 };
 export const ChannelIcon = () => {
-  return (
-    <Image src="/channel.svg" width={16} height={15.75} alt="T" />
-
-  );
+  return <Image src="/icons/channel.svg" width={16} height={15.75} alt="T" />;
 };
 export const ChatIcon = () => {
-  return (
-    <Image src="/chat.svg" width={20} height={20} alt="T" />
-
-  );
+  return <Image src="/icons/chat.svg" width={20} height={20} alt="T" />;
 };
 
 export const ToolsIcon = () => {
-  return <Image src="/tools.svg" width={24} height={24} alt="T" />;
+  return <Image src="/icons/tools.svg" width={24} height={24} alt="T" />;
+};
+export const OverviewIcon = () => {
+  return <Image src="/icons/overview.svg" width={22} height={14} alt="T" />;
 };
 
 export const EMPAIcon = () => {
@@ -57,59 +50,31 @@ export const FAQIcon = () => {
   );
 };
 
-export const OverviewIcon = () => {
-  return (
-    <span className=" -rotate-90">
-      <RiArchiveStackFill color="#333530" />
-    </span>
-  );
-};
-
 export const AnalysisIcon = () => {
-  return (
-    <span>
-      <PiChartLineFill color="#333530" />
-    </span>
-  );
+  return <Image src="/icons/analysis.svg" width={20} height={16} alt="T" />;
 };
 
 export const RegulatoryIcon = () => {
   return (
-    <span>
-      <GrCycle color="#333530" />
-    </span>
+    <Image src="/icons/regulatory.svg" width={21.75} height={22} alt="T" />
   );
 };
 
 export const MethodologyIcon = () => {
-  return (
-    <span>
-      <HiMiniCircleStack color="#333530" />
-    </span>
-  );
+  return <Image src="/icons/methodology.svg" width={20} height={21} alt="T" />;
 };
 
 export const AssessmentIcon = () => {
-  return (
-    <span>
-      <BiSolidBarChartSquare color="#333530" />
-    </span>
-  );
+  return <Image src="/icons/assessment.svg" width={18} height={18} alt="T" />;
 };
 
 export const InsightIcon = () => {
-  return (
-    <span>
-      <CgTrending color="#333530" />
-    </span>
-  );
+  return <Image src="/icons/insights.svg" width={22} height={13} alt="T" />;
 };
 
 export const RecommendationIcon = () => {
   return (
-    <span>
-      <VscThumbsupFilled color="#333530" />
-    </span>
+    <Image src="/icons/recommendation.svg" width={20} height={20} alt="T" />
   );
 };
 export const UnlockIcon = () => {
@@ -159,8 +124,6 @@ export const AddPersonIcon = () => {
     </span>
   );
 };
-
-
 
 export const StackIcon = () => {
   return (

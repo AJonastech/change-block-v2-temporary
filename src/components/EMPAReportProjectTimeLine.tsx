@@ -1,7 +1,7 @@
 "use client";
 import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
-import React, { LegacyRef, useState } from "react";
+import React, { LegacyRef, useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { ResizableBox } from "react-resizable";
@@ -78,14 +78,14 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="rounded-lg flex flex-col gap-6 !max-w-full w-full">
-        <Skeleton isLoaded={isMounted} className="rounded-lg max-w-[80%]">
+      <div className="rounded-lg flex flex-col gap-6 !max-w-full w-full ">
+        <Skeleton isLoaded={isMounted} className="rounded-lg max-w-[70%]">
           <h4 className="heading-h4 font-generalSans font-semibold leading-[40.3px] text-grey-700 capitalize w-fit !my-0">
             Approach - Project timeline and governance
           </h4>
         </Skeleton>
 
-        <div className="relative text-dark-200">
+        <div className="relative text-dark-200 w-[calc(100%-5px)] mx-auto">
           <div className="relative z-30 bg-secondary-100 p-4  rounded-lg">
             <Skeleton isLoaded={isMounted} className="rounded-lg">
               <p className="!my-0 font-satoshi text-lg text-grey-300">
@@ -102,12 +102,12 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
           <div className="absolute z-10 h-full w-[10rem] bg-grey-700 rounded-xl -translate-x-[5px] left-0 top-0"></div>
         </div>
 
-        <div className="overflow-x-auto !max-w-full pb-[2rem] not-prose mx-auto ">
+        <div className="overflow-x-auto !max-w-full pb-[2rem] not-prose mx-auto">
           <Skeleton
             isLoaded={isMounted}
             className="rounded-lg flex w-full mx-auto overflow-x-auto"
           >
-            <table className="max-w-full mx-auto border-collapse border-2  border-black">
+            <table className="max-w-full w-full mx-auto border-collapse border-2  border-black">
               <thead className="border-2 border-black">
                 <tr className="border-2 border-black">
                   <th className=" p-4 w-[3rem] text-primary bg-primary">
@@ -119,7 +119,7 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
                   {weekDates.map((date, index) => (
                     <th
                       key={index}
-                      className="border-x border-gray-200 p-4 px-2 text-sm bg-primary text-white fixed-header "
+                      className="border-x border-gray-200 p-4 px-2 text-sm bg-primary text-white w-[90px] min-w-[90px] max-w-[90px] "
                     >
                       Week {index + 1}
                       <br />
@@ -173,7 +173,7 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
                   {weekDates.map((date, index) => (
                     <th
                       key={index}
-                      className="border-2 border-black border-x-1 border-x-gray-200  p-4 bg-primary text-white fixed-header "
+                      className="border-2 border-black border-x-1 border-x-gray-200  p-4 bg-primary text-white w-[90px] min-w-[90px] max-w-[90px] "
                     ></th>
                   ))}
                 </tr>
@@ -194,6 +194,18 @@ interface WeekCellProps {
   resizeActivity: (activityName: string, newDuration: number) => void;
 }
 
+import { useRef } from "react";
+
+import "react-resizable/css/styles.css";
+
+interface WeekCellProps {
+  weekIndex: number;
+  weeks: number;
+  activity: Activity;
+  moveActivity: (activity: Activity, targetWeek: number) => void;
+  resizeActivity: (activityName: string, newDuration: number) => void;
+}
+
 const WeekCell: React.FC<WeekCellProps> = ({
   weekIndex,
   activity,
@@ -201,7 +213,10 @@ const WeekCell: React.FC<WeekCellProps> = ({
   resizeActivity,
   weeks,
 }) => {
-  const [{ isOver }, ref] = useDrop({
+  const ref = useRef<HTMLTableCellElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  const [{ isOver }, drop] = useDrop({
     accept: "activity",
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -215,13 +230,19 @@ const WeekCell: React.FC<WeekCellProps> = ({
     },
   });
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag, preview] = useDrag({
     type: "activity",
     item: { activity },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
+
+  useEffect(() => {
+    if (previewRef.current) {
+      preview(previewRef.current);
+    }
+  }, [preview]);
 
   const handleResize = (event: React.SyntheticEvent, { size }: any) => {
     const newDuration = Math.ceil(size.width / 100); // Adjust according to your width scale
@@ -230,8 +251,8 @@ const WeekCell: React.FC<WeekCellProps> = ({
 
   return (
     <td
-      ref={ref as unknown as LegacyRef<HTMLTableCellElement>}
-      className={`relative  hover:border-primary p-2 min-h-full fixed-header overflow-visible ${
+      ref={drop as unknown as LegacyRef<HTMLTableCellElement>}
+      className={`relative hover:border-primary p-2 min-h-full w-[90px] min-w-[90px] max-w-[90px] overflow-visible ${
         activity.duration <= weeks - weekIndex && isOver
           ? "bg-secondary/50 border-dashed border-black"
           : "border bg-secondary border-gray-200" // Styling for drop target
@@ -247,21 +268,33 @@ const WeekCell: React.FC<WeekCellProps> = ({
           height={60} // Fixed height
           axis="x"
           handle={
-            <div className="bg-[#f3fae9] rounded-xl cursor-grab w-[49px] z-10 h-[50px] rotate-45 right-0 translate-x-[25px] top-[5px] absolute "></div>
+            <div className="bg-[#f3fae9] border rounded-xl  cursor-grab w-[49px] z-10 h-[50px] rotate-45 right-0 translate-x-[25px] top-[5px] absolute "></div>
           }
           minConstraints={[90, 60]}
           maxConstraints={[(weeks - activity.week + 1) * 80 * 0.9, 60]} // Adjust according to your width scale
           onResizeStop={handleResize}
-          className="sticky top-0 left-[2px]   py- z-20 max-h-full bg-[#f3fae9] rounded-l-xl"
-          style={{ opacity: isDragging ? 0.5 : 1 }}
+          className="sticky top-0 left-[2px] py-  max-h-full bg-[#f3fae9] rounded-l-xl"
+          //  style={{ opacity: isDragging ? 0.5 : 1 }}
         >
           <div
-            ref={drag as unknown as LegacyRef<HTMLDivElement>}
-            className="h-full transition-all duration-400   min-w-[80px] z-50 select-none flex p-3  cursor-move justify-center no-scrollbar text-[13px] items-star overflow-auto"
+            ref={(el) => {
+              drag(el);
+              if (previewRef.current) {
+                preview(previewRef.current);
+              }
+            }}
+            style={{ opacity: 1 }} // Ensure the preview element has full opacity
+            className="h-full rounded-l-xl transition-all relative   duration-400 min-w-[80px] bg-[#f3fae9] z-50 select-none flex p-3 cursor-move justify-center no-scrollbar text-[13px] items-start overflow-auto"
           >
-            <span className="z-40 w-full text-green-900">
-              {activity.description}
-            </span>
+            <div
+              // ref={previewRef}
+              style={{ opacity: 1 }} // Ensure the preview element has full opacity
+            >
+              <span className="z-40 w-full text-green-900 bg-[#f3fae9]">
+                {activity.description}
+              </span>
+            </div>
+            s
           </div>
         </ResizableBox>
       )}

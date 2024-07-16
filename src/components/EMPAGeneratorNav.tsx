@@ -9,9 +9,6 @@ import { useParams } from "next/navigation";
 import SlideIntoView from "./SlideIntoView";
 import { EMPAReportSteps } from "@/config/reportStepConfig";
 
-
-
-
 const EMPAGeneratorNav = ({
   data,
   section,
@@ -46,14 +43,16 @@ const EMPAGeneratorNav = ({
 
   return (
     <div className="w-full pb-[2rem] flex flex-col h-full overflow-x-hidden ">
-      <h6 className=" heading-h6 text-grey-500 font-generalSans font-semibold mb-4 pb-3 px-4 mt-7 ">Report Steps</h6>
-      <ul className="h-full flex flex-col px-3 not-prose">
+      <h6 className=" heading-h6 text-grey-500 font-generalSans font-semibold mb-4 pb-3 px-4 mt-7 ">
+        Report Steps
+      </h6>
+      <ul className="h-full flex flex-col pl-3 pr-1 not-prose">
         {reportSteps.map((step, index) => (
           <li key={index} className="mb-2 ">
             {step.substeps.length <= 0 ? (
               <SlideIntoView from="left" index={index}>
                 <Link
-                  href={`/EMPA-generator/${step.title}?data=report`}
+                  href={`/EMPA/${step.title}?data=report`}
                   className={`w-full  rounded-full  flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
                     segment === step.title
                       ? "text-grey-700 font-satoshi font-medium"
@@ -61,14 +60,22 @@ const EMPAGeneratorNav = ({
                   } hover:bg-gray-300/20`}
                   onClick={() => toggleStep(index)}
                 >
-                  <span className=" "> {<step.icon/>}</span>
+                  <span className=" "> {<step.icon />}</span>
                   <span className="pl-2"> {step.title}</span>
                 </Link>
               </SlideIntoView>
             ) : (
               <SlideIntoView from="left" index={index}>
                 <Button
-                  startContent={<step.icon/>}
+                  startContent={
+                    <div
+                      className={`${
+                        segment === step.title ? "opacity-100 " : "opacity-70"
+                      } `}
+                    >
+                      <step.icon />
+                    </div>
+                  }
                   className={`w-full  rounded-full  flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
                     segment === step.title
                       ? "text-grey-700 font-satoshi font-medium"
@@ -85,32 +92,32 @@ const EMPAGeneratorNav = ({
                 initial={{ height: 0 }}
                 animate={{ height: "auto" }}
                 exit={{ height: 0 }}
-                className="overflow-hidden flex flex-col items-end px-[1rem]  "
+                className="overflow-hidden flex flex-col items-end px-[1rem] w-full justify-between"
               >
                 {step.substeps.map(({ title, isLocked }, subIndex) => (
                   <SlideIntoView
                     className={` ${
                       section === title ? "bg-background" : " "
-                    }  rounded-full group pl-[3rem]  flex justify-between relative w-full py-1 gap-2`}
+                    }  rounded-full group pl-[2rem]  flex justify-between relative w-full py-1 gap-2 `}
                     from="right"
                     key={subIndex}
                     index={subIndex}
                   >
                     <Link
-                      href={`/EMPA-generator/${step?.title}?data=report&&section=${title}`}
+                      href={`/EMPA/${step?.title}?data=report&&section=${title}`}
                       className={` ${
                         section === title
                           ? "text-primary-100 font-semibold"
                           : "text-dark-100 "
-                      } w  w-full   hover:text-green-700 capitalize text-nowrap`}
+                      }   w-full   hover:text-green-700 capitalize text-nowrap`}
                     >
                       {title}
                     </Link>
                     <div
-                      className={` ${
+                      className={`transition-all duration-300 ${
                         section === title
                           ? "text-primary-100 font-semibold"
-                          : "hidden group-hover:block "
+                          : "opacity-0 group-hover:opacity-100 "
                       } `}
                     >
                       <Button

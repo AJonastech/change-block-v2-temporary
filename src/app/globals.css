@@ -5,46 +5,74 @@
 
 @layer components {
   .heading-h1 {
-    @apply   text-[54px] leading-[120%] tracking-normal;
+    @apply text-[54px] leading-[120%] tracking-normal;
   }
 
   .heading-h2 {
-    @apply   text-[45px] leading-[120%] tracking-normal;
+    @apply text-[45px] leading-[120%] tracking-normal;
   }
 
   .heading-h3 {
-    @apply   text-[37px] leading-[120%] tracking-normal;
+    @apply text-[37px] leading-[120%] tracking-normal;
   }
 
   .heading-h4 {
-    @apply   text-[31px] leading-[120%] tracking-normal;
+    @apply text-[31px] leading-[120%] tracking-normal;
   }
 
   .heading-h6 {
-    @apply   text-[22px] leading-[120%];
+    @apply text-[22px] leading-[120%];
+  }
+
+  .markdown h1 {
+    @apply heading-h1 my-2 mt-8;
+  }
+
+  .markdown h2 {
+    @apply heading-h2 my-2 mt-8;
+  }
+
+  .markdown h3 {
+    @apply heading-h3 my-2 mt-8;
+  }
+
+  .markdown h4 {
+    @apply heading-h4 mt-8 text-grey-500 capitalize font-semibold my-2;
+  }
+
+  .markdown h6 {
+    @apply heading-h6 mt-8 text-grey-500 capitalize font-semibold my-2;
+  }
+
+  .markdown p {
+    @apply text-[18px] leading-[1.5] text-grey-300;
+  }
+
+  .markdown ul {
+    @apply !list-disc ml-6;
+  }
+
+  .markdown li {
+    @apply text-grey-300 text-[18px] !list-disc;
+  }
+
+  .markdown img {
+    @apply my-[1.5rem] rounded-md mx-auto;
   }
 }
 
 @layer utilities {
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    display: none;
   }
 
- /* Hide scrollbar for IE, Edge and Firefox */
+  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
 }
-}
-
-
-/* Add this CSS to your global stylesheet or a CSS module */
-.fixed-header {
-  width: 90px;
-  /* Adjust the width as needed */
-  max-width: 90px;
-  min-width: 90px;
-
-}
-

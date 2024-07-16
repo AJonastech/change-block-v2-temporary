@@ -15,7 +15,7 @@ const EMPAReportHome = () => {
       <div className=" !max-w-full">
         <EMPAReportProjectTimeline
           stages={stages}
-          weeks={8}
+          weeks={12}
           startDate="2023-06-01"
         />
       </div>
@@ -29,8 +29,8 @@ const EMPAReportHome = () => {
             <Skeleton isLoaded={isMounted} className="max-w-[40%] rounded-lg">
               {" "}
               <h4 className="heading-h4 font-generalSans font-semibold leading-[40.3px] text-grey-700 capitalize w-fit !my-0">
-            {steps.title}
-          </h4>
+                {steps.title}
+              </h4>
             </Skeleton>
             <EMPAReportCards cards={cards} />
           </section>
@@ -153,14 +153,14 @@ const stages = [
     activities: [
       {
         name: "Assessment",
-        week: 4,
+        week: 6,
         duration: 2,
         description: "Assess risks and opportunities with strategies",
       },
 
       {
         name: "Recommendation",
-        week: 5,
+        week: 8,
         duration: 2,
         description: "Provide actionable recommendations",
       },

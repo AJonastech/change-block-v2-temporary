@@ -30,7 +30,7 @@ function GeneratedEmpa() {
                     reports.map((report, id) => (
                         <Link
                             key={id}
-                            href={`/EMPA-generator/home?data=report`}
+                            href={`/EMPA/home?data=report`}
                             className="border-[1px] w-full border-grey/20 shadow-sm rounded-xl p-4 flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-white hover:bg-G10/80 h-full"
                         >
                             <Image
