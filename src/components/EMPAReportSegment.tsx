@@ -10,6 +10,9 @@ import CommentsDrawer from "./CommentsDrawer";
 import EMPAReportMenu from "./EMPAReportMenu";
 import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
+import NovelEditorAndDisplay from "./NovelEditorAndDisplay";
+import { markdownContent, markdownContent2 } from "@/mockdata/EMPASectionsMKD";
+import markdownToProseMirror from "@/config/markdownToProseMirror";
 
 const EMPAReportSegment = ({ section }: { section: string }) => {
   const location = useLocation();
@@ -17,7 +20,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const isMounted = useIsMounted();
   const [step, setStep] = useState<TStep>(EMPAReportSteps[0]);
   const [subStep, setSubStep] = useState<TSubStep>(step.substeps[0]);
-
+  const [isEditor, setIsEditor] = useState<boolean>(false);
   const [isChatDrawerOpen, setChatDrawerOpen] = useState<boolean>(false);
 
   const curentSegment = location?.pathname?.split("/")[2];
@@ -46,6 +49,9 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const toggleChatDrawer = () => {
     setChatDrawerOpen((prev) => !prev);
   };
+  const toggleEditor = () => {
+    setIsEditor((prev) => !prev);
+  };
 
   useEffect(() => {
     if (containerRef.current) {
@@ -63,6 +69,10 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
     }
   }, [isChatDrawerOpen]);
 
+  const markupContent = subStep ? (subStep.data as string) : "";
+  const novelJSONContent = markdownToProseMirror(markupContent);
+
+  console.log({ markupContent, novelJSONContent });
   return (
     <Suspense>
       <div
@@ -70,7 +80,11 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
         ref={containerRef}
       >
         <div className="">
-          <EMPAReportMenu toggleChatDrawer={toggleChatDrawer} />
+          <EMPAReportMenu
+            toggleChatDrawer={toggleChatDrawer}
+            toggleEditor={toggleEditor}
+            isEditor={isEditor}
+          />
         </div>
         <div className="flex flex-col gap-4 h-fit">
           <Skeleton isLoaded={isMounted} className="rounded-full w-[10rem]">
@@ -93,7 +107,13 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
         </div>
         {subStep?.data && (
           <div className="h-max min-h-max    overflow-y-uto">
-            <Markdown>{subStep?.data as string}</Markdown>
+            <div className="h-[20rem] ">
+              <NovelEditorAndDisplay
+                novelJSONContent={novelJSONContent}
+                markupContent={markupContent}
+                isEditor={isEditor}
+              />
+            </div>
           </div>
         )}
         <div className="w-full ">

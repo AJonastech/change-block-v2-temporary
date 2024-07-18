@@ -25,27 +25,27 @@
   }
 
   .markdown h1 {
-    @apply heading-h1 my-2 mt-8;
+    @apply heading-h1 my-4 mt-8;
   }
 
   .markdown h2 {
-    @apply heading-h2 my-2 mt-8;
+    @apply heading-h2 my-4 mt-8;
   }
 
   .markdown h3 {
-    @apply heading-h3 my-2 mt-8;
+    @apply heading-h3 my-4 mt-8;
   }
 
   .markdown h4 {
-    @apply heading-h4 mt-8 text-grey-500 capitalize font-semibold my-2;
+    @apply heading-h4 mt-8 text-grey-500 capitalize font-semibold my-4;
   }
 
   .markdown h6 {
-    @apply heading-h6 mt-8 text-grey-500 capitalize font-semibold my-2;
+    @apply heading-h6 mt-8 text-grey-500 capitalize font-semibold my-4;
   }
 
   .markdown p {
-    @apply text-[18px] leading-[1.5] text-grey-300;
+    @apply text-[18px] leading-[1.5] text-grey-300 ;
   }
 
   .markdown ul {
@@ -53,11 +53,11 @@
   }
 
   .markdown li {
-    @apply text-grey-300 text-[18px] !list-disc;
+    @apply text-grey-300 text-[18px] !list-disc my-4;
   }
 
   .markdown img {
-    @apply my-[1.5rem] rounded-md mx-auto;
+    @apply my-[1.5rem] rounded-md mx-auto !border-none;
   }
 }
 
@@ -75,4 +75,15 @@
     scrollbar-width: none;
     /* Firefox */
   }
+}
+
+.custom-editor {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Ensure that inner elements also have no padding or margin */
+.custom-editor .ProseMirror {
+  padding: 0 !important;
+  margin: 0 !important;
 }

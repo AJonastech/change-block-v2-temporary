@@ -1,6 +1,5 @@
 import EMPAReportHome from "@/components/EMPAReportHome";
 import EMPAReportSegment from "@/components/EMPAReportSegment";
-import { markdownContent } from "@/mockdata/EMPASectionsMKD";
 
 const page = ({
   params,

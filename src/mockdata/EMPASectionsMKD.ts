@@ -3,7 +3,6 @@ export const markdownContent = `
 
 Provide a detailed EMPA report that evaluates GreenLife's environmental assets, identifies carbon credit opportunities, and offers strategic recommendations to enhance market positioning and sustainability.
 
-
 ###### Tasks and Deliverables
 
 - **Project Kickoff Meeting**: Initiate the project with a comprehensive meeting to understand GreenLife's objectives, project scope, and expectations.
@@ -37,18 +36,12 @@ The EMPA aims to assess the environmental and financial potential of GreenLife's
 
     export const markdownContent2 = `
 ###### Key Findings
-
 The EMPA analysis reveals significant opportunities for GreenLife to expand its impact and enhance its environmental initiatives. Key findings include:
-
 ![GreenLife Environmental Assets](/assets/img1.png)
-
-
 - Identification of high-priority environmental projects with potential for substantial carbon sequestration and biodiversity conservation.
 - Assessment of market trends and emerging opportunities in the environmental sector, such as carbon offsetting and ecosystem services trading.
 - Evaluation of GreenLife's competitive positioning and differentiation strategies in the environmental market landscape.
-
 ###### Strategic Implications
-
 - The EMPA outcomes underscore the strategic importance of reforestation efforts in Nigeria, highlighting the potential for ecological restoration, community resilience, and sustainable development.
 - GreenLife can leverage the EMPA findings to enhance project visibility, attract investors, and forge partnerships with stakeholders committed to environmental conservation.
 
