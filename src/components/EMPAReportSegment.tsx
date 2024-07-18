@@ -105,17 +105,17 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             and 3.
           </EMPAReportSegmentHeaderCard>
         </div>
-        {subStep?.data && (
-          <div className="h-max min-h-max    overflow-y-uto">
-            <div className="h-[20rem] ">
+        <div className="h-full">
+          {subStep?.data && (
+            <div className="h-max min-h-max   ">
               <NovelEditorAndDisplay
                 novelJSONContent={novelJSONContent}
                 markupContent={markupContent}
                 isEditor={isEditor}
               />
             </div>
-          </div>
-        )}
+          )}
+        </div>
         <div className="w-full ">
           <CommentsDrawer
             onClick={toggleChatDrawer}
