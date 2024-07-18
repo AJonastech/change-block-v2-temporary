@@ -12,7 +12,7 @@ const Markdown: React.FC<MarkdownProps> = ({ children }) => {
 
   return (
     <div
-      className="markdown min-h-full h-full
+      className="markdown min-h-max h-full
                 "
       dangerouslySetInnerHTML={{ __html: children as string }}
     ></div>

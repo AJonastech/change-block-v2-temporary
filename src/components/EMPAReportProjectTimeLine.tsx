@@ -294,7 +294,6 @@ const WeekCell: React.FC<WeekCellProps> = ({
                 {activity.description}
               </span>
             </div>
-            s
           </div>
         </ResizableBox>
       )}
