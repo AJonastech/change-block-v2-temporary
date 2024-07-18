@@ -36,7 +36,7 @@ export const parseMKD = (markdown: string): string => {
   html = html.replace(/(<li>[\s\S]*?<\/li>)/gm, "<ol>$1</ol>");
 
   // Convert line breaks
-  // html = html.replace(/\n/gm, "<br />");
+   html = html.replace(/\n/gm, "<p></p>");
 
   // Wrap text that is not already wrapped in HTML tags into paragraphs
   html = html.replace(/^(?!<[^>]+>)(.+)$/gm, "<p>$1</p>");
