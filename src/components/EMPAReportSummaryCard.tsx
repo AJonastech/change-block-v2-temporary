@@ -2,35 +2,41 @@ import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
 import React from "react";
 import { ArrowRight } from "iconsax-react";
+import Link from "next/link";
 interface EMPAReportCardsProps {
   cards: TEMPAReportSummaryCard[];
+  step: string;
 }
 
-const EMPAReportCards: React.FC<EMPAReportCardsProps> = ({ cards }) => {
+const EMPAReportCards: React.FC<EMPAReportCardsProps> = ({ cards, step }) => {
   const isMounted = useIsMounted();
 
   return (
     <div className="grid xl:grid-cols-2 grid-flow-row gap-4 !space-y-0">
-
       {cards.map((card, cardIndex) => (
-        <div className="group cursor-pointer" key={cardIndex}>
+        <Link
+          href={`/EMPA/${step}?data=report&&section=${card.title}`}
+          className="group cursor-pointer"
+          key={cardIndex}
+        >
           <div className="flex mb-7   w-fit  items-center gap-3 !space-y-0">
             <Skeleton isLoaded={isMounted} className="rounded-lg">
               <h6 className="heading-h6 !my-0 text-grey-500 font-generalSans font-semibold">
                 {card.title}
               </h6>
-
             </Skeleton>
-            <ArrowRight size={15} strokeWidth={3} className="text-grey-700 group-hover:ml-3 font-bold transition-all duration-300 ease-in-out" />
+            <ArrowRight
+              size={15}
+              strokeWidth={3}
+              className="text-grey-700 group-hover:ml-3 font-bold transition-all duration-300 ease-in-out"
+            />
           </div>
-          <div
-
-            className="bg-white group-hover:shadow-lg p-4 flex flex-col gap-5 rounded-xl border !space-y-0 "
-          >
-
+          <div className="bg-white group-hover:shadow-lg p-4 flex flex-col gap-5 rounded-xl border !space-y-0 ">
             <Skeleton isLoaded={isMounted} className="rounded-lg">
               {" "}
-              <p className=" text-grey-300 font-satoshi text-lg leading-[25.2px]">{card.description}</p>
+              <p className=" text-grey-300 font-satoshi text-lg leading-[25.2px]">
+                {card.description}
+              </p>
             </Skeleton>
 
             <div className="  flex flex-col gap-3 !my-0 !space-y-0 relative">
@@ -47,7 +53,10 @@ const EMPAReportCards: React.FC<EMPAReportCardsProps> = ({ cards }) => {
                   </Skeleton>
 
                   <div className="text-dark-100 text-base overflow-hidden  text-ellipsis !my-0 !py-0 !space-y-0 ">
-                    <Skeleton isLoaded={isMounted} className="rounded-lg !my-0 ">
+                    <Skeleton
+                      isLoaded={isMounted}
+                      className="rounded-lg !my-0 "
+                    >
                       {" "}
                       <span className="text-nowrap text-grey-300 font-satoshi text-lg  !my-0 !py-0 !space-y-0">
                         {" "}
@@ -60,7 +69,7 @@ const EMPAReportCards: React.FC<EMPAReportCardsProps> = ({ cards }) => {
               <div className="h-[7rem] w-full bg-gradient-to-t from-white/60 to-white/0 absolute bottom-0 left-0 "></div>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

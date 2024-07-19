@@ -31,6 +31,8 @@ const markdownToProseMirror = (
     const doc = parser.parseFromString(html, "text/html");
 
     const nodeToProseMirror = (node: any): ProseMirrorNode | null => {
+      console.log({ node: node.nodeName.toLowerCase() });
+
       if (node.nodeType === Node.ELEMENT_NODE) {
         switch (node.nodeName.toLowerCase()) {
           case "h1":
@@ -80,7 +82,15 @@ const markdownToProseMirror = (
               content: parseChildren(node),
             };
           case "li":
-            return { type: "listItem", content: parseChildren(node) };
+            return {
+              type: "listItem",
+              content: [
+                {
+                  type: "paragraph",
+                  content: parseChildren(node),
+                },
+              ],
+            };
           case "strong":
             return {
               type: "text",

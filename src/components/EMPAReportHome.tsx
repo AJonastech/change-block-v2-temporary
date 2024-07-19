@@ -32,7 +32,7 @@ const EMPAReportHome = () => {
                 {steps.title}
               </h4>
             </Skeleton>
-            <EMPAReportCards cards={cards} />
+            <EMPAReportCards cards={cards} step={steps.title} />
           </section>
         );
       })}
@@ -44,7 +44,7 @@ export default EMPAReportHome;
 
 const cards = [
   {
-    title: "Introduction and client summary",
+    title: "Statement of Work",
     description:
       "Explore the valuable insights and outcomes generated through our EMPA analysis, highlighting potential environmental assets and their strategic implications for GreenLife NGO's mission.",
     summaries: [
