@@ -8,24 +8,30 @@ import { parseMKD } from "@/config/parseMKD";
 
 type NovelEditorProps = {
   markupContent: string;
-  novelJSONContent:any;
+  novelJSONContent: any;
   isEditor: boolean;
 };
 
-export default function NovelEditorAndDisplay({ markupContent,novelJSONContent, isEditor }: NovelEditorProps) {
+export default function NovelEditorAndDisplay({
+  markupContent,
+  novelJSONContent,
+  isEditor,
+}: NovelEditorProps) {
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
-console.log({ novelJSONContent });
+  const [JSONContent, setJSONContent] = useState(novelJSONContent);
+
+  console.log({ novelJSONContent, JSONContent });
   return (
     <div className="markdown flex-col flex gap-3 h-full">
       {isEditor ? (
         <Editor
-        
           defaultValue={{
             type: "doc",
             content: [novelJSONContent as any],
           }}
           onDebouncedUpdate={(editor?: TipTapEditor) => {
             setHtmlContent(editor?.getHTML() as any);
+            setJSONContent(editor?.getJSON() as any);
           }}
           disableLocalStorage={true}
           className=" !p-0 m-0 shadow-none custom-editor"
