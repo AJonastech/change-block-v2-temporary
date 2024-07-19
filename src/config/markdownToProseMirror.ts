@@ -72,18 +72,12 @@ const markdownToProseMirror = (
           case "ul":
             return {
               type: "bulletList",
-              content: Array.from(node.children).map((li: any) => ({
-                type: "listItem",
-                content: parseChildren(li),
-              })),
+              content: parseChildren(node),
             };
           case "ol":
             return {
               type: "orderedList",
-              content: Array.from(node.children).map((li: any) => ({
-                type: "listItem",
-                content: parseChildren(li),
-              })),
+              content: parseChildren(node),
             };
           case "li":
             return { type: "listItem", content: parseChildren(node) };
@@ -142,11 +136,24 @@ const markdownToProseMirror = (
       return nodes;
     };
 
-    return { type: "doc", content: parseChildren(doc.body) };
+    // Ensure lists have valid structures with 'listItem' children only
+    const validateLists = (nodes: ProseMirrorNode[]): ProseMirrorNode[] => {
+      return nodes.map((node) => {
+        if (node.type === "bulletList" || node.type === "orderedList") {
+          node.content =
+            node.content?.filter((item) => item.type === "listItem") || [];
+        }
+        return node;
+      });
+    };
+
+    const docContent = parseChildren(doc.body);
+    const validatedContent = validateLists(docContent);
+
+    return { type: "doc", content: validatedContent };
   };
 
   return htmlToProseMirror(htmlContent);
 };
 
-// Example usage
 export default markdownToProseMirror;

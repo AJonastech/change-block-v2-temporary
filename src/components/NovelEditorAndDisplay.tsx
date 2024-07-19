@@ -5,7 +5,6 @@ import { type Editor as TipTapEditor } from "@tiptap/core";
 import { useState } from "react";
 import Markdown from "./Markdown";
 import { parseMKD } from "@/config/parseMKD";
-import { markdownContent2 } from "@/mockdata/EMPASectionsMKD";
 
 type NovelEditorProps = {
   markupContent: string;
@@ -15,11 +14,12 @@ type NovelEditorProps = {
 
 export default function NovelEditorAndDisplay({ markupContent,novelJSONContent, isEditor }: NovelEditorProps) {
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
-
+console.log({ novelJSONContent });
   return (
     <div className="markdown flex-col flex gap-3 h-full">
       {isEditor ? (
         <Editor
+        
           defaultValue={{
             type: "doc",
             content: [novelJSONContent as any],
