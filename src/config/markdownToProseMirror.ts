@@ -82,7 +82,15 @@ const markdownToProseMirror = (
               content: parseChildren(node),
             };
           case "li":
-            return { type: "listItem", content: parseChildren(node) };
+            return {
+              type: "listItem",
+              content: [
+                {
+                  type: "paragraph",
+                  content: parseChildren(node),
+                },
+              ],
+            };
           case "strong":
             return {
               type: "text",
