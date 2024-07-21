@@ -20,7 +20,7 @@ export default function NovelEditorAndDisplay({
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
   const [JSONContent, setJSONContent] = useState(novelJSONContent);
 
-  console.log({ novelJSONContent, JSONContent });
+  
   return (
     <div className="markdown flex-col flex gap-3 h-full">
       {isEditor ? (

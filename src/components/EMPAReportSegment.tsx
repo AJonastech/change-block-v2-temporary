@@ -53,6 +53,8 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
     setIsEditor((prev) => !prev);
   };
 
+ 
+
   useEffect(() => {
     if (containerRef.current) {
       if (isChatDrawerOpen) {
@@ -72,7 +74,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const markupContent = subStep ? (subStep.data as string) : "";
   const novelJSONContent = markdownToProseMirror(markupContent);
 
-  console.log({ markupContent, novelJSONContent });
+  
   return (
     <Suspense>
       <div
@@ -83,6 +85,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
           <EMPAReportMenu
             toggleChatDrawer={toggleChatDrawer}
             toggleEditor={toggleEditor}
+            
             isEditor={isEditor}
           />
         </div>
