@@ -43,7 +43,8 @@ const config: Config = {
         G100: "#797A76",
         G700: "#21241E",
         green: {
-          500: "#014022"
+          500: "#014022",
+          300:"#026938"
         }
       },
       backgroundImage: {

@@ -49,7 +49,7 @@ export default function EMPAModal({
             "mt-4 mx-8 bg-grey-20 hover:border-red-500 border border-transparent w-[44px] h-[44px] flex items-center justify-center text-center",
         }}
         size={undefined}
-        className={`${className} rounded-[32px]
+        className={`${className} max-h-[90vh] overflow-y-auto rounded-[32px]
 `}
         isOpen={isOpen}
         onOpenChange={onOpenChange}

@@ -18,6 +18,7 @@ export default function NovelEditorAndDisplay({
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
   const [JSONContent, setJSONContent] = useState(novelJSONContent);
 
+
   const handleImageUpload = async () => {
     const response = await fetch("/api/upload");
 
