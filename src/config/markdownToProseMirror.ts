@@ -102,6 +102,7 @@ const markdownToProseMirror = (
           case "img":
             return {
               type: "image",
+
               attrs: {
                 src: node.getAttribute("src") || "",
                 alt: node.getAttribute("alt") || "",
