@@ -1,8 +1,6 @@
-"use client";
-
 import { Editor } from "novel";
 import { type Editor as TipTapEditor } from "@tiptap/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Markdown from "./Markdown";
 import { parseMKD } from "@/config/parseMKD";
 
@@ -20,7 +18,23 @@ export default function NovelEditorAndDisplay({
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
   const [JSONContent, setJSONContent] = useState(novelJSONContent);
 
+  const handleImageUpload = async () => {
+    const response = await fetch("/api/upload");
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+
+    const data = await response.json();
+    console.log({ data });
+    return data.filePath; // Return the Blob URL to the uploaded file
+  };
+  useEffect(() => {
+    handleImageUpload();
+  }, []);
+
   console.log({ novelJSONContent, JSONContent });
+
   return (
     <div className="markdown flex-col flex gap-3 h-full">
       {isEditor ? (
@@ -34,7 +48,7 @@ export default function NovelEditorAndDisplay({
             setJSONContent(editor?.getJSON() as any);
           }}
           disableLocalStorage={true}
-          className=" !p-0 m-0 shadow-none custom-editor"
+          className="!p-0 m-0 shadow-none custom-editor"
         />
       ) : (
         <Markdown>{htmlContent}</Markdown>

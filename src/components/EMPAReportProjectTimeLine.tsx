@@ -1,9 +1,11 @@
 "use client";
+
 import useIsMounted from "@/hooks/useIsMounted";
-import { Skeleton } from "@nextui-org/react";
-import React, { LegacyRef, useEffect, useState } from "react";
+import { Button, Skeleton } from "@nextui-org/react";
+import React, { LegacyRef, useEffect, useState, useRef } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { FaPlus } from "react-icons/fa";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 
@@ -47,8 +49,9 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
 }) => {
   const isMounted = useIsMounted();
   const [activities, setActivities] = useState(stages);
+  const [weekCount, setWeekCount] = useState(weeks);
 
-  const weekDates = getWeekDates(startDate, weeks);
+  const weekDates = getWeekDates(startDate, weekCount);
 
   const moveActivity = (draggedActivity: Activity, targetWeek: number) => {
     setActivities((prevStages) =>
@@ -74,6 +77,16 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
         ),
       }))
     );
+  };
+
+  const addWeek = () => {
+    setWeekCount((prevCount) => prevCount + 1);
+  };
+
+  const removeWeek = () => {
+    if (weekCount > 1) {
+      setWeekCount((prevCount) => prevCount - 1);
+    }
   };
 
   return (
@@ -102,101 +115,115 @@ const EMPAReportProjectTimeline: React.FC<EMPAReportProjectTimelineProps> = ({
           <div className="absolute z-10 h-full w-[10rem] bg-grey-700 rounded-xl -translate-x-[5px] left-0 top-0"></div>
         </div>
 
-        <div className="overflow-x-auto !max-w-full pb-[2rem] not-prose mx-auto">
-          <Skeleton
-            isLoaded={isMounted}
-            className="rounded-lg flex w-full mx-auto overflow-x-auto"
-          >
-            <table className="max-w-full w-full mx-auto border-collapse border-2  border-black">
-              <thead className="border-2 border-black">
-                <tr className="border-2 border-black">
-                  <th className=" p-4 w-[3rem] text-primary bg-primary">
-                    stages
-                  </th>
-                  <th className="border-x border-gray-200 p-4 bg-primary text-white">
-                    Key Activities
-                  </th>
-                  {weekDates.map((date, index) => (
-                    <th
-                      key={index}
-                      className="border-x border-gray-200 p-4 px-2 text-sm bg-primary text-white w-[90px] min-w-[90px] max-w-[90px] "
-                    >
-                      Week {index + 1}
-                      <br />
-                      <span className="text-gray-200 font-light"> {date}</span>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {activities.map((stage, stageIndex) => (
-                  <React.Fragment key={stageIndex}>
-                    <tr className="border-2 border-black p-4 text-center ">
-                      <td
-                        className="border-2 border-black  mx-auto"
-                        rowSpan={stage.activities.length + 1}
-                      >
-                        <div
-                          style={{ writingMode: "vertical-rl" }}
-                          className="font-semibold rotate-180 pr-6  mx-auto text-center my-auto w-fit text-lg text-dark-200"
+        <div className="flex">
+          <div className="!max-w-full w-full  pb-[2rem] not-prose mx-auto flex gap-4 relative">
+            <div className="overflow-x-auto no-scrollbar  w-full flex-1 ">
+              {" "}
+              <Skeleton
+                isLoaded={isMounted}
+                className="rounded-lg flex w-full mx-auto "
+              >
+                <table className="max-w-full w-full  mx-auto border-collapse  overflow-hidden">
+                  <thead className="border-2 border-black">
+                    <tr className="border-2 border-black">
+                      <th className="p-4 w-[3rem] text-primary bg-primary">
+                        stages
+                      </th>
+                      <th className="border-x border-gray-200 p-4 bg-primary text-white">
+                        Key Activities
+                      </th>
+                      {weekDates.map((date, index) => (
+                        <th
+                          key={index}
+                          className="border-x border-gray-200 p-4 px-2 text-sm bg-primary text-white w-[100px] min-w-[100px] max-w-[100px]"
                         >
-                          {stage.name}
-                        </div>
-                      </td>
+                          <div className="flex justify-between items-center">
+                            <button
+                              onClick={removeWeek}
+                              className="hover:border red-500 text-white group-hover:opacity-100 opacity-0 transition-all flex rounded-full w-6 h-6 items-center justify-center"
+                            >
+                              -
+                            </button>
+                            <div className=" text-nowrap">
+                              Week {index + 1}
+                              <br />
+                              <span className="text-gray-200 font-light resize-none">
+                                {date}
+                              </span>
+                            </div>
+                          </div>
+                        </th>
+                      ))}
                     </tr>
-                    {stage.activities.map((activity, activityIndex) => (
-                      <tr key={activityIndex} className="">
-                        <td className="border border-gray-200 p-4 bg-white">
-                          {activity.name}
-                        </td>
-                        {Array.from({ length: weeks }).map((_, weekIndex) => (
-                          <WeekCell
-                            weeks={weeks}
-                            key={weekIndex}
-                            weekIndex={weekIndex}
-                            activity={activity}
-                            moveActivity={moveActivity}
-                            resizeActivity={resizeActivity}
-                          />
+                  </thead>
+                  <tbody>
+                    {activities.map((stage, stageIndex) => (
+                      <React.Fragment key={stageIndex}>
+                        <tr className="border-2 border-black p-4 text-center">
+                          <td
+                            className="border-2 border-black mx-auto"
+                            rowSpan={stage.activities.length + 1}
+                          >
+                            <div
+                              style={{ writingMode: "vertical-rl" }}
+                              className="font-semibold rotate-180 pr-6 mx-auto text-center my-auto w-fit text-lg text-dark-200"
+                            >
+                              {stage.name}
+                            </div>
+                          </td>
+                        </tr>
+                        {stage.activities.map((activity, activityIndex) => (
+                          <tr key={activityIndex}>
+                            <td className="border border-gray-200 p-4 bg-white">
+                              {activity.name}
+                            </td>
+                            {Array.from({ length: weekCount }).map(
+                              (_, weekIndex) => (
+                                <WeekCell
+                                  weeks={weekCount}
+                                  key={weekIndex}
+                                  weekIndex={weekIndex}
+                                  activity={activity}
+                                  moveActivity={moveActivity}
+                                  resizeActivity={resizeActivity}
+                                />
+                              )
+                            )}
+                          </tr>
                         ))}
-                      </tr>
+                      </React.Fragment>
                     ))}
-                  </React.Fragment>
-                ))}
-              </tbody>
-              <thead className="border-2 border-black ">
-                <tr className="border-2 border-black ">
-                  <th className="border-2 border-black  border-r-0 p-4 text-white bg-primary"></th>
-                  <th className="border-2 border-black border-x-1 border-x-gray-200  p-4 bg-primary text-white">
-                    Status Meeting
-                  </th>
-                  {weekDates.map((date, index) => (
-                    <th
-                      key={index}
-                      className="border-2 border-black border-x-1 border-x-gray-200  p-4 bg-primary text-white w-[90px] min-w-[90px] max-w-[90px] "
-                    ></th>
-                  ))}
-                </tr>
-              </thead>
-            </table>
-          </Skeleton>
+                  </tbody>
+                  <thead className="border-2 border-black">
+                    <tr className="border-2 border-black">
+                      <th className="border-2 border-black border-r-0 p-4 text-white bg-primary"></th>
+                      <th className="border-2 border-black border-x-1 border-x-gray-200 p-4 bg-primary text-white">
+                        Status Meeting
+                      </th>
+                      {weekDates.map((date, index) => (
+                        <th
+                          key={index}
+                          className="border-2 border-black border-x-1 border-x-gray-200 p-4 bg-primary text-white w-[100px] min-w-[100px] max-w-[100px]"
+                        ></th>
+                      ))}
+                    </tr>
+                  </thead>
+                </table>
+              </Skeleton>
+            </div>
+
+            <Button
+              className="flex h-full  items-center select-none justify-center w-[100px] min-w-[100px] max-w-[100px] hover:bg-gray-100 transition-all text-grey-500   cursor-pointer rounded-r-xl border-black hover:border- 2"
+              onClick={addWeek}
+            >
+              <FaPlus />{" "}
+            </Button>
+          </div>
         </div>
       </div>
     </DndProvider>
   );
 };
-
-interface WeekCellProps {
-  weekIndex: number;
-  weeks: number;
-  activity: Activity;
-  moveActivity: (activity: Activity, targetWeek: number) => void;
-  resizeActivity: (activityName: string, newDuration: number) => void;
-}
-
-import { useRef } from "react";
-
-import "react-resizable/css/styles.css";
 
 interface WeekCellProps {
   weekIndex: number;
@@ -245,36 +272,35 @@ const WeekCell: React.FC<WeekCellProps> = ({
   }, [preview]);
 
   const handleResize = (event: React.SyntheticEvent, { size }: any) => {
-    const newDuration = Math.ceil(size.width / 100); // Adjust according to your width scale
+    const newDuration = Math.ceil(size.width / 80); // Adjust according to your width scale
     resizeActivity(activity.name, newDuration);
   };
 
   return (
     <td
       ref={drop as unknown as LegacyRef<HTMLTableCellElement>}
-      className={`relative hover:border-primary p-2 min-h-full w-[90px] min-w-[90px] max-w-[90px] overflow-visible ${
+      className={`relative hover:border-primary p-2 min-h-full w-[100px] min-w-[100px] max-w-[100px] overflow-visible ${
         activity.duration <= weeks - weekIndex && isOver
           ? "bg-secondary/50 border-dashed border-black"
-          : "border bg-secondary border-gray-200" // Styling for drop target
+          : "border bg-secondary border-gray-200"
       } ${
         activity.duration > weeks - weekIndex && isOver
-          ? "bg-red-500/30 border border-dashded border-red-400"
-          : "border bg-secondary border-gray-200" // Original styling for active week
+          ? "bg-red-500/30 border border-dashed border-red-400"
+          : "border bg-secondary border-gray-200"
       }`}
     >
       {activity.week === weekIndex + 1 && (
         <ResizableBox
-          width={activity.duration * 90} // Adjust according to your width scale
+          width={activity.duration * 80} // Adjust according to your width scale
           height={60} // Fixed height
           axis="x"
           handle={
-            <div className="bg-[#f3fae9] border rounded-xl  cursor-grab w-[49px] z-10 h-[50px] rotate-45 right-0 translate-x-[25px] top-[5px] absolute "></div>
+            <div className="bg-[#f3fae9] border rounded-xl cursor-grab w-[49px] z-10 h-[50px] rotate-45 right-0 translate-x-[25px] top-[5px] absolute"></div>
           }
-          minConstraints={[90, 60]}
-          maxConstraints={[(weeks - activity.week + 1) * 80 * 0.9, 60]} // Adjust according to your width scale
+          minConstraints={[80, 60]}
+          maxConstraints={[(weeks - activity.week + 1) * 80, 60]} // Adjust according to your width scale
           onResizeStop={handleResize}
-          className="sticky top-0 left-[2px] py-  max-h-full bg-[#f3fae9] rounded-l-xl"
-          //  style={{ opacity: isDragging ? 0.5 : 1 }}
+          className="sticky top-0 left-[2px] py- max-h-full bg-[#f3fae9] rounded-l-xl"
         >
           <div
             ref={(el) => {
@@ -284,17 +310,13 @@ const WeekCell: React.FC<WeekCellProps> = ({
               }
             }}
             style={{ opacity: 1 }} // Ensure the preview element has full opacity
-            className="h-full rounded-l-xl transition-all relative   duration-400 min-w-[80px] bg-[#f3fae9] z-50 select-none flex p-3 cursor-move justify-center no-scrollbar text-[13px] items-start overflow-auto"
+            className="h-full rounded-l-xl transition-all relative duration-400 min-w-[80px] bg-[#f3fae9] z-50 select-none flex p-3 cursor-move justify-center no-scrollbar text-[13px] items-start overflow-auto"
           >
-            <div
-              // ref={previewRef}
-              style={{ opacity: 1 }} // Ensure the preview element has full opacity
-            >
-              <span className="z-40 w-full text-green-900 bg-[#f3fae9]">
+            <div style={{ opacity: 1 }}>
+              <span className="z-40 w-full text-green-800 bg-[#f3fae9]">
                 {activity.description}
               </span>
             </div>
-            
           </div>
         </ResizableBox>
       )}
