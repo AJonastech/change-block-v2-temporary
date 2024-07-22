@@ -1,14 +1,14 @@
 "use client";
 
-import { ReactElement, useState } from "react";
+import {  useState } from "react";
 import { motion } from "framer-motion";
 import { Button, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { LockIcon, UnlockIcon } from "@/icons";
 import { useParams, useRouter } from "next/navigation";
 import SlideIntoView from "./SlideIntoView";
-import { EMPAReportSteps } from "@/config/reportStepConfig";
 import { Add } from "iconsax-react";
+import useReportStepsStore from "@/store/useReportStepsStore";
 
 const EMPAGeneratorNav = ({
   data,
@@ -20,30 +20,15 @@ const EMPAGeneratorNav = ({
   const router = useRouter();
   const { segment } = useParams();
   const [openStep, setOpenStep] = useState<number | null>(null);
-  const [reportSteps, setReportSteps] = useState(EMPAReportSteps);
+  
   const [newSubStepIndex, setNewSubStepIndex] = useState<number | null>(null);
   const [newSubStepTitle, setNewSubStepTitle] = useState<string>("");
-
+  const { reportSteps, toggleSubStepLock, addNewSubStep, setCurrentSubStep } = useReportStepsStore(); // Use Zustand store
   const toggleStep = (index: number) => {
     setOpenStep(openStep === index ? null : index);
   };
 
-  const toggleSubStepLock = (stepIndex: number, subIndex: number) => {
-    setReportSteps((prevSteps) =>
-      prevSteps.map((step, sIdx) =>
-        sIdx === stepIndex
-          ? {
-              ...step,
-              substeps: step.substeps.map((substep, ssIdx) =>
-                ssIdx === subIndex
-                  ? { ...substep, isLocked: !substep.isLocked }
-                  : substep
-              ),
-            }
-          : step
-      )
-    );
-  };
+ 
 
   const handleAddNewSubStep = (stepIndex: number) => {
     setNewSubStepIndex(stepIndex);
@@ -56,19 +41,7 @@ const EMPAGeneratorNav = ({
 
   const handleNewSubStepBlur = () => {
     if (newSubStepTitle.trim() !== "") {
-      setReportSteps((prevSteps) =>
-        prevSteps.map((step, sIdx) =>
-          sIdx === newSubStepIndex
-            ? {
-                ...step,
-                substeps: [
-                  ...step.substeps,
-                  { title: newSubStepTitle, isLocked: false },
-                ],
-              }
-            : step
-        )
-      );
+      addNewSubStep(newSubStepIndex!, newSubStepTitle);
       router.push(
         `/EMPA/analysis?data=report&&section=${newSubStepTitle}`
       );
@@ -85,6 +58,13 @@ const EMPAGeneratorNav = ({
       handleNewSubStepBlur();
     }
   };
+
+  const trimSentence = (sentence: string) => {
+    if (sentence.length <= 19) return sentence;
+  
+    return `${sentence.slice(0, 19)}...`;
+  };
+  
 
   return (
     <div className="w-full pb-[2rem] flex flex-col h-full overflow-x-hidden ">
@@ -197,8 +177,9 @@ const EMPAGeneratorNav = ({
                           ? "text-primary-100 font-semibold"
                           : "text-dark-100"
                       } w-full hover:text-green-700 capitalize text-nowrap`}
+                      
                     >
-                      {title}
+                      {trimSentence(title)}
                     </Link>
                     <div
                       className={`transition-all duration-300 ${
@@ -211,7 +192,7 @@ const EMPAGeneratorNav = ({
                         isIconOnly
                         variant="light"
                         className="w-fit h-full text-primary-100"
-                        onClick={() => toggleSubStepLock(index, subIndex)}
+                        onClick={() => {toggleSubStepLock(index, subIndex); setCurrentSubStep({ title, isLocked: !isLocked })}}
                       >
                         {isLocked ? <LockIcon /> : <UnlockIcon />}
                       </Button>

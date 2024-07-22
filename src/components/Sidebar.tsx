@@ -31,6 +31,9 @@ const Sidebar = () => {
   const sidebarWidth = useMemo(() => (isCollapsed ? 80 : 290), [isCollapsed]);
   const drawerWidth = useMemo(() => (data === "report" && isMounted || pathName.includes("/internal-tools/automated-issue-system") ? 306 : 0), [data, isMounted, pathName]);
 
+
+
+
   return (
     <div className="transition-all duration-200 flex gap-1 h-full">
       <motion.div

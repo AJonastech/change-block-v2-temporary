@@ -38,12 +38,18 @@ export const EMPAReportSteps: Step[] = [
   },
   {
     isLocked: false,
-    title: "overview",
+    title: "Introduction",
     substeps: [
-      { title: "Statement of Work", isLocked: false, data: markdownContent },
+      { title: "Summary of project", isLocked: false, data: markdownContent },
       { title: "Executive Summary", isLocked: false, data: markdownContent },
-      { title: "EMPA Outcomes", isLocked: false, data: markdownContent },
-      { title: "Goals and Aims", isLocked: false, data: markdownContent },
+    ],
+    icon: OverviewIcon,
+  },
+  {
+    isLocked: false,
+    title: "Objective",
+    substeps: [
+      { title: "Overview of project", isLocked: false, data: markdownContent },
     ],
     icon: OverviewIcon,
   },
@@ -60,22 +66,20 @@ export const EMPAReportSteps: Step[] = [
   },
   {
     isLocked: false,
-    title: "analysis",
+    title: "Market analysis",
     substeps: [
-      { title: "Carbon Estimation", isLocked: false, data: markdownContent },
-      { title: "EA Opportunities", isLocked: false, data: markdownContent },
-      { title: "Project Analysis", isLocked: false, data: markdownContent },
-      { title: " Credit Pricing", isLocked: false, data: markdownContent },
+      { title: "Market outlook", isLocked: false, data: markdownContent },
+      { title: "Overview of Market pricing", isLocked: false, data: markdownContent },
     ],
     icon: AnalysisIcon,
   },
   {
-    title: "Insights",
+    title: "Key findings",
     substeps: [
-      { title: "Env. Attributes", isLocked: false, data: markdownContent2 },
-      { title: "Differentiation", isLocked: false, data: markdownContent2 },
-      { title: "Market Trends", isLocked: false, data: markdownContent2 },
-      { title: " Pricing Overview", isLocked: false, data: markdownContent2 },
+      { title: "EA opportunity overview", isLocked: false, data: markdownContent2 },
+      { title: "SDG alignment", isLocked: false, data: markdownContent2 },
+      { title: "Carbon credit market options", isLocked: false, data: markdownContent2 },
+      { title: " Carbon credit pricing analysis", isLocked: false, data: markdownContent2 },
     ],
     icon: InsightIcon,
     isLocked: false,

@@ -17,6 +17,7 @@ import EMPAModal from "./modals/EMPAModal";
 import ShareEMPAForm from "./forms/ShareEMPAForm";
 import EMPAVersionHistory from "./EMPAVersionHistory";
 import EMPAPreviewReport from "./EMPAPreviewReport";
+import useReportStepsStore from "@/store/useReportStepsStore";
 
 
 const EMPAReportMenu = ({
@@ -28,16 +29,17 @@ const EMPAReportMenu = ({
   toggleEditor: () => void;
   isEditor: boolean;
 }) => {
-  const data = useSearchParam("data");
-  const { segment } = useParams();
 
+  const { currentSubStep } = useReportStepsStore()
+  const isDisabled = currentSubStep?.isLocked
+console.log(currentSubStep)
   return (
     <div className={`absolute top-0 right-0`}>
       <SlideIntoView from="right">
         <div className="flex w-fit justify-between items-center gap-3">
           <div className="bg-white flex items-center justify-evenly divide-x-1 text-lg rounded-md">
             <Tooltip content="Refresh">
-              <Button isIconOnly className="rounded-none" variant="light">
+              <Button isDisabled={isDisabled} isIconOnly className="rounded-none" variant="light">
                 <RefreshIcon />
               </Button>
             </Tooltip>
@@ -53,6 +55,7 @@ const EMPAReportMenu = ({
               <Button
                 isIconOnly
                 className="rounded-none"
+                isDisabled={isDisabled}
                 variant="light"
                 onPress={toggleChatDrawer}
               >
@@ -71,21 +74,22 @@ const EMPAReportMenu = ({
               </EMPAModal>
             </Tooltip>
           </div>
-        <EMPAModal     className="min-w-[1000px] w-[1000px]" buttonElement={ <Button
-            
+          <EMPAModal className="min-w-[1000px] w-[1000px]" buttonElement={<Button
+
             color="primary"
             className="!bg-green-300 !px-4 py-[5px] max-w-[6.5rem] w-[6.5rem]"
             onPress={toggleEditor}
           >
-           Preview
+            Preview
           </Button>}>
-         <EMPAPreviewReport/>
-        </EMPAModal>
-          
+            <EMPAPreviewReport />
+          </EMPAModal>
+
           <Button
+            isDisabled={isDisabled}
             startContent={<EditIcon />}
             color="primary"
-            className="!bg-primary !px-4 py-[5px] max-w-[6.5rem] w-[6.5rem]"
+            className="!bg-primary disabled:cursor-not-allowed  !px-4 py-[5px] max-w-[6.5rem] w-[6.5rem]"
             onPress={toggleEditor}
           >
             {isEditor ? "Save" : "Edit"}
