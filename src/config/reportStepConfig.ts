@@ -88,10 +88,7 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "regulatory",
     substeps: [
-      { title: "Credit Assessment", isLocked: false, data: markdownContent1 },
-      { title: "Regulations", isLocked: false, data: markdownContent1 },
-      { title: "Market Forecast", isLocked: false, data: markdownContent1 },
-      { title: " Assumptions", isLocked: false, data: markdownContent1 },
+      { title: "Regulatory Environment and Market Mechanisms", isLocked: false, data: markdownContent1 },
     ],
     icon: RegulatoryIcon,
   },
@@ -108,6 +105,17 @@ export const EMPAReportSteps: Step[] = [
   {
     isLocked: false,
     title: "recommendation",
+    substeps: [
+      { title: "Limitations", isLocked: false, data: markdownContent2 },
+      { title: "Action Steps", isLocked: false, data: markdownContent2 },
+      { title: "Recommendations", isLocked: false, data: markdownContent2 },
+      { title: "Summary", isLocked: false, data: markdownContent2 },
+    ],
+    icon: RecommendationIcon,
+  },
+  {
+    isLocked: false,
+    title: "conclusion",
     substeps: [
       { title: "Limitations", isLocked: false, data: markdownContent2 },
       { title: "Action Steps", isLocked: false, data: markdownContent2 },
