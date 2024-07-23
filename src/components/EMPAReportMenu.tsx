@@ -9,7 +9,7 @@ import {
   StackIcon,
   ShareIcon,
 } from "@/icons";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import SlideIntoView from "./SlideIntoView";
 import { useSearchParam } from "react-use";
 import AddCollaborator from "./forms/AddEMPACollaborator";
@@ -29,10 +29,12 @@ const EMPAReportMenu = ({
   toggleEditor: () => void;
   isEditor: boolean;
 }) => {
+const searchParam = useSearchParams()
+const section = searchParam.get("section")
 
   const { currentSubStep } = useReportStepsStore()
-  const isDisabled = currentSubStep?.isLocked
-console.log(currentSubStep)
+  const isDisabled = currentSubStep?.isLocked && currentSubStep.title === section
+
   return (
     <div className={`absolute top-0 right-0`}>
       <SlideIntoView from="right">

@@ -23,7 +23,7 @@ const EMPAGeneratorNav = ({
   
   const [newSubStepIndex, setNewSubStepIndex] = useState<number | null>(null);
   const [newSubStepTitle, setNewSubStepTitle] = useState<string>("");
-  const { reportSteps, toggleSubStepLock, addNewSubStep, setCurrentSubStep } = useReportStepsStore(); // Use Zustand store
+  const { reportSteps, toggleSubStepLock, addNewSubStep,currentSubStep, setCurrentSubStep } = useReportStepsStore(); // Use Zustand store
   const toggleStep = (index: number) => {
     setOpenStep(openStep === index ? null : index);
   };
@@ -161,13 +161,14 @@ const EMPAGeneratorNav = ({
                     </div>
                   )}
                 </div>
-                {step.substeps.map(({ title, isLocked }, subIndex) => (
+                {step.substeps.map(({ title, isLocked, id }, subIndex) => (
                   <SlideIntoView
                     className={`${
                       section === title ? "bg-background" : ""
                     } rounded-full group pl-[2rem] flex justify-between relative w-full py-1 gap-2`}
                     from="right"
                     key={subIndex}
+                    
                     index={subIndex}
                   >
                     <Link
@@ -177,6 +178,9 @@ const EMPAGeneratorNav = ({
                           ? "text-primary-100 font-semibold"
                           : "text-dark-100"
                       } w-full hover:text-green-700 capitalize text-nowrap`}
+                    
+                  
+                      onClick={() => setCurrentSubStep({ title, id, isLocked })}
                       
                     >
                       {trimSentence(title)}
@@ -192,7 +196,7 @@ const EMPAGeneratorNav = ({
                         isIconOnly
                         variant="light"
                         className="w-fit h-full text-primary-100"
-                        onClick={() => {toggleSubStepLock(index, subIndex); setCurrentSubStep({ title, isLocked: !isLocked })}}
+                        onClick={() => {toggleSubStepLock(index, subIndex)}}
                       >
                         {isLocked ? <LockIcon /> : <UnlockIcon />}
                       </Button>

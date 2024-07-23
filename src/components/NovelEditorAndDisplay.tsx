@@ -27,14 +27,13 @@ export default function NovelEditorAndDisplay({
     }
 
     const data = await response.json();
-    console.log({ data });
     return data.filePath; // Return the Blob URL to the uploaded file
   };
-  useEffect(() => {
-    handleImageUpload();
-  }, []);
+  // useEffect(() => {
+  //   handleImageUpload();
+  // }, []);
 
-  console.log({ novelJSONContent, JSONContent });
+
 
   return (
     <div className="markdown flex-col flex gap-3 h-full">
