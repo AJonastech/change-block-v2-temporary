@@ -23,6 +23,9 @@ import Image from "next/image";
 export const HomeIcon = () => {
   return <Image src="/icons/home.svg" width={16} height={15.75} alt="T" />;
 };
+export const DownloadIcon =()=>{
+  return <Image src="/icons/download.svg" width={16} height={15.75} alt="T" />;
+}
 export const ChannelIcon = () => {
   return <Image src="/icons/channel.svg" width={16} height={15.75} alt="T" />;
 };
