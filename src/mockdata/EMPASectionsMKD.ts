@@ -14,7 +14,7 @@ Provide a detailed EMPA report that evaluates GreenLife's environmental assets, 
 
   `;
 
-  export const markdownContent1 = `
+export const markdownContent1 = `
   ###### Client Background
 
 The client, GreenLife Conservation NGO, is a leading environmental organization dedicated to reforestation and biodiversity conservation efforts in Nigeria. With over a decade of experience, GreenLife has successfully implemented various reforestation projects across the country.
@@ -34,7 +34,7 @@ The EMPA aims to assess the environmental and financial potential of GreenLife's
 
   `;
 
-    export const markdownContent2 = `
+export const markdownContent2 = `
 ###### Key Findings
 The EMPA analysis reveals significant opportunities for GreenLife to expand its impact and enhance its environmental initiatives. Key findings include:
 ![GreenLife Environmental Assets](/assets/img1.png)
@@ -47,3 +47,8 @@ The EMPA analysis reveals significant opportunities for GreenLife to expand its 
 
   `;
 
+export const markdownDescription = `
+
+We propose completing this engagement within a 17 week timeframe,with regular progress updates and checkpoints. The iterative approach to rapid design and prototyping will both inform and test the target state, implementation strategy and business case. Prototyping and validation work completed at the end of Stage 1 will help shape and fast track the vendor selection process in Stages 2 and 3.
+
+  `;

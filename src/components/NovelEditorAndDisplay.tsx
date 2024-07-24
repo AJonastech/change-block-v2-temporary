@@ -8,35 +8,20 @@ type NovelEditorProps = {
   markupContent: string;
   novelJSONContent: any;
   isEditor: boolean;
+  className?: string;
 };
 
 export default function NovelEditorAndDisplay({
   markupContent,
   novelJSONContent,
   isEditor,
+  className,
 }: NovelEditorProps) {
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
   const [JSONContent, setJSONContent] = useState(novelJSONContent);
 
-
-  const handleImageUpload = async () => {
-    const response = await fetch("/api/upload");
-
-    if (!response.ok) {
-      throw new Error("Failed to upload image");
-    }
-
-    const data = await response.json();
-    return data.filePath; // Return the Blob URL to the uploaded file
-  };
-  // useEffect(() => {
-  //   handleImageUpload();
-  // }, []);
-
-
-
   return (
-    <div className="markdown flex-col flex gap-3 h-full">
+    <div className={`${className} markdown flex-col flex gap-3 h-full`}>
       {isEditor ? (
         <Editor
           defaultValue={{
@@ -51,7 +36,7 @@ export default function NovelEditorAndDisplay({
           className="!p-0 m-0 shadow-none custom-editor"
         />
       ) : (
-        <Markdown>{htmlContent}</Markdown>
+        <Markdown className={`${className}`}>{htmlContent}</Markdown>
       )}
     </div>
   );

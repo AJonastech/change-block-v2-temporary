@@ -1,26 +1,11 @@
 import create from 'zustand';
-import { ReactElement } from 'react';
 import { EMPAReportSteps } from '@/config/reportStepConfig';
-import { SubStep, Step } from '@/config/reportStepConfig';
-// interface SubStep {
-//     title: string;
-//     isLocked: boolean;
-//     data?: string;
-//   }
-  
-//   interface Step {
-//     title: string;
-//     path?: string;
-  
-//     substeps: SubStep[];
-//     icon: () => JSX.Element;
-//     isLocked: boolean;
-//   }
+
 
 interface ReportStepsState {
-    reportSteps: Step[];
-    currentSubStep: SubStep  | null; // Add the currentSubStep property
-    setCurrentSubStep: (subStep: SubStep) => void;
+    reportSteps: TStep[];
+    currentSubStep: TSubStep  | null; // Add the currentSubStep property
+    setCurrentSubStep: (subStep: TSubStep) => void;
     toggleSubStepLock: (stepIndex: number, subIndex: number) => void;
     addNewSubStep: (stepIndex: number, title: string) => void;
 }
@@ -28,7 +13,7 @@ interface ReportStepsState {
 const useReportStepsStore = create<ReportStepsState>((set) => ({
     reportSteps:EMPAReportSteps,
     currentSubStep: null,
-    setCurrentSubStep: (subStep: SubStep) => set({ currentSubStep: subStep }),
+    setCurrentSubStep: (subStep: TSubStep) => set({ currentSubStep: subStep }),
     toggleSubStepLock: (stepIndex, subIndex) => set((state) => {
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
           sIdx === stepIndex

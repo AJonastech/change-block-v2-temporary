@@ -12,26 +12,10 @@ import {
   markdownContent,
   markdownContent1,
   markdownContent2,
+  markdownDescription,
 } from "@/mockdata/EMPASectionsMKD";
 
-export interface SubStep {
-  id:number;
-  title: string;
-  isLocked: boolean;
-  data?: string;
-}
-
-export interface Step {
-  id:number;
-  title: string;
-  path?: string;
-
-  substeps: SubStep[];
-  icon: () => JSX.Element;
-  isLocked: boolean;
-}
-
-export const EMPAReportSteps: Step[] = [
+export const EMPAReportSteps: TStep[] = [
   {
     id: 1,
     title: "home",
@@ -44,8 +28,22 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "Introduction",
     substeps: [
-      { id: 1, title: "Summary of project", isLocked: false, data: markdownContent },
-      { id: 2, title: "Executive Summary", isLocked: false, data: markdownContent },
+      {
+        id: 1,
+        title: "Summary of project",
+        isLocked: false,
+        data: markdownContent,
+        description: markdownDescription,
+        markupTitle: "#### Summary of project",
+      },
+      {
+        id: 2,
+        title: "Executive Summary",
+        isLocked: false,
+        data: markdownContent,
+        description: markdownDescription,
+        markupTitle: "#### Executive Summary",
+      },
     ],
     icon: OverviewIcon,
   },
@@ -54,7 +52,14 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "Objective",
     substeps: [
-      { id: 1, title: "Overview of project", isLocked: false, data: markdownContent },
+      {
+        id: 1,
+        title: "Overview of project",
+        isLocked: false,
+        data: markdownContent,
+        description: markdownDescription,
+        markupTitle: "#### Overview of project",
+      },
     ],
     icon: OverviewIcon,
   },
@@ -63,9 +68,30 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "methodology",
     substeps: [
-      { id: 1, title: "Data Gathering", isLocked: false, data: markdownContent2 },
-      { id: 2, title: "Standards Screening", isLocked: false, data: markdownContent2 },
-      { id: 3, title: "Project Evaluation", isLocked: false, data: markdownContent2 },
+      {
+        id: 1,
+        title: "Data Gathering",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### Data Gathering",
+      },
+      {
+        id: 2,
+        title: "Standards Screening",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### Standards Screening",
+      },
+      {
+        id: 3,
+        title: "Project Evaluation",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### Project Evaluation",
+      },
     ],
     icon: MethodologyIcon,
   },
@@ -74,8 +100,22 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "Market analysis",
     substeps: [
-      { id: 1, title: "Market outlook", isLocked: false, data: markdownContent },
-      { id: 2, title: "Overview of Market pricing", isLocked: false, data: markdownContent },
+      {
+        id: 1,
+        title: "Market outlook",
+        isLocked: false,
+        data: markdownContent,
+        description: markdownDescription,
+        markupTitle: "#### Market outlook",
+      },
+      {
+        id: 2,
+        title: "Overview of Market pricing",
+        isLocked: false,
+        data: markdownContent,
+        description: markdownDescription,
+        markupTitle: "#### Overview of Market pricing",
+      },
     ],
     icon: AnalysisIcon,
   },
@@ -83,10 +123,38 @@ export const EMPAReportSteps: Step[] = [
     id: 6,
     title: "Key findings",
     substeps: [
-      { id: 1, title: "EA opportunity overview", isLocked: false, data: markdownContent2 },
-      { id: 2, title: "SDG alignment", isLocked: false, data: markdownContent2 },
-      { id: 3, title: "Carbon credit market options", isLocked: false, data: markdownContent2 },
-      { id: 4, title: " Carbon credit pricing analysis", isLocked: false, data: markdownContent2 },
+      {
+        id: 1,
+        title: "EA opportunity overview",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### EA opportunity overview",
+      },
+      {
+        id: 2,
+        title: "SDG alignment",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### SDG alignment",
+      },
+      {
+        id: 3,
+        title: "Carbon credit market options",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### Carbon credit market options",
+      },
+      {
+        id: 4,
+        title: "Carbon credit pricing analysis",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### Carbon credit pricing analysis",
+      },
     ],
     icon: InsightIcon,
     isLocked: false,
@@ -96,7 +164,13 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "regulatory",
     substeps: [
-      { id: 1, title: "Regulatory Environment and Market Mechanisms", isLocked: false, data: markdownContent1 },
+      {
+        id: 1,
+        title: "Regulatory Environment and Market Mechanisms",
+        isLocked: false,
+        data: markdownContent1,
+        markupTitle: "#### Regulatory Environment and Market Mechanisms",
+      },
     ],
     icon: RegulatoryIcon,
   },
@@ -105,9 +179,30 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "assessment",
     substeps: [
-      { id: 1, title: "Capital Opportunity", isLocked: false, data: markdownContent },
-      { id: 2, title: "Risk & Opportunities", isLocked: false, data: markdownContent },
-      { id: 3, title: "Sustainability", isLocked: false, data: markdownContent },
+      {
+        id: 1,
+        title: "Capital Opportunity",
+        isLocked: false,
+        data: markdownContent,
+        description: markdownDescription,
+        markupTitle: "#### Capital Opportunity",
+      },
+      {
+        id: 2,
+        title: "Risk & Opportunities",
+        isLocked: false,
+        data: markdownContent,
+        description: markdownDescription,
+        markupTitle: "#### Risk & Opportunities",
+      },
+      {
+        id: 3,
+        title: "Sustainability",
+        isLocked: false,
+        data: markdownContent,
+        description: markdownDescription,
+        markupTitle: "#### Sustainability",
+      },
     ],
     icon: AssessmentIcon,
   },
@@ -116,10 +211,35 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "recommendation",
     substeps: [
-      { id: 1, title: "Limitations", isLocked: false, data: markdownContent2 },
-      { id: 2, title: "Action Steps", isLocked: false, data: markdownContent2 },
-      { id: 3, title: "Recommendations", isLocked: false, data: markdownContent2 },
-      { id: 4, title: "Summary", isLocked: false, data: markdownContent2 },
+      {
+        id: 1,
+        title: "Limitations",
+        isLocked: false,
+        data: markdownContent2,
+        markupTitle: "#### Limitations",
+      },
+      {
+        id: 2,
+        title: "Action Steps",
+        isLocked: false,
+        data: markdownContent2,
+        markupTitle: "#### Action Steps",
+      },
+      {
+        id: 3,
+        title: "Recommendations",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### Recommendations",
+      },
+      {
+        id: 4,
+        title: "Summary",
+        isLocked: false,
+        data: markdownContent2,
+        markupTitle: "#### Summary",
+      },
     ],
     icon: RecommendationIcon,
   },
@@ -128,10 +248,35 @@ export const EMPAReportSteps: Step[] = [
     isLocked: false,
     title: "conclusion",
     substeps: [
-      { id: 1, title: "Limitations", isLocked: false, data: markdownContent2 },
-      { id: 2, title: "Action Steps", isLocked: false, data: markdownContent2 },
-      { id: 3, title: "Recommendations", isLocked: false, data: markdownContent2 },
-      { id: 4, title: "Summary", isLocked: false, data: markdownContent2 },
+      {
+        id: 1,
+        title: "Limitations",
+        isLocked: false,
+        data: markdownContent2,
+        markupTitle: "#### Limitations",
+      },
+      {
+        id: 2,
+        title: "Action Steps",
+        isLocked: false,
+        data: markdownContent2,
+        markupTitle: "#### Action Steps",
+      },
+      {
+        id: 3,
+        title: "Recommendations",
+        isLocked: false,
+        data: markdownContent2,
+        description: markdownDescription,
+        markupTitle: "#### Recommendations",
+      },
+      {
+        id: 4,
+        title: "Summary",
+        isLocked: false,
+        data: markdownContent2,
+        markupTitle: "#### Summary",
+      },
     ],
     icon: RecommendationIcon,
   },

@@ -11,7 +11,6 @@ import EMPAReportMenu from "./EMPAReportMenu";
 import useIsMounted from "@/hooks/useIsMounted";
 import { Button, Skeleton } from "@nextui-org/react";
 import NovelEditorAndDisplay from "./NovelEditorAndDisplay";
-import { markdownContent, markdownContent2 } from "@/mockdata/EMPASectionsMKD";
 import markdownToProseMirror from "@/config/markdownToProseMirror";
 import useReportStepsStore from "@/store/useReportStepsStore";
 
@@ -23,11 +22,10 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const [subStep, setSubStep] = useState<TSubStep>(step.substeps[0]);
   const [isEditor, setIsEditor] = useState<boolean>(false);
   const [isChatDrawerOpen, setChatDrawerOpen] = useState<boolean>(false);
-  const searchParam = useSearchParams()
+  const searchParam = useSearchParams();
 
-
-  const { currentSubStep } = useReportStepsStore()
-  const isLocked = currentSubStep?.isLocked && currentSubStep.title === section
+  const { currentSubStep } = useReportStepsStore();
+  const isLocked = currentSubStep?.isLocked && currentSubStep.title === section;
 
   const curentSegment = location?.pathname?.split("/")[2];
 
@@ -59,8 +57,6 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
     setIsEditor((prev) => !prev);
   };
 
-
-
   useEffect(() => {
     if (containerRef.current) {
       if (isChatDrawerOpen) {
@@ -78,9 +74,19 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   }, [isChatDrawerOpen]);
 
   const markupContent = subStep ? (subStep.data as string) : "";
-  const novelJSONContent = markdownToProseMirror(markupContent);
+  const novelJSONContent =
+    markupContent && markdownToProseMirror(markupContent);
+  const titleMarkupContent = subStep ? (subStep.markupTitle as string) : "";
+  const descriptionMarkupContent = subStep
+    ? (subStep.description as string)
+    : "";
+  const descriptionNovelJSONContent =
+    descriptionMarkupContent && markdownToProseMirror(descriptionMarkupContent);
 
+  const titleNovelJSONContent =
+    titleMarkupContent && markdownToProseMirror(titleMarkupContent);
 
+  console.log({ currentSubStep, subStep });
   return (
     <Suspense>
       <div
@@ -91,12 +97,11 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
           <EMPAReportMenu
             toggleChatDrawer={toggleChatDrawer}
             toggleEditor={toggleEditor}
-
             isEditor={isEditor}
           />
         </div>
-        {
-          isLocked && <div className="bg-grey-10 mb-7 w-full rounded-3xl px-4 py-2 flex items-center justify-between">
+        {isLocked && (
+          <div className="bg-grey-10 mb-7 w-full rounded-3xl px-4 py-2 flex items-center justify-between">
             <p className="font-satoshi font-semibold text-lg text-grey-500">
               Document locked by oluwole fagbohun
             </p>
@@ -104,7 +109,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
               Unlock Document
             </Button>
           </div>
-        }
+        )}
         <div className="flex flex-col gap-4 h-fit">
           <Skeleton isLoaded={isMounted} className="rounded-full w-[10rem]">
             {" "}
@@ -113,16 +118,15 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
               {step?.title as string}
             </div>
           </Skeleton>
-
-          <EMPAReportSegmentHeaderCard title={section as string}>
-            We propose completing this engagement within a 17 week timeframe,
-            with regular progress updates and checkpoints. The iterative
-            approach to rapid design and prototyping will both inform and test
-            the target state, implementation strategy and business case.
-            Prototyping and validation work completed at the end of Stage 1 will
-            help shape and fast track the vendor selection process in Stages 2
-            and 3.
-          </EMPAReportSegmentHeaderCard>
+          {subStep?.title && (
+            <EMPAReportSegmentHeaderCard
+              titleNovelJSONContent={titleNovelJSONContent}
+              titleMarkupContent={titleMarkupContent}
+              descriptionNovelJSONContent={descriptionNovelJSONContent}
+              descriptionMarkupContent={descriptionMarkupContent}
+              isEditor={isEditor}
+            />
+          )}
         </div>
         <div className="h-full">
           {subStep?.data && (
