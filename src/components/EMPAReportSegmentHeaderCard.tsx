@@ -1,25 +1,40 @@
 import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
 import React, { ReactNode } from "react";
+import NovelEditorAndDisplay from "./NovelEditorAndDisplay";
 
 const EMPAReportSegmentHeaderCard = ({
-  title,
-  children,
+  titleNovelJSONContent,
+  titleMarkupContent,
+  descriptionNovelJSONContent,
+  descriptionMarkupContent,
+  isEditor,
 }: {
-  title: string;
-  children: ReactNode;
+  titleNovelJSONContent: ProseMirrorNode | null | string;
+  titleMarkupContent: string;
+  descriptionMarkupContent: string;
+  descriptionNovelJSONContent: ProseMirrorNode | null | string;
+  isEditor: boolean;
 }) => {
   const isMounted = useIsMounted();
   return (
     <div className="relative text-dark-100   w-[calc(100%-10px)] mx-auto">
-      <div className="relative flex flex-col overflow-hidden gap-3 z-30 bg-secondary-100 px-8 py-4 rounded-lg !space-y-0">
+      <div className="relative flex flex-col overflow-hidden gap-3 z-30 bg-secondary-100 px-8 pb-4 rounded-lg !space-y-0">
         <Skeleton isLoaded={isMounted} className="rounded-lg max-w-[60%]">
-          <h4 className="heading-h4 !my-0 font-semibold w-fit capitalize text-green-500">
-            {title}
-          </h4>
+          <NovelEditorAndDisplay
+            novelJSONContent={titleNovelJSONContent}
+            markupContent={titleMarkupContent}
+            isEditor={isEditor}
+            className="!heading-h4 !text-4xl !my-0 font-semibold w-full capitalize text-green-500"
+          />
         </Skeleton>
         <Skeleton isLoaded={isMounted} className="rounded-lg">
-          <span className="text-[18px]"> {children}</span>
+          <NovelEditorAndDisplay
+            novelJSONContent={descriptionNovelJSONContent}
+            markupContent={descriptionMarkupContent}
+            isEditor={isEditor}
+            className="w-full"
+          />
         </Skeleton>
       </div>
       <div className="absolute z-10 h-full w-[10rem] bg-primary rounded-xl -translate-x-[5px] left-0 top-0"></div>

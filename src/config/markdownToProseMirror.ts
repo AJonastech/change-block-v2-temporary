@@ -2,18 +2,6 @@
 import markdownIt from "markdown-it"; // Import markdown-it or similar library
 
 // Define the ProseMirror document node types
-interface ProseMirrorNode {
-  type: string;
-  text?: string;
-  attrs?: any;
-  content?: ProseMirrorNode[];
-  marks?: ProseMirrorMark[];
-}
-
-interface ProseMirrorMark {
-  type: string;
-  text?: string;
-}
 
 const markdownToProseMirror = (
   markdownContent: string
