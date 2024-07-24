@@ -1,105 +1,116 @@
 "use client";
-import { useParams, useSearchParams } from "next/navigation";
-import React, { Suspense, useEffect, useState, useRef } from "react";
+import React, { Suspense, useEffect, useState, useRef, useMemo } from "react";
+import { useParams } from "next/navigation";
 import { useLocation } from "react-use";
-import EMPAReportSegmentHeaderCard from "./EMPAReportSegmentHeaderCard";
-import { EMPAReportSteps } from "@/config/reportStepConfig";
-import RichInput from "./RichInput";
-import Markdown from "./Markdown";
-import CommentsDrawer from "./CommentsDrawer";
-import EMPAReportMenu from "./EMPAReportMenu";
-import useIsMounted from "@/hooks/useIsMounted";
 import { Button, Skeleton } from "@nextui-org/react";
+
+import EMPAReportSegmentHeaderCard from "./EMPAReportSegmentHeaderCard";
+import EMPAReportMenu from "./EMPAReportMenu";
+import CommentsDrawer from "./CommentsDrawer";
+import RichInput from "./RichInput";
 import NovelEditorAndDisplay from "./NovelEditorAndDisplay";
-import markdownToProseMirror from "@/config/markdownToProseMirror";
+
+import useIsMounted from "@/hooks/useIsMounted";
 import useReportStepsStore from "@/store/useReportStepsStore";
+import { EMPAReportSteps } from "@/config/reportStepConfig";
+import markdownToProseMirror from "@/config/markdownToProseMirror";
 
 const EMPAReportSegment = ({ section }: { section: string }) => {
+  // Get the current location and parameters from the URL
   const location = useLocation();
   const { segment } = useParams();
+  const decodedSegment = decodeURIComponent(segment as string);
+  const decodedSection = decodeURIComponent(section as string);
+
+  // Custom hooks and state management
   const isMounted = useIsMounted();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { currentSubStep } = useReportStepsStore();
+
+  // State variables for step and substep
   const [step, setStep] = useState<TStep>(EMPAReportSteps[0]);
   const [subStep, setSubStep] = useState<TSubStep>(step.substeps[0]);
   const [isEditor, setIsEditor] = useState<boolean>(false);
   const [isChatDrawerOpen, setChatDrawerOpen] = useState<boolean>(false);
-  const searchParam = useSearchParams();
 
-  const { currentSubStep } = useReportStepsStore();
-  const isLocked = currentSubStep?.isLocked && currentSubStep.title === section;
+  // Determine if the current substep is locked
+  const isLocked =
+    currentSubStep?.isLocked && currentSubStep.title === decodedSection;
+  const currentSegment = location?.pathname?.split("/")[2];
 
-  const curentSegment = location?.pathname?.split("/")[2];
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
+  // Update step and substep based on URL changes
   useEffect(() => {
-    const currentStep = EMPAReportSteps.find((step) => {
-      if (step.title === segment) {
-        return step;
-      } else {
-        return "";
-      }
-    });
-    const currentSection = currentStep?.substeps?.find((subStep) => {
-      if (subStep.title === section) {
-        return subStep;
-      } else {
-        return "";
-      }
-    });
+    const currentStep = EMPAReportSteps.find(
+      (step) => step.title === decodedSegment
+    );
+    const currentSection = currentStep?.substeps?.find(
+      (subStep) => subStep.title === decodedSection
+    );
     currentStep && setStep(currentStep as TStep);
     currentSection && setSubStep(currentSection);
-  }, [curentSegment, section, segment]);
+  }, [currentSegment, decodedSection, decodedSegment, section]);
 
-  const toggleChatDrawer = () => {
-    setChatDrawerOpen((prev) => !prev);
-  };
-  const toggleEditor = () => {
-    setIsEditor((prev) => !prev);
-  };
-
+  // Handle scrolling behavior when the chat drawer is toggled
   useEffect(() => {
     if (containerRef.current) {
-      if (isChatDrawerOpen) {
-        containerRef.current.scrollTo({
-          top: containerRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      } else {
-        containerRef.current.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      }
+      containerRef.current.scrollTo({
+        top: isChatDrawerOpen ? containerRef.current.scrollHeight : 0,
+        behavior: "smooth",
+      });
     }
   }, [isChatDrawerOpen]);
 
-  const markupContent = subStep ? (subStep.data as string) : "";
-  const novelJSONContent =
-    markupContent && markdownToProseMirror(markupContent);
-  const titleMarkupContent = subStep ? (subStep.markupTitle as string) : "";
-  const descriptionMarkupContent = subStep
-    ? (subStep.description as string)
-    : "";
-  const descriptionNovelJSONContent =
-    descriptionMarkupContent && markdownToProseMirror(descriptionMarkupContent);
+  // Toggle functions for chat drawer and editor
+  const toggleChatDrawer = () => setChatDrawerOpen((prev) => !prev);
+  const toggleEditor = () => setIsEditor((prev) => !prev);
 
-  const titleNovelJSONContent =
-    titleMarkupContent && markdownToProseMirror(titleMarkupContent);
+  // Memoize content transformation from markdown to ProseMirror format
+  const markupContent = useMemo(
+    () => (subStep?.data as string) || "",
+    [subStep]
+  );
+  const titleMarkupContent = useMemo(
+    () => (subStep?.markupTitle as string) || "",
+    [subStep]
+  );
+  const descriptionMarkupContent = useMemo(
+    () => (subStep?.description as string) || "",
+    [subStep]
+  );
 
-  console.log({ currentSubStep, subStep });
+  const novelJSONContent = useMemo(
+    () => (markupContent ? markdownToProseMirror(markupContent) : null),
+    [markupContent]
+  );
+  const titleNovelJSONContent = useMemo(
+    () =>
+      titleMarkupContent ? markdownToProseMirror(titleMarkupContent) : null,
+    [titleMarkupContent]
+  );
+  const descriptionNovelJSONContent = useMemo(
+    () =>
+      descriptionMarkupContent
+        ? markdownToProseMirror(descriptionMarkupContent)
+        : null,
+    [descriptionMarkupContent]
+  );
+
   return (
     <Suspense>
       <div
-        className="flex  flex-col justify-start min-h-full h-full no-scrollbar  overflow-y-auto mb-[3rem]  "
+        className="flex flex-col justify-start min-h-full h-full no-scrollbar overflow-y-auto mb-[3rem]"
         ref={containerRef}
       >
-        <div className="">
+        {/* Menu Component */}
+        <div>
           <EMPAReportMenu
             toggleChatDrawer={toggleChatDrawer}
             toggleEditor={toggleEditor}
             isEditor={isEditor}
           />
         </div>
+
+        {/* Document Lock Indicator */}
         {isLocked && (
           <div className="bg-grey-10 mb-7 w-full rounded-3xl px-4 py-2 flex items-center justify-between">
             <p className="font-satoshi font-semibold text-lg text-grey-500">
@@ -110,15 +121,18 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             </Button>
           </div>
         )}
+
+        {/* Step Indicator */}
         <div className="flex flex-col gap-4 h-fit">
-          <Skeleton isLoaded={isMounted} className="rounded-full w-[10rem]">
-            {" "}
-            <div className="bg-background items-center rounded-full py-2 w-fit px-4 flex gap-2 capitalize">
+          <Skeleton isLoaded={isMounted} className="rounded-full w-[15rem]">
+            <div className="bg-background items-center rounded-full py-2 w-fit px-4 flex gap-2 capitalize text-nowrap">
               <step.icon />
-              {step?.title as string}
+              {step?.title}
             </div>
           </Skeleton>
-          {subStep?.title && (
+
+          {/* Header Card for the Section */}
+          {titleNovelJSONContent && (
             <EMPAReportSegmentHeaderCard
               titleNovelJSONContent={titleNovelJSONContent}
               titleMarkupContent={titleMarkupContent}
@@ -128,9 +142,11 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             />
           )}
         </div>
+
+        {/* Main Content Editor/Display */}
         <div className="h-full">
-          {subStep?.data && (
-            <div className="h-max min-h-max   ">
+          {novelJSONContent && (
+            <div className="h-max min-h-max">
               <NovelEditorAndDisplay
                 novelJSONContent={novelJSONContent}
                 markupContent={markupContent}
@@ -139,16 +155,19 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             </div>
           )}
         </div>
-        <div className="w-full ">
+
+        {/* Comments Drawer */}
+        <div className="w-full">
           <CommentsDrawer
             onClick={toggleChatDrawer}
             isOpen={isChatDrawerOpen}
           />
         </div>
-        <div className=" absolute bottom-[32px] left-0  gap-2 w-full flex   ">
-          <div className=" w-full mx-auto flex flex-col ">
-            {" "}
-            <div className="h-8  w-full bg-gradient-to-b  from-transparent via-transparent to-black/10 "></div>{" "}
+
+        {/* Rich Input at the Bottom */}
+        <div className="absolute bottom-[32px] left-0 gap-2 w-full flex">
+          <div className="w-full mx-auto flex flex-col">
+            <div className="h-8 w-full bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
             <RichInput />
           </div>
         </div>

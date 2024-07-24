@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Button, Tooltip } from "@nextui-org/react";
 import {
-  AddPersonIcon,
   ChatIcon,
   EditIcon,
   RefreshIcon,
-  StackIcon,
   ShareIcon,
+  AddUserIcon,
+  VersionIcon,
 } from "@/icons";
 import { useParams, useSearchParams } from "next/navigation";
 import SlideIntoView from "./SlideIntoView";
@@ -78,7 +78,7 @@ const EMPAReportMenu = ({
             <Tooltip content="Add Collaborator">
               <EMPAModal
                 className="min-w-[700px] w-[700px]"
-                buttonIcon={<AddPersonIcon />}
+                buttonIcon={<AddUserIcon />}
               >
                 <AddCollaborator />
               </EMPAModal>
@@ -95,7 +95,7 @@ const EMPAReportMenu = ({
               </Button>
             </Tooltip>
             <Tooltip content="Version History">
-              <EMPAVersionHistory buttonIcon={<StackIcon />} />
+              <EMPAVersionHistory buttonIcon={<VersionIcon />} />
             </Tooltip>
             <Tooltip content="Share EMPA Report">
               <EMPAModal
