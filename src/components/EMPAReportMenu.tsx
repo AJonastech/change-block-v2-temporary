@@ -16,6 +16,8 @@ import AddCollaborator from "./forms/AddEMPACollaborator";
 import EMPAModal from "./modals/EMPAModal";
 import ShareEMPAForm from "./forms/ShareEMPAForm";
 import EMPAVersionHistory from "./EMPAVersionHistory";
+import EMPAPreviewReport from "./EMPAPreviewReport";
+
 
 const EMPAReportMenu = ({
   toggleChatDrawer,
@@ -28,7 +30,7 @@ const EMPAReportMenu = ({
 }) => {
   const data = useSearchParam("data");
   const { segment } = useParams();
-  console.log(segment, data);
+
   return (
     <div className={`absolute top-0 right-0`}>
       <SlideIntoView from="right">
@@ -69,10 +71,21 @@ const EMPAReportMenu = ({
               </EMPAModal>
             </Tooltip>
           </div>
+        <EMPAModal     className="min-w-[1000px] w-[1000px]" buttonElement={ <Button
+            
+            color="primary"
+            className="!bg-green-300 !px-4 py-[5px] max-w-[6.5rem] w-[6.5rem]"
+            onPress={toggleEditor}
+          >
+           Preview
+          </Button>}>
+         <EMPAPreviewReport/>
+        </EMPAModal>
+          
           <Button
             startContent={<EditIcon />}
             color="primary"
-            className="!bg-primary !px-5 max-w-[4rem] w-[4rem]"
+            className="!bg-primary !px-4 py-[5px] max-w-[6.5rem] w-[6.5rem]"
             onPress={toggleEditor}
           >
             {isEditor ? "Save" : "Edit"}
