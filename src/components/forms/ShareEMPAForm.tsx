@@ -95,14 +95,7 @@ const ShareEMPAForm = () => {
       <div className="flex px-8 pb-0 justify-between items-center">
         <h6 className="font-semibold heading-h6 text-grey-700">Share</h6>
       </div>
-      <div className="flex gap-4 p-8 border-y">
-        <Button startContent={<Link size={18} />} color="primary">
-          Copy Link
-        </Button>
-        <Button variant="bordered" className="border-[1.5px] rounded-lg">
-          Open Messaging
-        </Button>
-      </div>
+  
       <div className="flex flex-col gap-4 px-8">
         <Input
           label="Share to Address"
@@ -140,7 +133,7 @@ const ShareEMPAForm = () => {
                 src={collaborator.image}
                 alt={collaborator.name}
               />
-              <span className=" text-grey-700 font-bold text-lg group-hover:underline transition-all duration-200">
+              <span className=" text-grey-700 font-satoshi text-lg group-hover:underline transition-all duration-200">
                 {collaborator.name.split(" ")[0]}
               </span>
             </li>

@@ -15,7 +15,7 @@ const capitalizeWords = (str: string) => {
 };
 
 const BreadCrumb = () => {
-  const isMounted = true; //useIsMounted()
+  const isMounted = true; // useIsMounted();
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
 
@@ -31,6 +31,7 @@ const BreadCrumb = () => {
       </span>
       {isMounted &&
         pathSegments.map((segment, index) => {
+          const decodedSegment = decodeURIComponent(segment);
           const href = "/" + pathSegments.slice(0, index + 1).join("/");
           const isLast = index === pathSegments.length - 1;
 
@@ -45,10 +46,10 @@ const BreadCrumb = () => {
                 } capitalize flex-none`}
               >
                 {isLast ? (
-                  capitalizeWords(segment)
+                  capitalizeWords(decodedSegment)
                 ) : (
                   <Link href={href} className="hover:cursor-pointer">
-                    {capitalizeWords(segment)}
+                    {capitalizeWords(decodedSegment)}
                   </Link>
                 )}
               </span>

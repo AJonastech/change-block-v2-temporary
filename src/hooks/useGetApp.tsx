@@ -1,6 +1,6 @@
 "use client"
 import { usePathname, useSearchParams } from 'next/navigation';
-import React from 'react'
+
 
 function useGetApp() {
     const pathName = usePathname();

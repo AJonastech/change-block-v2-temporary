@@ -6,6 +6,7 @@ import { FiThumbsUp, FiMessageCircle, FiMoreHorizontal } from "react-icons/fi";
 import { AiOutlineSend } from "react-icons/ai";
 import { ArrowDown2, ArrowUp2 } from "iconsax-react";
 import { CgClose } from "react-icons/cg";
+import EMPAQuestions from "./EMPAQuestions";
 
 
 type TCommentProps = {
@@ -250,7 +251,7 @@ const EMPAComments = ({ onClick }: { onClick: () => void }) => {
         </Tab>
         <Tab key="questions" title="Questions">
           {/* Similar structure as comments but for questions */}
-          <QuestionsComponent />
+          <EMPAQuestions/>
         </Tab>
       </Tabs>
     </div>

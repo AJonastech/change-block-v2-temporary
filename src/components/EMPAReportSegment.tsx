@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState, useRef } from "react";
 import { useLocation } from "react-use";
 import EMPAReportSegmentHeaderCard from "./EMPAReportSegmentHeaderCard";
@@ -9,10 +9,11 @@ import Markdown from "./Markdown";
 import CommentsDrawer from "./CommentsDrawer";
 import EMPAReportMenu from "./EMPAReportMenu";
 import useIsMounted from "@/hooks/useIsMounted";
-import { Skeleton } from "@nextui-org/react";
+import { Button, Skeleton } from "@nextui-org/react";
 import NovelEditorAndDisplay from "./NovelEditorAndDisplay";
 import { markdownContent, markdownContent2 } from "@/mockdata/EMPASectionsMKD";
 import markdownToProseMirror from "@/config/markdownToProseMirror";
+import useReportStepsStore from "@/store/useReportStepsStore";
 
 const EMPAReportSegment = ({ section }: { section: string }) => {
   const location = useLocation();
@@ -22,6 +23,11 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const [subStep, setSubStep] = useState<TSubStep>(step.substeps[0]);
   const [isEditor, setIsEditor] = useState<boolean>(false);
   const [isChatDrawerOpen, setChatDrawerOpen] = useState<boolean>(false);
+  const searchParam = useSearchParams()
+
+
+  const { currentSubStep } = useReportStepsStore()
+  const isLocked = currentSubStep?.isLocked && currentSubStep.title === section
 
   const curentSegment = location?.pathname?.split("/")[2];
 
@@ -53,7 +59,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
     setIsEditor((prev) => !prev);
   };
 
- 
+
 
   useEffect(() => {
     if (containerRef.current) {
@@ -74,7 +80,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const markupContent = subStep ? (subStep.data as string) : "";
   const novelJSONContent = markdownToProseMirror(markupContent);
 
-  
+
   return (
     <Suspense>
       <div
@@ -85,10 +91,20 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
           <EMPAReportMenu
             toggleChatDrawer={toggleChatDrawer}
             toggleEditor={toggleEditor}
-            
+
             isEditor={isEditor}
           />
         </div>
+        {
+          isLocked && <div className="bg-grey-10 mb-7 w-full rounded-3xl px-4 py-2 flex items-center justify-between">
+            <p className="font-satoshi font-semibold text-lg text-grey-500">
+              Document locked by oluwole fagbohun
+            </p>
+            <Button className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6">
+              Unlock Document
+            </Button>
+          </div>
+        }
         <div className="flex flex-col gap-4 h-fit">
           <Skeleton isLoaded={isMounted} className="rounded-full w-[10rem]">
             {" "}
