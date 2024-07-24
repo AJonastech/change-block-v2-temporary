@@ -20,7 +20,7 @@ function page() {
             <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
             Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.
             </p>
-            <Button className='w-full font-satoshi text-grey-20 ' color='primary'>
+            <Button className='w-full font-satoshi !bg-primary text-grey-20 ' color='primary'>
               Process
             </Button>
           </div>
@@ -32,7 +32,7 @@ function page() {
             <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
             Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.
             </p>
-            <Button className='w-full font-satoshi text-grey-20 ' color='primary'>
+            <Button className='w-full font-satoshi !bg-primary text-grey-20 ' color='primary'>
               Process
             </Button>
           </div>
