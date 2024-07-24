@@ -19,7 +19,7 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
-    if (data !== null || pathName.includes("/internal-tools/automated-issue-system")) {
+    if (data !== null || pathName.includes("/internal-tools/automated-issue-system")|| pathName.includes("/internal-tools/weekly-insights")) {
       setIsCollapsed(true);
     } else {
       setIsCollapsed(false);
@@ -29,7 +29,7 @@ const Sidebar = () => {
   const handleToggleCollapse = () => setIsCollapsed(prev => !prev);
 
   const sidebarWidth = useMemo(() => (isCollapsed ? 80 : 290), [isCollapsed]);
-  const drawerWidth = useMemo(() => (data === "report" && isMounted || pathName.includes("/internal-tools/automated-issue-system") ? 306 : 0), [data, isMounted, pathName]);
+  const drawerWidth = useMemo(() => (data === "report" && isMounted || pathName.includes("/internal-tools/automated-issue-system") || pathName.includes("/internal-tools/weekly-insights")? 306 : 0), [data, isMounted, pathName]);
 
 
 
@@ -123,7 +123,7 @@ const Sidebar = () => {
           {currentApp === "EMPA" && data === "report" && (
             <EMPAGeneratorNav data={data} section={section} />
           )}
-          {pathName.includes("/internal-tools/automated-issue-system") && (
+          {(pathName.includes("/internal-tools/automated-issue-system") || pathName.includes("/internal-tools/weekly-insights"))  && (
             <AutomatedIssuesNav />
           )}
         </SideBarDrawer>

@@ -27,14 +27,8 @@ export default function page() {
                   className={`
                         w-[50px] h-[50px]  rounded-md sm:h-[40px] sm:w-[40px]
                         ${index === 0 && "bg-[#D1E7FA] p-[1px]"}
-                        ${index === 1 && "bg-[#FCEFCF] p-[1px]"}
-                        ${index === 2 && "bg-[#F7D4E2] p-[1px]"}
-                        ${index === 3 && "bg-[#CCE7FF] p-[1px]"}
-                        ${index === 4 && "bg-[#DDD2F9] p-[1px]"}
-                        ${index === 5 && "bg-[#E4CCFF] p-[1px]"}
-                        ${index === 6 && "bg-[#DCDFEF] p-[1px]"}
-                   
-                        
+                        ${index === 1 && "bg-[#cce7ff] p-[1px]"}
+                        ${index === 2 && "bg-[#F7D4E2] p-[1px]"}                    
                     `}
                 >
                   <Image
