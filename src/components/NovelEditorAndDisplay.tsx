@@ -33,7 +33,7 @@ export default function NovelEditorAndDisplay({
     handleImageUpload();
   }, []);
 
-  console.log({ novelJSONContent, JSONContent });
+ // console.log({ novelJSONContent, JSONContent });
 
   return (
     <div className="markdown flex-col flex gap-3 h-full">
