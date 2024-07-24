@@ -24,7 +24,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const [isChatDrawerOpen, setChatDrawerOpen] = useState<boolean>(false);
   const searchParam = useSearchParams();
 
-  const { currentSubStep } = useReportStepsStore();
+  const { currentSubStep, toggleSubStepLock } = useReportStepsStore();
   const isLocked = currentSubStep?.isLocked && currentSubStep.title === section;
 
   const curentSegment = location?.pathname?.split("/")[2];
@@ -86,7 +86,17 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const titleNovelJSONContent =
     titleMarkupContent && markdownToProseMirror(titleMarkupContent);
 
-  console.log({ currentSubStep, subStep });
+
+    const handleUnlockDocument = () => {
+      const stepIndex = EMPAReportSteps.findIndex((step) => step.title === segment);
+      const subStepIndex = EMPAReportSteps[stepIndex]?.substeps.findIndex((subStep) => subStep.title === section);
+     
+      if (stepIndex !== -1 && subStepIndex !== -1) {
+        toggleSubStepLock(stepIndex, subStepIndex);
+      }
+    };
+
+ 
   return (
     <Suspense>
       <div
@@ -105,7 +115,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             <p className="font-satoshi font-semibold text-lg text-grey-500">
               Document locked by oluwole fagbohun
             </p>
-            <Button className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6">
+            <Button onClick={handleUnlockDocument} className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6">
               Unlock Document
             </Button>
           </div>
