@@ -176,7 +176,10 @@ const EMPAGeneratorNav = ({
                         } w-full hover:text-green-700 capitalize text-nowrap`}
 
 
-                      onClick={() => setCurrentSubStep({ title, id, isLocked })}
+                      onClick={() => setCurrentSubStep({
+                        title, id, isLocked,
+                        markupTitle: ""
+                      })}
 
                     >
                       {trimSentence(title)}
