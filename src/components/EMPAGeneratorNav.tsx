@@ -108,7 +108,7 @@ const EMPAGeneratorNav = ({
                   <Button
                     startContent={
                       <div
-                        className={`${segment === step.title ? "opacity-100 " : "opacity-70"
+                        className={`${segment === step.title ? "opacity-100" : "opacity-70"
                           } `}
                       >
                         <step.icon />
