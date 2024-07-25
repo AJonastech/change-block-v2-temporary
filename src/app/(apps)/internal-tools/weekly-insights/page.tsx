@@ -18,7 +18,7 @@ function page() {
               from Channel
             </h6>
             <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
-            Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.
+              Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.
             </p>
             <Button className='w-full font-satoshi !bg-primary text-grey-20 ' color='primary'>
               Process
@@ -30,7 +30,7 @@ function page() {
               from Channel
             </h6>
             <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
-            Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.
+              Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.
             </p>
             <Button className='w-full font-satoshi !bg-primary text-grey-20 ' color='primary'>
               Process

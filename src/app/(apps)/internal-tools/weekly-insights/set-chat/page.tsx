@@ -1,5 +1,4 @@
-
-import AutomatedChatSettingsForm from '@/components/forms/AutomatedChatSettingsForm'
+import WeeklyChatSettingsForm from '@/components/forms/WeeklyChatSettingsForm'
 import React from 'react'
 
 function page() {
@@ -12,8 +11,8 @@ function page() {
                         Edit your chat room to get messages from
                     </span>
                 </div>
-                <div className=' w-full justify-center mt-5  px-[2rem]'>
-                    <AutomatedChatSettingsForm/>
+                <div className=' w-full justify-center mt-5 pb-12  px-[2rem]'>
+                    <WeeklyChatSettingsForm />
                 </div>
             </div>
 

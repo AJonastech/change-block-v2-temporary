@@ -1,4 +1,4 @@
-import ChannelSettingsForm from '@/components/forms/ChannelSettingsForm'
+import AutomatedChannelSettingsForm from '@/components/forms/AutomatedChannelSettingsForm'
 import React from 'react'
 
 function page() {
@@ -12,7 +12,7 @@ function page() {
                     </span>
                 </div>
                 <div className=' w-full justify-center mt-5  px-[2rem]'>
-                    <ChannelSettingsForm />
+                    <AutomatedChannelSettingsForm />
                 </div>
             </div>
 

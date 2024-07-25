@@ -37,3 +37,21 @@ export const automatedIssuesItems: item[] = [
     path: "/internal-tools/automated-issue-system/set-chat",
   },
 ];
+
+export const weeklyInsightItems: item[] = [
+  {
+    name: "Home",
+    icon: HomeIcon,
+    path: "/internal-tools/weekly-insights",
+  },
+  {
+    name: "Set Channel",
+    icon: ChannelIcon,
+    path: "/internal-tools/weekly-insights/set-channel",
+  },
+  {
+    name: "Set Chat",
+    icon: ChatIcon,
+    path: "/internal-tools/weekly-insights/set-chat",
+  },
+];

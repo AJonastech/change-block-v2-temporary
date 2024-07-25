@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic';
 import useIsMounted from "@/hooks/useIsMounted";
 import { menuItems } from "@/config/panelConfig";
 import useGetApp from "@/hooks/useGetApp";
+import WeeklyInsightsNav from "./WeeklyInsightNav";
 
 const SideBarDrawer = dynamic(() => import('./SideBarDrawer'));
 const EMPAGeneratorNav = dynamic(() => import('./EMPAGeneratorNav'));
@@ -19,7 +20,7 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
-    if (data !== null || pathName.includes("/internal-tools/automated-issue-system")|| pathName.includes("/internal-tools/weekly-insights")) {
+    if (data !== null || pathName.includes("/internal-tools/automated-issue-system") || pathName.includes("/internal-tools/weekly-insights")) {
       setIsCollapsed(true);
     } else {
       setIsCollapsed(false);
@@ -29,7 +30,7 @@ const Sidebar = () => {
   const handleToggleCollapse = () => setIsCollapsed(prev => !prev);
 
   const sidebarWidth = useMemo(() => (isCollapsed ? 80 : 290), [isCollapsed]);
-  const drawerWidth = useMemo(() => (data === "report" && isMounted || pathName.includes("/internal-tools/automated-issue-system") || pathName.includes("/internal-tools/weekly-insights")? 306 : 0), [data, isMounted, pathName]);
+  const drawerWidth = useMemo(() => (data === "report" && isMounted || pathName.includes("/internal-tools/automated-issue-system") || pathName.includes("/internal-tools/weekly-insights") ? 306 : 0), [data, isMounted, pathName]);
 
 
 
@@ -69,31 +70,31 @@ const Sidebar = () => {
             </div>
             <div className="flex flex-col gap-2">
 
-   
-            {menuItems.map((item, index) => (
-              <Link  key={index} href={`/${item.path}`}>
-                <Tooltip
-                  content={item.name}
-                  placement="right"
-                  isDisabled={!isCollapsed}
-                  className=""
-                >
-                  <motion.div
-                    className={`flex items-center text-nowrap font-satoshi rounded-r-full text-lg py-3 pl-7 pr-4 cursor-pointer hover:bg-gray-200 mr-4 ${currentPath?.toLowerCase() === item?.path?.toLowerCase() ? "bg-secondary  text-green-500 font-bold " : "font-medium text-grey-300"}`}
+
+              {menuItems.map((item, index) => (
+                <Link key={index} href={`/${item.path}`}>
+                  <Tooltip
+                    content={item.name}
+                    placement="right"
+                    isDisabled={!isCollapsed}
+                    className=""
                   >
-                    <span className="text-xl text-nowrap">
-                      <item.icon />
-                    </span>
-                    {!isCollapsed && (
-                      <div className="w-full overflow-hidden">
-                        <span className="ml-4">{item.name}</span>
-                      </div>
-                    )}
-                  </motion.div>
-                </Tooltip>
-              </Link>
-            ))}
-                     </div>
+                    <motion.div
+                      className={`flex items-center text-nowrap font-satoshi rounded-r-full text-lg py-3 pl-7 pr-4 cursor-pointer hover:bg-gray-200 mr-4 ${currentPath?.toLowerCase() === item?.path?.toLowerCase() ? "bg-secondary  text-green-500 font-bold " : "font-medium text-grey-300"}`}
+                    >
+                      <span className="text-xl text-nowrap">
+                        <item.icon />
+                      </span>
+                      {!isCollapsed && (
+                        <div className="w-full overflow-hidden">
+                          <span className="ml-4">{item.name}</span>
+                        </div>
+                      )}
+                    </motion.div>
+                  </Tooltip>
+                </Link>
+              ))}
+            </div>
           </div>
           <div className="p-4 w-full mx-auto">
             <motion.div className="flex gap-x-4 items-center w-full mx-auto">
@@ -123,8 +124,11 @@ const Sidebar = () => {
           {currentApp === "EMPA" && data === "report" && (
             <EMPAGeneratorNav data={data} section={section} />
           )}
-          {(pathName.includes("/internal-tools/automated-issue-system") || pathName.includes("/internal-tools/weekly-insights"))  && (
+          {(pathName.includes("/internal-tools/automated-issue-system")) && (
             <AutomatedIssuesNav />
+          )}
+          {(pathName.includes("/internal-tools/weekly-insights")) && (
+            <WeeklyInsightsNav />
           )}
         </SideBarDrawer>
       </motion.div>

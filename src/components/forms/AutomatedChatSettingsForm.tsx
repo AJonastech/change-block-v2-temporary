@@ -13,7 +13,7 @@ const chatSettingsFormSchema = z.object({
 
 type ChatSettingsFormType = z.infer<typeof chatSettingsFormSchema>;
 
-function ChatSettingsForm() {
+function AutomatedChatSettingsForm() {
     const form = useForm<ChatSettingsFormType>({
         resolver: zodResolver(chatSettingsFormSchema)
     })
@@ -94,4 +94,4 @@ function ChatSettingsForm() {
     )
 }
 
-export default ChatSettingsForm
+export default AutomatedChatSettingsForm
