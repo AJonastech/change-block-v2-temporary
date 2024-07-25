@@ -33,10 +33,17 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   const [isEditor, setIsEditor] = useState<boolean>(false);
   const [isChatDrawerOpen, setChatDrawerOpen] = useState<boolean>(false);
 
+
   // Determine if the current substep is locked
   const isLocked =
     currentSubStep?.isLocked && currentSubStep.title === decodedSection;
   const currentSegment = location?.pathname?.split("/")[2];
+
+  const { currentSubStep, toggleSubStepLock } = useReportStepsStore();
+
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
 
   // Update step and substep based on URL changes
   useEffect(() => {
@@ -60,6 +67,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
     }
   }, [isChatDrawerOpen]);
 
+
   // Toggle functions for chat drawer and editor
   const toggleChatDrawer = () => setChatDrawerOpen((prev) => !prev);
   const toggleEditor = () => setIsEditor((prev) => !prev);
@@ -78,6 +86,15 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
     [subStep]
   );
 
+console.log("data")
+  
+  const novelJSONContent =
+    markupContent && markdownToProseMirror(markupContent);
+ 
+  const descriptionNovelJSONContent =
+    descriptionMarkupContent && markdownToProseMirror(descriptionMarkupContent);
+
+
   const novelJSONContent = useMemo(
     () => (markupContent ? markdownToProseMirror(markupContent) : null),
     [markupContent]
@@ -94,6 +111,20 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
         : null,
     [descriptionMarkupContent]
   );
+
+
+
+
+    const handleUnlockDocument = () => {
+      const stepIndex = EMPAReportSteps.findIndex((step) => step.title === segment);
+      const subStepIndex = EMPAReportSteps[stepIndex]?.substeps.findIndex((subStep) => subStep.title === section);
+     
+      if (stepIndex !== -1 && subStepIndex !== -1) {
+        toggleSubStepLock(stepIndex, subStepIndex);
+      }
+    };
+
+ 
 
   return (
     <Suspense>
@@ -116,7 +147,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             <p className="font-satoshi font-semibold text-lg text-grey-500">
               Document locked by oluwole fagbohun
             </p>
-            <Button className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6">
+            <Button onClick={handleUnlockDocument} className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6">
               Unlock Document
             </Button>
           </div>
