@@ -72,14 +72,14 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
       }
     }
   }, [isChatDrawerOpen]);
-
+console.log("data")
   const markupContent = subStep ? (subStep.data as string) : "";
   const novelJSONContent =
     markupContent && markdownToProseMirror(markupContent);
   const titleMarkupContent = subStep ? (subStep.markupTitle as string) : "";
   const descriptionMarkupContent = subStep
     ? (subStep.description as string)
-    : "";
+    : "  ";
   const descriptionNovelJSONContent =
     descriptionMarkupContent && markdownToProseMirror(descriptionMarkupContent);
 
