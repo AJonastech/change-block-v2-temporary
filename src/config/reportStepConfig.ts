@@ -168,7 +168,9 @@ export const EMPAReportSteps: TStep[] = [
         id: 1,
         title: "Regulatory Environment and Market Mechanisms",
         isLocked: false,
-        data: markdownContent1,
+        data: markdownContent,
+        description: markdownDescription,
+
         markupTitle: "#### Regulatory Environment and Market Mechanisms",
       },
     ],
@@ -189,11 +191,11 @@ export const EMPAReportSteps: TStep[] = [
       },
       {
         id: 2,
-        title: "Risk & Opportunities",
+        title: "Risk and Opportunities",
         isLocked: false,
         data: markdownContent,
         description: markdownDescription,
-        markupTitle: "#### Risk & Opportunities",
+        markupTitle: "#### Risk and Opportunities",
       },
       {
         id: 3,
@@ -216,6 +218,8 @@ export const EMPAReportSteps: TStep[] = [
         title: "Limitations",
         isLocked: false,
         data: markdownContent2,
+        description: markdownDescription,
+
         markupTitle: "#### Limitations",
       },
       {
@@ -223,6 +227,8 @@ export const EMPAReportSteps: TStep[] = [
         title: "Action Steps",
         isLocked: false,
         data: markdownContent2,
+        description: markdownDescription,
+
         markupTitle: "#### Action Steps",
       },
       {
@@ -238,6 +244,8 @@ export const EMPAReportSteps: TStep[] = [
         title: "Summary",
         isLocked: false,
         data: markdownContent2,
+        description: markdownDescription,
+
         markupTitle: "#### Summary",
       },
     ],
@@ -253,6 +261,8 @@ export const EMPAReportSteps: TStep[] = [
         title: "Limitations",
         isLocked: false,
         data: markdownContent2,
+        description: markdownDescription,
+
         markupTitle: "#### Limitations",
       },
       {
@@ -260,6 +270,8 @@ export const EMPAReportSteps: TStep[] = [
         title: "Action Steps",
         isLocked: false,
         data: markdownContent2,
+        description: markdownDescription,
+
         markupTitle: "#### Action Steps",
       },
       {
@@ -275,6 +287,8 @@ export const EMPAReportSteps: TStep[] = [
         title: "Summary",
         isLocked: false,
         data: markdownContent2,
+        description: markdownDescription,
+
         markupTitle: "#### Summary",
       },
     ],

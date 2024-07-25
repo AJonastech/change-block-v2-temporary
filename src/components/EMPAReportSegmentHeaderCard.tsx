@@ -1,6 +1,7 @@
+"use client";
 import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
-import React, { ReactNode } from "react";
+import React from "react";
 import NovelEditorAndDisplay from "./NovelEditorAndDisplay";
 
 const EMPAReportSegmentHeaderCard = ({
@@ -17,10 +18,11 @@ const EMPAReportSegmentHeaderCard = ({
   isEditor: boolean;
 }) => {
   const isMounted = useIsMounted();
+
   return (
     <div className="relative text-dark-100   w-[calc(100%-10px)] mx-auto">
       <div className="relative flex flex-col overflow-hidden gap-3 z-30 bg-secondary-100 px-8 pb-4 rounded-lg !space-y-0">
-        <Skeleton isLoaded={isMounted} className="rounded-lg max-w-[60%]">
+        <Skeleton isLoaded={isMounted} className="rounded-lg">
           <NovelEditorAndDisplay
             novelJSONContent={titleNovelJSONContent}
             markupContent={titleMarkupContent}

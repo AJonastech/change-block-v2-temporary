@@ -1,3 +1,4 @@
+"use client";
 import { Editor } from "novel";
 import { type Editor as TipTapEditor } from "@tiptap/core";
 import { useEffect, useState } from "react";
@@ -18,7 +19,10 @@ export default function NovelEditorAndDisplay({
   className,
 }: NovelEditorProps) {
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
-  const [JSONContent, setJSONContent] = useState(novelJSONContent);
+
+  useEffect(() => {
+    setHtmlContent(parseMKD(markupContent));
+  }, [markupContent]);
 
   return (
     <div className={`${className} markdown flex-col flex gap-3 h-full`}>
@@ -30,7 +34,6 @@ export default function NovelEditorAndDisplay({
           }}
           onDebouncedUpdate={(editor?: TipTapEditor) => {
             setHtmlContent(editor?.getHTML() as any);
-            setJSONContent(editor?.getJSON() as any);
           }}
           disableLocalStorage={true}
           className="!p-0 m-0 shadow-none custom-editor"
