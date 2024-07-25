@@ -25,7 +25,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   // Custom hooks and state management
   const isMounted = useIsMounted();
   const containerRef = useRef<HTMLDivElement>(null);
-  const { currentSubStep } = useReportStepsStore();
+  const { currentSubStep, toggleSubStepLock } = useReportStepsStore();
 
   // State variables for step and substep
   const [step, setStep] = useState<TStep>(EMPAReportSteps[0]);
@@ -95,6 +95,15 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
     [descriptionMarkupContent]
   );
 
+
+  const handleUnlockDocument = () => {
+    const stepIndex = EMPAReportSteps.findIndex((step) => step.title === segment);
+    const subStepIndex = EMPAReportSteps[stepIndex]?.substeps.findIndex((subStep) => subStep.title === section);
+
+    if (stepIndex !== -1 && subStepIndex !== -1) {
+      toggleSubStepLock(stepIndex, subStepIndex);
+    }
+  }
   return (
     <Suspense>
       <div
@@ -116,7 +125,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             <p className="font-satoshi font-semibold text-lg text-grey-500">
               Document locked by oluwole fagbohun
             </p>
-            <Button className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6">
+            <Button onClick={handleUnlockDocument} className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6">
               Unlock Document
             </Button>
           </div>
