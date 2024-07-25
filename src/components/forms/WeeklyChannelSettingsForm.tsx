@@ -113,7 +113,7 @@ function WeeklyChannelSettingsForm() {
                     )}
                 />
                 <div className='flex items-center gap-4'>
-                    <Button type='submit' size="lg" color='primary' className='py-4 px-6  text-grey-20'>
+                    <Button type='submit' size="lg" color='primary' className='py-4 !bg-primary px-6  text-grey-20'>
                         Save
                     </Button>
                     <Button type="reset" size="lg" variant='bordered' className='bg-transparent text-lg text-grey-100 '>

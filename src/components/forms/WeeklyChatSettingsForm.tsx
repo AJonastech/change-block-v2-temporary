@@ -10,7 +10,6 @@ import EmailTextarea from '../EmailTextArea';
 const channelSettingsFormSchema = z.object({
     team: z.string().min(1, "Please enter the name of the team"),
     channelName: z.string().min(1, "Please enter the name of the channel"),
-    projectKey: z.string().min(1, "Please enter the project key"),
     emailAddresses: z.array(z.string().email("Invalid email address")).min(1, "Please enter at least one email address"),
 });
 
@@ -103,7 +102,7 @@ function WeeklyChannelSettingsForm() {
                     )}
                 />
                 <div className='flex items-center gap-4'>
-                    <Button type='submit' size="lg" color='primary' className='py-4 px-6 text-grey-20'>
+                    <Button type='submit' size="lg" color='primary' className='py-4 !bg-primary px-6 text-grey-20'>
                         Save
                     </Button>
                     <Button type="reset" size="lg" variant='bordered' className='bg-transparent text-lg text-grey-100'>
