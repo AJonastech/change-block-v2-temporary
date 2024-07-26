@@ -25,11 +25,12 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   // Custom hooks and state management
   const isMounted = useIsMounted();
   const containerRef = useRef<HTMLDivElement>(null);
-  const { currentSubStep, toggleSubStepLock } = useReportStepsStore();
+  const { currentSubStep, toggleSubStepLock, reportSteps } =
+    useReportStepsStore();
 
   // State variables for step and substep
-  const [step, setStep] = useState<TStep>(EMPAReportSteps[0]);
-  const [subStep, setSubStep] = useState<TSubStep>(step.substeps[0]);
+  const [step, setStep] = useState<TStep | null>(null);
+  const [subStep, setSubStep] = useState<TSubStep | null>(null);
   const [isEditor, setIsEditor] = useState<boolean>(false);
   const [isChatDrawerOpen, setChatDrawerOpen] = useState<boolean>(false);
 
@@ -40,15 +41,21 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
 
   // Update step and substep based on URL changes
   useEffect(() => {
-    const currentStep = EMPAReportSteps.find(
+    const currentStep = reportSteps.find(
       (step) => step.title === decodedSegment
     );
     const currentSection = currentStep?.substeps?.find(
       (subStep) => subStep.title === decodedSection
     );
-    currentStep && setStep(currentStep as TStep);
-    currentSection && setSubStep(currentSection);
-  }, [currentSegment, decodedSection, decodedSegment, section]);
+
+    if (currentStep && currentSection) {
+      setStep(currentStep as TStep);
+      setSubStep(currentSection);
+    } else {
+      setStep(null);
+      setSubStep(null);
+    }
+  }, [currentSegment, decodedSection, decodedSegment, reportSteps, section]);
 
   // Handle scrolling behavior when the chat drawer is toggled
   useEffect(() => {
@@ -95,15 +102,33 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
     [descriptionMarkupContent]
   );
 
-
   const handleUnlockDocument = () => {
-    const stepIndex = EMPAReportSteps.findIndex((step) => step.title === segment);
-    const subStepIndex = EMPAReportSteps[stepIndex]?.substeps.findIndex((subStep) => subStep.title === section);
+    const stepIndex = reportSteps.findIndex(
+      (step) => step.title === decodedSegment
+    );
+    const subStepIndex = reportSteps[stepIndex]?.substeps.findIndex(
+      (subStep) => subStep.title === decodedSection
+    );
 
     if (stepIndex !== -1 && subStepIndex !== -1) {
       toggleSubStepLock(stepIndex, subStepIndex);
     }
+  };
+
+  // Render an error message if step or subStep is not found
+  if (!step || !subStep) {
+    return (
+      <div className="flex justify-center items-center min-h-full h-full">
+        <h1 className="text-red-500 text-2xl font-semibold flex flex-col gap-2 items-center">
+          <span className=""> 404 Error:</span>{" "}
+          <span className="">
+            The specified segment or section does not exist.
+          </span>
+        </h1>
+      </div>
+    );
   }
+
   return (
     <Suspense>
       <div
@@ -125,7 +150,10 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
             <p className="font-satoshi font-semibold text-lg text-grey-500">
               Document locked by oluwole fagbohun
             </p>
-            <Button onClick={handleUnlockDocument} className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6">
+            <Button
+              onClick={handleUnlockDocument}
+              className="!bg-grey-500 text-lemon-50 text-lg leading-[25.2px] w-[202px] h-[58px] py-4 px-6"
+            >
               Unlock Document
             </Button>
           </div>
