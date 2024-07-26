@@ -20,16 +20,21 @@ const EMPAGeneratorNav = ({
 }) => {
   const router = useRouter();
   const { segment } = useParams();
+  const decodedSegment = segment;
   const [openStep, setOpenStep] = useState<number | null>(null);
 
   const [newSubStepIndex, setNewSubStepIndex] = useState<number | null>(null);
   const [newSubStepTitle, setNewSubStepTitle] = useState<string>("");
-  const { reportSteps, toggleSubStepLock, addNewSubStep, currentSubStep, setCurrentSubStep } = useReportStepsStore(); // Use Zustand store
+  const {
+    reportSteps,
+    toggleSubStepLock,
+    addNewSubStep,
+    currentSubStep,
+    setCurrentSubStep,
+  } = useReportStepsStore(); // Use Zustand store
   const toggleStep = (index: number) => {
     setOpenStep(openStep === index ? null : index);
   };
-
-
 
   const handleAddNewSubStep = (stepIndex: number) => {
     setNewSubStepIndex(stepIndex);
@@ -40,12 +45,21 @@ const EMPAGeneratorNav = ({
     setNewSubStepTitle(e.target.value);
   };
 
-  const handleNewSubStepBlur = () => {
+  const handleNewSubStepBlur = (index: any) => {
     if (newSubStepTitle.trim() !== "") {
-      addNewSubStep(newSubStepIndex!, newSubStepTitle);
-      router.push(
-        `/EMPA/analysis?data=report&&section=${newSubStepTitle}`
+      const step = reportSteps.find((reportStep) => reportStep.id === index);
+      const subStepExists = step?.substeps?.find(
+        (substep) =>
+          substep.title.toLowerCase().trim() ===
+          newSubStepTitle.toLowerCase().trim()
       );
+      if (!subStepExists) {
+        console.log({ index, step });
+        addNewSubStep(newSubStepIndex!, newSubStepTitle);
+        router.push(
+          `/EMPA/${step?.title}?data=report&&section=${newSubStepTitle}`
+        );
+      }
     }
 
     setNewSubStepIndex(null);
@@ -53,10 +67,11 @@ const EMPAGeneratorNav = ({
   };
 
   const handleNewSubStepKeyPress = (
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: any
   ) => {
     if (e.key === "Enter") {
-      handleNewSubStepBlur();
+      handleNewSubStepBlur(index);
     }
   };
 
@@ -66,6 +81,7 @@ const EMPAGeneratorNav = ({
     return `${sentence.slice(0, 19)}...`;
   };
 
+  console.log({ currentSubStep });
 
   return (
     <div className="w-full pb-[2rem] flex flex-col h-full overflow-x-hidden ">
@@ -81,26 +97,16 @@ const EMPAGeneratorNav = ({
                   <div className="flex items-center w-full group">
                     <Link
                       href={`/EMPA/${step.title}?data=report`}
-                      className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${segment === step.title
-                        ? "text-grey-700 font-satoshi font-medium"
-                        : "text-grey-300 font-light"
-                        } hover:bg-gray-300/20`}
+                      className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
+                        segment === step.title
+                          ? "text-grey-700 font-satoshi font-medium"
+                          : "text-grey-300 font-light"
+                      } hover:bg-gray-300/20`}
                       onClick={() => toggleStep(index)}
                     >
                       <span>{<step.icon />}</span>
                       <span className="pl-2">{step.title}</span>
                     </Link>
-                    {/* <Button
-                    isIconOnly
-                    variant="light"
-                    className="ml-2 opacity-0 group-hover:opacity-100"
-                    onClick={() => {
-                      openStep !== index && toggleStep(index);
-                      handleAddNewSubStep(index);
-                    }}
-                  >
-                    <Add />
-                  </Button> */}
                   </div>
                 </SlideIntoView>
               ) : (
@@ -109,16 +115,20 @@ const EMPAGeneratorNav = ({
                     <Button
                       startContent={
                         <div
-                          className={`${segment === step.title ? "opacity-100" : "opacity-70"
-                            } `}
+                          className={`${
+                            segment === step.title
+                              ? "opacity-100"
+                              : "opacity-70"
+                          } `}
                         >
                           <step.icon />
                         </div>
                       }
-                      className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${segment === step.title
-                        ? "text-grey-700 font-satoshi font-medium"
-                        : "text-grey-300 font-light"
-                        } hover:bg-gray-300/20`}
+                      className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
+                        segment === step.title
+                          ? "text-grey-700 font-satoshi font-medium"
+                          : "text-grey-300 font-light"
+                      } hover:bg-gray-300/20`}
                       onClick={() => toggleStep(index)}
                     >
                       <span className="pl-2">{step.title}</span>
@@ -152,8 +162,12 @@ const EMPAGeneratorNav = ({
                           type="text"
                           value={newSubStepTitle}
                           onChange={handleNewSubStepChange}
-                          onBlur={handleNewSubStepBlur}
-                          onKeyPress={handleNewSubStepKeyPress}
+                          onBlur={() => {
+                            handleNewSubStepBlur(step.id);
+                          }}
+                          onKeyPress={(e) => {
+                            handleNewSubStepKeyPress(e, step.id);
+                          }}
                           autoFocus
                           className="!border-[0.5px] !border-grey-50 rounded-md px-2 py-1 w-[55%] ml-[2rem] outline-none"
                         />
@@ -162,37 +176,45 @@ const EMPAGeneratorNav = ({
                   </div>
                   {step.substeps.map(({ title, isLocked, id }, subIndex) => (
                     <SlideIntoView
-                      className={`${section === title ? "bg-background" : ""
-                        } rounded-full group pl-[2rem] flex justify-between relative w-full py-1 gap-2`}
+                      className={`${
+                        section === title ? "bg-background" : ""
+                      } rounded-full group pl-[2rem] flex justify-between relative w-full py-1 gap-2`}
                       from="right"
                       key={subIndex}
-
                       index={subIndex}
                     >
                       <Link
                         href={`/EMPA/${step?.title}?data=report&&section=${title}`}
-                        className={`${section === title
-                          ? "text-primary-100 font-semibold"
-                          : "text-dark-100"
-                          } w-full hover:text-green-700 capitalize text-nowrap`}
-
-
-                        onClick={() => setCurrentSubStep({ title, id, isLocked, markupTitle: "" })}
-
+                        className={`${
+                          section === title
+                            ? "text-primary-100 font-semibold"
+                            : "text-dark-100"
+                        } w-full hover:text-green-700 capitalize text-nowrap`}
+                        onClick={() =>
+                          setCurrentSubStep({
+                            title,
+                            id,
+                            isLocked,
+                            markupTitle: "",
+                          })
+                        }
                       >
                         {trimSentence(title)}
                       </Link>
                       <div
-                        className={`transition-all duration-300 ${section === title
-                          ? "text-primary-100 font-semibold"
-                          : "opacity-0 group-hover:opacity-100"
-                          }`}
+                        className={`transition-all duration-300 ${
+                          section === title
+                            ? "text-primary-100 font-semibold"
+                            : "opacity-0 group-hover:opacity-100"
+                        }`}
                       >
                         <Button
                           isIconOnly
                           variant="light"
                           className="w-fit h-full text-primary-100"
-                          onClick={() => { toggleSubStepLock(index, subIndex) }}
+                          onClick={() => {
+                            toggleSubStepLock(index, subIndex);
+                          }}
                         >
                           {isLocked ? <LockIcon /> : <UnlockIcon />}
                         </Button>
@@ -206,11 +228,15 @@ const EMPAGeneratorNav = ({
         </ul>
       </div>
 
-
       <div className="mt-4 px-4 w-full ">
-        <Link href="/EMPA/question-box?data=report" className="flex w-full rounded-full py-2 px-[1rem] hover:bg-gray-300/20 gap-2 mb-4 items-center">
+        <Link
+          href="/EMPA/question-box?data=report"
+          className="flex w-full rounded-full py-2 px-[1rem] hover:bg-gray-300/20 gap-2 mb-4 items-center"
+        >
           <QuestionBoxIcon />
-          <span className="text-lg font-satoshi leading-[25.2px] font-semibold">Question Box</span>
+          <span className="text-lg font-satoshi leading-[25.2px] font-semibold">
+            Question Box
+          </span>
         </Link>
         <AddClient />
       </div>

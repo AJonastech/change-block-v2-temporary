@@ -9,16 +9,16 @@ export default function page() {
         <h6 className="heading-h6 font-semibold font-generalSans text-grey-700">
           EMPA Generator
         </h6>
-        <Link href="/EMPA/generate">
-          <Button
+        <Button
+          as={Link}
+          href="/EMPA/generate"
           aria-label="Generate EMPA"
-            size="lg"
-            className="font-medium text-grey-20 px-6 py-4 lg:text-lg"
-            color="primary"
-          >
-            Generate EMPA
-          </Button>
-        </Link>
+          size="lg"
+          className="font-medium text-grey-20 px-6 py-4 lg:text-lg bg-primary"
+          color="primary"
+        >
+          Generate EMPA
+        </Button>
       </div>
       <GeneratedEmpa />
     </main>

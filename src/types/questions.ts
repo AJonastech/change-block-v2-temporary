@@ -1,14 +1,13 @@
-
 export type TQuestion = {
-    id: number;
-    text: string;
-    created: string; // Use string to represent ISO date strings
+  id: number;
+  text: string;
+  created: string; // Use string to represent ISO date strings
+  source: string;
+};
+
+export interface TGroupedQuestions {
+  [dateKey: string]: {
+    label: string;
+    questions: TQuestion[];
   };
-  
-  export interface TGroupedQuestions {
-    [dateKey: string]: {
-        label: string;
-        questions: TQuestion[];
-    };
 }
-  
