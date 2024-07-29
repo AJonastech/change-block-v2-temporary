@@ -6,11 +6,13 @@ import { BiPlus } from "react-icons/bi";
 import { formatDistanceToNow, isToday, parseISO } from "date-fns";
 import { questions as EMPAQuestions } from "@/mockdata/questions";
 import { groupQuestionsByDate } from "@/lib/groupQuestionsByDate";
+import Link from "next/link";
 
 interface TQuestions {
     id: number;
     text: string;
     created: string;
+    section?:string;
 }
 
 function EMPAQuestionsCollection() {
@@ -88,11 +90,18 @@ function EMPAQuestionsCollection() {
                                             placeholder={question.text || "Type your question here..."}
                                         />
                                     </div>
-                                    <p>
+                                  
+                                      <Link href={``}>
+                              
+                                      <div className="text-lg font-normal flex items-center gap-x-2 leading-[25.2px] text-grey-100">
                                         <small className="text-[15px] font-satoshi text-grey-300 leading-[21px]">
                                             Created {formatDistanceToNow(new Date(question.created), { addSuffix: true })}
                                         </small>
-                                    </p>
+                                        {
+                                            question.section &&        (      <><span className="bg-grey-50 inline-block w-[6px] h-[6px] aspect-square rounded-full"></span><span className="text-[15px] font-satoshi text-grey-300 leading-[21px] font-medium"> {question.section}</span></>)
+                                        }
+                                    </div>
+                                    </Link>
                                 </div>
                             ))}
                         </div>
