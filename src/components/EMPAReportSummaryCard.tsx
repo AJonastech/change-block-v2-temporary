@@ -15,7 +15,7 @@ const EMPAReportCards: React.FC<EMPAReportCardsProps> = ({ cards, step }) => {
     <div className="grid xl:grid-cols-2 grid-flow-row gap-4 !space-y-0">
       {cards.map((card, cardIndex) => (
         <Link
-          href={`/EMPA/introduction?data=report&&section=${card.title}`}
+          href={`/EMPA/Introduction?data=report&&section=${card.title}`}
           className="group cursor-pointer"
           key={cardIndex}
         >
