@@ -3,10 +3,11 @@ import { EMPAReportSteps } from "@/config/reportStepConfig";
 
 interface ReportStepsState {
   reportSteps: TStep[];
-  currentSubStep: TSubStep | null; // Add the currentSubStep property
+  currentSubStep: TSubStep | null;
   setCurrentSubStep: (subStep: TSubStep) => void;
   toggleSubStepLock: (stepIndex: number, subIndex: number) => void;
   addNewSubStep: (stepIndex: number, title: string) => void;
+  updateSubSteps: (stepIndex: number, newSubSteps: TSubStep[]) => void; // Add this
 }
 
 const useReportStepsStore = create<ReportStepsState>((set) => ({
@@ -37,7 +38,6 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
     }),
   addNewSubStep: (stepIndex, title) =>
     set((state) => {
-      // Find the highest id among the current substeps to generate a new unique id
       const currentSubsteps = state.reportSteps[stepIndex].substeps;
       const maxId = currentSubsteps.reduce(
         (max, substep) => (substep.id > max ? substep.id : max),
@@ -61,6 +61,19 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
             }
           : step
       );
+
+      return { reportSteps: updatedSteps };
+    }),
+    updateSubSteps: (stepIndex, newSubSteps) =>
+      set((state) => {
+        const updatedSteps = state.reportSteps.map((step, sIdx) =>
+          sIdx === stepIndex
+            ? {
+                ...step,
+                substeps: newSubSteps,
+              }
+            : step
+        );
 
       return { reportSteps: updatedSteps };
     }),
