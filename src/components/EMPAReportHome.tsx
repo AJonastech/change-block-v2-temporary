@@ -44,7 +44,7 @@ export default EMPAReportHome;
 
 const cards = [
   {
-    title: "Statement of Work",
+    title: "Summary of project",
     description:
       "Explore the valuable insights and outcomes generated through our EMPA analysis, highlighting potential environmental assets and their strategic implications for GreenLife NGO's mission.",
     summaries: [
@@ -65,7 +65,7 @@ const cards = [
     ],
   },
   {
-    title: "EMPA Outcomes",
+    title: "Executive Summary",
     description: "Different insights and outcomes from another EMPA analysis.",
     summaries: [
       {
@@ -83,27 +83,7 @@ const cards = [
         ],
       },
     ],
-  },
-  {
-    title: "Goals and Aims",
-    description: "Different insights and outcomes from another EMPA analysis.",
-    summaries: [
-      {
-        title: "EMPA Objectives",
-        summary: [
-          "- Significant potential in green building initiatives.",
-          "- Opportunities for reducing energy consumption by 30%.",
-        ],
-      },
-      {
-        title: "Strategic Actions",
-        summary: [
-          "- Investing in energy-efficient technologies is crucial.",
-          "Support for regulatory measures promoting sustainability.",
-        ],
-      },
-    ],
-  },
+  }
 ];
 const stages = [
   {
