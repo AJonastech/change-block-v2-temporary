@@ -99,7 +99,7 @@ const EMPAGeneratorNav = ({
 }) => {
   const router = useRouter();
   const { segment } = useParams();
-  const decodedSegment = segment;
+  const decodedSegment = decodeURIComponent(segment as string);
   const [openStep, setOpenStep] = useState<number | null>(null);
 
   const [newSubStepIndex, setNewSubStepIndex] = useState<number | null>(null);
@@ -184,7 +184,7 @@ const EMPAGeneratorNav = ({
                       <Link
                         href={`/EMPA/${step.title}?data=report`}
                         className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
-                          segment === step.title
+                          decodedSegment === step.title
                             ? "text-grey-700 font-satoshi font-medium"
                             : "text-grey-300 font-light"
                         } hover:bg-gray-300/20`}
@@ -202,7 +202,7 @@ const EMPAGeneratorNav = ({
                         startContent={
                           <div
                             className={`${
-                              segment === step.title
+                              decodedSegment === step.title
                                 ? "opacity-100"
                                 : "opacity-70"
                             } `}
@@ -211,7 +211,7 @@ const EMPAGeneratorNav = ({
                           </div>
                         }
                         className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
-                          segment === step.title
+                          decodedSegment === step.title
                             ? "text-grey-700 font-satoshi font-medium"
                             : "text-grey-300 font-light"
                         } hover:bg-gray-300/20`}
@@ -293,7 +293,7 @@ const EMPAGeneratorNav = ({
           <AddClient />
         </div>
       </div>
-</DndProvider>
+    </DndProvider>
   );
 };
 
