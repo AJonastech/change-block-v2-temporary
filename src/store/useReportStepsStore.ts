@@ -8,6 +8,7 @@ interface ReportStepsState {
   toggleSubStepLock: (stepIndex: number, subIndex: number) => void;
   addNewSubStep: (stepIndex: number, title: string) => void;
   updateSubSteps: (stepIndex: number, newSubSteps: TSubStep[]) => void; // Add this
+  deleteSubStep: (stepIndex: number, subStepId: number) => void; // Add this
 }
 
 const useReportStepsStore = create<ReportStepsState>((set) => ({
@@ -64,18 +65,41 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
 
       return { reportSteps: updatedSteps };
     }),
-    updateSubSteps: (stepIndex, newSubSteps) =>
-      set((state) => {
-        const updatedSteps = state.reportSteps.map((step, sIdx) =>
-          sIdx === stepIndex
-            ? {
-                ...step,
-                substeps: newSubSteps,
-              }
-            : step
-        );
+  updateSubSteps: (stepIndex, newSubSteps) =>
+    set((state) => {
+      const updatedSteps = state.reportSteps.map((step, sIdx) =>
+        sIdx === stepIndex
+          ? {
+              ...step,
+              substeps: newSubSteps,
+            }
+          : step
+      );
 
       return { reportSteps: updatedSteps };
+    }),
+  deleteSubStep: (stepIndex, subStepTitle) =>
+    set((state) => {
+      const updatedSteps = state.reportSteps.map((step, sIdx) =>
+        sIdx === stepIndex
+          ? {
+              ...step,
+              substeps: step.substeps.filter(
+                (substep) => substep.title !== subStepTitle
+              ),
+            }
+          : step
+      );
+
+      // Set currentSubStep to the next one or null if none exists
+      const nextSubStep =
+        updatedSteps[stepIndex].substeps.find((substep, idx) => idx === 0) ||
+        null;
+
+      return {
+        reportSteps: updatedSteps,
+        currentSubStep: nextSubStep,
+      };
     }),
 }));
 
