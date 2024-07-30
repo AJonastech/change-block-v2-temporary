@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button, Input } from "@nextui-org/react";
@@ -13,17 +13,28 @@ import AddClient from "./AddClients";
 import { DndProvider, useDrag, useDrop, DragSourceMonitor, DropTargetMonitor } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 const trimSentence = (sentence: string) => {
-  if (sentence.length <= 19) return sentence;
+  if (sentence.length <= 17) return sentence;
 
-  return `${sentence.slice(0, 19)}...`;
+  return `${sentence.slice(0, 17)}...`;
 };
 
 const ItemTypes = {
   SUBSTEP: 'substep'
 };
 
-const DraggableSubStep = ({ stepIndex, subStepIndex, subStep, moveSubStep, setCurrentSubStep, section, step , toggleSubStepLock}: any) => {
-  const ref = React.useRef<HTMLLIElement>(null);
+
+const DraggableSubStep = ({
+  stepIndex,
+  subStepIndex,
+  subStep,
+  moveSubStep,
+  setCurrentSubStep,
+  section,
+  step,
+  toggleSubStepLock
+}: any) => {
+  const ref = useRef<HTMLLIElement>(null);
+  const [initialY, setInitialY] = useState<number | null>(null);
 
   const [, drop] = useDrop({
     accept: ItemTypes.SUBSTEP,
@@ -54,12 +65,44 @@ const DraggableSubStep = ({ stepIndex, subStepIndex, subStep, moveSubStep, setCu
     collect: (monitor: DragSourceMonitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    end: () => setInitialY(null)
   });
+
+  const handleDrag = (event: DragEvent) => {
+    if (initialY !== null) {
+      const currentY = event.clientY;
+      const deltaY = currentY - initialY;
+
+      if (deltaY > 50 || deltaY < -50) {
+        event.preventDefault();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const element = ref.current;
+    if (element) {
+      element.addEventListener('drag', handleDrag);
+      return () => {
+        element.removeEventListener('drag', handleDrag);
+      };
+    }
+  }, [initialY]);
 
   drag(drop(ref));
 
   return (
-    <li ref={ref} style={{ opacity: isDragging ? 0 : 1 }} className={`rounded-full group pl-[2rem] flex justify-between relative w-full py-1 gap-2 ${section === subStep.title ? "bg-background" : ""}`}>
+    <li 
+      ref={ref} 
+      style={{ opacity: isDragging ? 0 : 1 }} 
+      className={`rounded-full ${isDragging && "scale-105 rounded-full"} group pl-[2rem] flex justify-between relative w-full py-1 gap-2 ${section === subStep.title ? "bg-background" : ""}`}
+      onMouseDown={() => {
+        const initialRect = ref.current?.getBoundingClientRect();
+        if (initialRect) {
+          setInitialY(initialRect.top + window.scrollY);
+        }
+      }}
+    >
       <Link
         href={`/EMPA/${step.title}?data=report&&section=${subStep.title}`}
         className={`w-full hover:text-green-700 capitalize text-nowrap ${section === subStep.title ? "text-primary-100 font-semibold" : "text-dark-100"}`}
@@ -178,26 +221,9 @@ const EMPAGeneratorNav = ({
           <ul className="h-full flex flex-col pl-3 pr-1 not-prose">
             {reportSteps.map((step, index) => (
               <li key={index} className="mb-2 ">
-                {step.substeps.length <= 0 ? (
+                
                   <SlideIntoView from="left" index={index}>
-                    <div className="flex items-center w-full group">
-                      <Link
-                        href={`/EMPA/${step.title}?data=report`}
-                        className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
-                          decodedSegment === step.title
-                            ? "text-grey-700 font-satoshi font-medium"
-                            : "text-grey-300 font-light"
-                        } hover:bg-gray-300/20`}
-                        onClick={() => toggleStep(index)}
-                      >
-                        <span>{<step.icon />}</span>
-                        <span className="pl-2">{step.title}</span>
-                      </Link>
-                    </div>
-                  </SlideIntoView>
-                ) : (
-                  <SlideIntoView from="left" index={index}>
-                    <div className="flex items-center w-full group">
+                    <div className="flex cursor-pointer items-center w-full group">
                       <Button
                         startContent={
                           <div
@@ -233,7 +259,7 @@ const EMPAGeneratorNav = ({
                       </Button>
                     </div>
                   </SlideIntoView>
-                )}
+                
                 {openStep === index && (
                   <motion.ul
                     initial={{ height: 0 }}

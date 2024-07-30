@@ -2,6 +2,8 @@ import create from "zustand";
 import { EMPAReportSteps } from "@/config/reportStepConfig";
 
 interface ReportStepsState {
+  isRegenerating: boolean;
+  setIsRegenerating: (isRegenerating: boolean) => void;
   reportSteps: TStep[];
   currentSubStep: TSubStep | null;
   setCurrentSubStep: (subStep: TSubStep) => void;
@@ -12,6 +14,8 @@ interface ReportStepsState {
 }
 
 const useReportStepsStore = create<ReportStepsState>((set) => ({
+  isRegenerating: false,
+  setIsRegenerating: (isRegenerating) => set({ isRegenerating }),
   reportSteps: EMPAReportSteps,
   currentSubStep: null,
   setCurrentSubStep: (subStep: TSubStep) => set({ currentSubStep: subStep }),

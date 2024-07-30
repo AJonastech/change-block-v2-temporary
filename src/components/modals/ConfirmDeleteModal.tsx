@@ -39,6 +39,7 @@ const ConfirmDeleteModal = ({
   const decodedSegment = decodeURIComponent(segment as string);
 
   const handleDeleteDoccument = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       if (currentSubStep) {
         const stepIndex = reportSteps.findIndex((step) =>
@@ -69,13 +70,13 @@ const ConfirmDeleteModal = ({
             router.push(nextPath); // Fallback route
           }
 
-          toast.success("Deleted successfully!");
+          
         }
       }
 
       onConfirmClose();
     } catch (error) {
-      toast.error("Failed to delete. Please try again.");
+
       onConfirmClose();
     }
   };
