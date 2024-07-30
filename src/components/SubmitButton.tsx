@@ -16,7 +16,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
   return (
     <Button
       type="submit"
-      className="w-fit max-w-[150px] flex items-center "
+      className="w-fit !bg-primary max-w-[150px] flex items-center "
       color="primary"
       radius="sm"
       isLoading={formState.isSubmitting}

@@ -2,6 +2,8 @@ import create from "zustand";
 import { EMPAReportSteps } from "@/config/reportStepConfig";
 
 interface ReportStepsState {
+  isRegenerating: boolean;
+  setIsRegenerating: (isRegenerating: boolean) => void;
   reportSteps: TStep[];
   currentSubStep: TSubStep | null;
   setCurrentSubStep: (subStep: TSubStep) => void;
@@ -11,6 +13,8 @@ interface ReportStepsState {
 }
 
 const useReportStepsStore = create<ReportStepsState>((set) => ({
+  isRegenerating: false,
+  setIsRegenerating: (isRegenerating) => set({ isRegenerating }),
   reportSteps: EMPAReportSteps,
   currentSubStep: null,
   setCurrentSubStep: (subStep: TSubStep) => set({ currentSubStep: subStep }),
@@ -47,9 +51,9 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
         id: maxId + 1,
         title,
         isLocked: false,
-        data: `###### Itenerary
-               - New Itenerary`,
-        description: `Add Description`,
+        data: `###### Heading 6
+               You can type in some content here simply by clicking on the edit button above`,
+        description: `Add a Description for this sub section`,
         markupTitle: `#### ${title}`,
       };
 

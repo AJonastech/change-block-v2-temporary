@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button, Input } from "@nextui-org/react";
@@ -22,8 +22,19 @@ const ItemTypes = {
   SUBSTEP: 'substep'
 };
 
-const DraggableSubStep = ({ stepIndex, subStepIndex, subStep, moveSubStep, setCurrentSubStep, section, step , toggleSubStepLock}: any) => {
-  const ref = React.useRef<HTMLLIElement>(null);
+
+const DraggableSubStep = ({
+  stepIndex,
+  subStepIndex,
+  subStep,
+  moveSubStep,
+  setCurrentSubStep,
+  section,
+  step,
+  toggleSubStepLock
+}: any) => {
+  const ref = useRef<HTMLLIElement>(null);
+  const [initialY, setInitialY] = useState<number | null>(null);
 
   const [, drop] = useDrop({
     accept: ItemTypes.SUBSTEP,
@@ -54,12 +65,44 @@ const DraggableSubStep = ({ stepIndex, subStepIndex, subStep, moveSubStep, setCu
     collect: (monitor: DragSourceMonitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    end: () => setInitialY(null)
   });
+
+  const handleDrag = (event: DragEvent) => {
+    if (initialY !== null) {
+      const currentY = event.clientY;
+      const deltaY = currentY - initialY;
+
+      if (deltaY > 50 || deltaY < -50) {
+        event.preventDefault();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const element = ref.current;
+    if (element) {
+      element.addEventListener('drag', handleDrag);
+      return () => {
+        element.removeEventListener('drag', handleDrag);
+      };
+    }
+  }, [initialY]);
 
   drag(drop(ref));
 
   return (
-    <li ref={ref} style={{ opacity: isDragging ? 0 : 1 }} className={`rounded-full group pl-[2rem] flex justify-between relative w-full py-1 gap-2 ${section === subStep.title ? "bg-background" : ""}`}>
+    <li 
+      ref={ref} 
+      style={{ opacity: isDragging ? 0 : 1 }} 
+      className={`rounded-full ${isDragging && "scale-105 rounded-full"} group pl-[2rem] flex justify-between relative w-full py-1 gap-2 ${section === subStep.title ? "bg-background" : ""}`}
+      onMouseDown={() => {
+        const initialRect = ref.current?.getBoundingClientRect();
+        if (initialRect) {
+          setInitialY(initialRect.top + window.scrollY);
+        }
+      }}
+    >
       <Link
         href={`/EMPA/${step.title}?data=report&&section=${subStep.title}`}
         className={`w-full hover:text-green-700 capitalize text-nowrap ${section === subStep.title ? "text-primary-100 font-semibold" : "text-dark-100"}`}

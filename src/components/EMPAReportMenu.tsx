@@ -16,9 +16,10 @@ import ShareEMPAForm from "./forms/ShareEMPAForm";
 import EMPAVersionHistory from "./EMPAVersionHistory";
 import EMPAPreviewReport from "./EMPAPreviewReport";
 import useReportStepsStore from "@/store/useReportStepsStore";
-import EMPAPreviewConfirmation from "./EMPAPreviewConfirmation";
+import EMPAPreviewConfirmation from "./EMPAConfirmation";
 import { parseMKD } from "@/config/parseMKD";
 import { EMPAReportSteps } from "@/config/reportStepConfig";
+import EMPAConfirmation from "./EMPAConfirmation";
 
 const EMPAReportMenu = ({
   toggleChatDrawer,
@@ -32,7 +33,7 @@ const EMPAReportMenu = ({
   const searchParam = useSearchParams();
   const section = searchParam.get("section");
   const { segment } = useParams();
-  const { currentSubStep } = useReportStepsStore();
+  const { currentSubStep, setIsRegenerating } = useReportStepsStore();
   const isDisabled =
     currentSubStep?.isLocked && currentSubStep.title === section;
   const [showPreviewReport, setShowPreviewReport] = useState(false);
@@ -60,20 +61,35 @@ const EMPAReportMenu = ({
     setShowPreviewReport(true);
   };
 
+
+  const handleRegeneration = (type: "current" | "entire") => {
+    setIsRegenerating(true);
+    setTimeout(() => {
+      setIsRegenerating(false);
+    }, 3000); // Mock regeneration time
+  };
+
+
   return (
     <div className={`absolute top-0 right-0`}>
       <SlideIntoView from="right">
         <div className="flex w-fit justify-between items-center gap-3">
           <div className="bg-white flex items-center justify-evenly divide-x-1 text-lg rounded-md">
             <Tooltip content="Refresh">
-              <Button
-                isDisabled={isDisabled}
-                isIconOnly
-                className="rounded-none"
-                variant="light"
+              <EMPAModal
+                className="min-w-[650px]"
+                buttonElement={<Button
+                  isDisabled={isDisabled}
+                  isIconOnly
+                  className="rounded-none"
+                  variant="light"
+                >
+                  <RefreshIcon />
+                </Button>}
               >
-                <RefreshIcon />
-              </Button>
+                <EMPAConfirmation type="regenerate" onAction={handleRegeneration} />
+              </EMPAModal>
+
             </Tooltip>
             <Tooltip content="Add Collaborator">
               <EMPAModal
@@ -107,9 +123,8 @@ const EMPAReportMenu = ({
             </Tooltip>
           </div>
           <EMPAModal
-            className={`${
-              showPreviewReport ? "min-w-[968px]" : "min-w-[650px]"
-            }`}
+            className={`${showPreviewReport ? "min-w-[968px]" : "min-w-[650px]"
+              }`}
             buttonElement={
               <Button
                 color="primary"
@@ -125,7 +140,7 @@ const EMPAReportMenu = ({
                 htmlContent={previewContent}
               />
             ) : (
-              <EMPAPreviewConfirmation onPreview={handlePreview} />
+              <EMPAConfirmation type="preview" onAction={handlePreview} />
             )}
           </EMPAModal>
           <Button
