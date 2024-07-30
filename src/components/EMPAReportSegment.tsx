@@ -119,7 +119,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   if (!step || !subStep) {
     return (
       <div className="flex justify-center items-center min-h-full h-full">
-       Hello
+     
       </div>
     );
   }
