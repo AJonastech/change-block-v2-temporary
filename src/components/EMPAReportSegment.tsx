@@ -119,12 +119,7 @@ const EMPAReportSegment = ({ section }: { section: string }) => {
   if (!step || !subStep) {
     return (
       <div className="flex justify-center items-center min-h-full h-full">
-        <h1 className="text-red-500 text-2xl font-semibold flex flex-col gap-2 items-center">
-          <span className=""> 404 Error:</span>{" "}
-          <span className="">
-            The specified segment or section does not exist.
-          </span>
-        </h1>
+       Hello
       </div>
     );
   }

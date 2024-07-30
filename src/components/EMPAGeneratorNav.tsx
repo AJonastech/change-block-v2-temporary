@@ -13,9 +13,9 @@ import AddClient from "./AddClients";
 import { DndProvider, useDrag, useDrop, DragSourceMonitor, DropTargetMonitor } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 const trimSentence = (sentence: string) => {
-  if (sentence.length <= 19) return sentence;
+  if (sentence.length <= 17) return sentence;
 
-  return `${sentence.slice(0, 19)}...`;
+  return `${sentence.slice(0, 17)}...`;
 };
 
 const ItemTypes = {
@@ -142,7 +142,7 @@ const EMPAGeneratorNav = ({
 }) => {
   const router = useRouter();
   const { segment } = useParams();
-  const decodedSegment = segment;
+  const decodedSegment = decodeURIComponent(segment as string);
   const [openStep, setOpenStep] = useState<number | null>(null);
 
   const [newSubStepIndex, setNewSubStepIndex] = useState<number | null>(null);
@@ -221,31 +221,14 @@ const EMPAGeneratorNav = ({
           <ul className="h-full flex flex-col pl-3 pr-1 not-prose">
             {reportSteps.map((step, index) => (
               <li key={index} className="mb-2 ">
-                {step.substeps.length <= 0 ? (
+                
                   <SlideIntoView from="left" index={index}>
-                    <div className="flex items-center w-full group">
-                      <Link
-                        href={`/EMPA/${step.title}?data=report`}
-                        className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
-                          segment === step.title
-                            ? "text-grey-700 font-satoshi font-medium"
-                            : "text-grey-300 font-light"
-                        } hover:bg-gray-300/20`}
-                        onClick={() => toggleStep(index)}
-                      >
-                        <span>{<step.icon />}</span>
-                        <span className="pl-2">{step.title}</span>
-                      </Link>
-                    </div>
-                  </SlideIntoView>
-                ) : (
-                  <SlideIntoView from="left" index={index}>
-                    <div className="flex items-center w-full group">
+                    <div className="flex cursor-pointer items-center w-full group">
                       <Button
                         startContent={
                           <div
                             className={`${
-                              segment === step.title
+                              decodedSegment === step.title
                                 ? "opacity-100"
                                 : "opacity-70"
                             } `}
@@ -254,7 +237,7 @@ const EMPAGeneratorNav = ({
                           </div>
                         }
                         className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
-                          segment === step.title
+                          decodedSegment === step.title
                             ? "text-grey-700 font-satoshi font-medium"
                             : "text-grey-300 font-light"
                         } hover:bg-gray-300/20`}
@@ -276,7 +259,7 @@ const EMPAGeneratorNav = ({
                       </Button>
                     </div>
                   </SlideIntoView>
-                )}
+                
                 {openStep === index && (
                   <motion.ul
                     initial={{ height: 0 }}
@@ -336,7 +319,7 @@ const EMPAGeneratorNav = ({
           <AddClient />
         </div>
       </div>
-</DndProvider>
+    </DndProvider>
   );
 };
 

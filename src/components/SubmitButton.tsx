@@ -3,27 +3,26 @@
 
 import { Button, ButtonProps } from "@nextui-org/react";
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormStatus } from "react-dom";
 
 // Define additional props for SubmitButton
 interface SubmitButtonProps extends ButtonProps {
-
+  // Add any additional props specific to SubmitButton
+  //  loadingText?: string;
 }
 
 const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
+  const { pending } = useFormStatus();
 
-  const { formState } = useFormContext();
   return (
     <Button
       type="submit"
-      className="w-fit !bg-primary max-w-[150px] flex items-center "
-      color="primary"
+      className="w-fit max-w-[150px] flex items-center bg-red-400"
       radius="sm"
-      isLoading={formState.isSubmitting}
-
+      isLoading={pending}
       {...props} // Spread the additional props
     >
-      {formState.isSubmitting ? "processing" : props.children || "submit"}
+      {pending ? "processing" : props.children || "submit"}
     </Button>
   );
 };

@@ -19,6 +19,8 @@ import useReportStepsStore from "@/store/useReportStepsStore";
 import EMPAPreviewConfirmation from "./EMPAConfirmation";
 import { parseMKD } from "@/config/parseMKD";
 import { EMPAReportSteps } from "@/config/reportStepConfig";
+import { Trash } from "iconsax-react";
+import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import EMPAConfirmation from "./EMPAConfirmation";
 
 const EMPAReportMenu = ({
@@ -33,6 +35,7 @@ const EMPAReportMenu = ({
   const searchParam = useSearchParams();
   const section = searchParam.get("section");
   const { segment } = useParams();
+  const decodedSection = decodeURIComponent(section as string);
   const { currentSubStep, setIsRegenerating } = useReportStepsStore();
   const isDisabled =
     currentSubStep?.isLocked && currentSubStep.title === section;
@@ -113,14 +116,18 @@ const EMPAReportMenu = ({
             <Tooltip content="Version History">
               <EMPAVersionHistory buttonIcon={<VersionIcon />} />
             </Tooltip>
-            <Tooltip content="Share EMPA Report">
-              <EMPAModal
-                className="min-w-[600px] w-[600px]"
-                buttonIcon={<ShareIcon />}
-              >
-                <ShareEMPAForm />
-              </EMPAModal>
-            </Tooltip>
+
+            <EMPAModal
+              className="min-w-[600px] w-[600px]"
+              buttonIcon={
+                <Tooltip content="Share EMPA Report">
+                  <ShareIcon />
+                </Tooltip>
+              }
+            >
+              <ShareEMPAForm />
+            </EMPAModal>
+            <ConfirmDeleteModal data={decodedSection} />
           </div>
           <EMPAModal
             className={`${showPreviewReport ? "min-w-[968px]" : "min-w-[650px]"
