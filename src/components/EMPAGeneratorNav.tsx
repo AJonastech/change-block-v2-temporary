@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button, Input } from "@nextui-org/react";
@@ -10,7 +10,13 @@ import SlideIntoView from "./SlideIntoView";
 import { Add } from "iconsax-react";
 import useReportStepsStore from "@/store/useReportStepsStore";
 import AddClient from "./AddClients";
-import { DndProvider, useDrag, useDrop, DragSourceMonitor, DropTargetMonitor } from "react-dnd";
+import {
+  DndProvider,
+  useDrag,
+  useDrop,
+  DragSourceMonitor,
+  DropTargetMonitor,
+} from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 const trimSentence = (sentence: string) => {
   if (sentence.length <= 17) return sentence;
@@ -19,9 +25,8 @@ const trimSentence = (sentence: string) => {
 };
 
 const ItemTypes = {
-  SUBSTEP: 'substep'
+  SUBSTEP: "substep",
 };
-
 
 const DraggableSubStep = ({
   stepIndex,
@@ -31,7 +36,7 @@ const DraggableSubStep = ({
   setCurrentSubStep,
   section,
   step,
-  toggleSubStepLock
+  toggleSubStepLock,
 }: any) => {
   const ref = useRef<HTMLLIElement>(null);
   const [initialY, setInitialY] = useState<number | null>(null);
@@ -47,7 +52,8 @@ const DraggableSubStep = ({
       if (dragIndex === hoverIndex) return;
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
@@ -65,37 +71,44 @@ const DraggableSubStep = ({
     collect: (monitor: DragSourceMonitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    end: () => setInitialY(null)
+    end: () => setInitialY(null),
   });
 
-  const handleDrag = (event: DragEvent) => {
-    if (initialY !== null) {
-      const currentY = event.clientY;
-      const deltaY = currentY - initialY;
+  const handleDrag = useCallback(
+    (event: DragEvent) => {
+      if (initialY !== null) {
+        const currentY = event.clientY;
+        const deltaY = currentY - initialY;
 
-      if (deltaY > 50 || deltaY < -50) {
-        event.preventDefault();
+        if (deltaY > 50 || deltaY < -50) {
+          event.preventDefault();
+        }
       }
-    }
-  };
+    },
+    [initialY]
+  );
 
   useEffect(() => {
     const element = ref.current;
     if (element) {
-      element.addEventListener('drag', handleDrag);
+      element.addEventListener("drag", handleDrag);
       return () => {
-        element.removeEventListener('drag', handleDrag);
+        element.removeEventListener("drag", handleDrag);
       };
     }
-  }, [initialY]);
+  }, [handleDrag, initialY]);
 
   drag(drop(ref));
 
   return (
-    <li 
-      ref={ref} 
-      style={{ opacity: isDragging ? 0 : 1 }} 
-      className={`rounded-full ${isDragging && "scale-105 rounded-full"} group pl-[2rem] flex justify-between relative w-full py-1 gap-2 ${section === subStep.title ? "bg-background" : ""}`}
+    <li
+      ref={ref}
+      style={{ opacity: isDragging ? 0 : 1 }}
+      className={`rounded-full ${
+        isDragging && "scale-105 rounded-full"
+      } group pl-[2rem] flex justify-between relative w-full py-1 gap-2 ${
+        section === subStep.title ? "bg-background" : ""
+      }`}
       onMouseDown={() => {
         const initialRect = ref.current?.getBoundingClientRect();
         if (initialRect) {
@@ -105,7 +118,11 @@ const DraggableSubStep = ({
     >
       <Link
         href={`/EMPA/${step.title}?data=report&&section=${subStep.title}`}
-        className={`w-full hover:text-green-700 capitalize text-nowrap ${section === subStep.title ? "text-primary-100 font-semibold" : "text-dark-100"}`}
+        className={`w-full hover:text-green-700 capitalize text-nowrap ${
+          section === subStep.title
+            ? "text-primary-100 font-semibold"
+            : "text-dark-100"
+        }`}
         onClick={() =>
           setCurrentSubStep({
             title: subStep.title,
@@ -117,7 +134,13 @@ const DraggableSubStep = ({
       >
         {trimSentence(subStep.title)}
       </Link>
-      <div className={`transition-all duration-300 ${section === subStep.title ? "text-primary-100 font-semibold" : "opacity-0 group-hover:opacity-100"}`}>
+      <div
+        className={`transition-all duration-300 ${
+          section === subStep.title
+            ? "text-primary-100 font-semibold"
+            : "opacity-0 group-hover:opacity-100"
+        }`}
+      >
         <Button
           isIconOnly
           variant="light"
@@ -198,8 +221,6 @@ const EMPAGeneratorNav = ({
     }
   };
 
- 
-
   const moveSubStep = (dragIndex: number, hoverIndex: number) => {
     const draggedSubStep = reportSteps[openStep!].substeps[dragIndex];
     const newSubSteps = [...reportSteps[openStep!].substeps];
@@ -221,45 +242,44 @@ const EMPAGeneratorNav = ({
           <ul className="h-full flex flex-col pl-3 pr-1 not-prose">
             {reportSteps.map((step, index) => (
               <li key={index} className="mb-2 ">
-                
-                  <SlideIntoView from="left" index={index}>
-                    <div className="flex cursor-pointer items-center w-full group">
-                      <Button
-                        startContent={
-                          <div
-                            className={`${
-                              decodedSegment === step.title
-                                ? "opacity-100"
-                                : "opacity-70"
-                            } `}
-                          >
-                            <step.icon />
-                          </div>
-                        }
-                        className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
-                          decodedSegment === step.title
-                            ? "text-grey-700 font-satoshi font-medium"
-                            : "text-grey-300 font-light"
-                        } hover:bg-gray-300/20`}
-                        onClick={() => toggleStep(index)}
-                      >
-                        <span className="pl-2">{step.title}</span>
-                      </Button>
-                      <Button
-                        size="sm"
-                        isIconOnly
-                        variant="light"
-                        className="ml-2 opacity-0 group-hover:opacity-100 text-grey-700 "
-                        onClick={() => {
-                          openStep !== index && toggleStep(index);
-                          handleAddNewSubStep(index);
-                        }}
-                      >
-                        <Add size={18} />
-                      </Button>
-                    </div>
-                  </SlideIntoView>
-                
+                <SlideIntoView from="left" index={index}>
+                  <div className="flex cursor-pointer items-center w-full group">
+                    <Button
+                      startContent={
+                        <div
+                          className={`${
+                            decodedSegment === step.title
+                              ? "opacity-100"
+                              : "opacity-70"
+                          } `}
+                        >
+                          <step.icon />
+                        </div>
+                      }
+                      className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
+                        decodedSegment === step.title
+                          ? "text-grey-700 font-satoshi font-medium"
+                          : "text-grey-300 font-light"
+                      } hover:bg-gray-300/20`}
+                      onClick={() => toggleStep(index)}
+                    >
+                      <span className="pl-2">{step.title}</span>
+                    </Button>
+                    <Button
+                      size="sm"
+                      isIconOnly
+                      variant="light"
+                      className="ml-2 opacity-0 group-hover:opacity-100 text-grey-700 "
+                      onClick={() => {
+                        openStep !== index && toggleStep(index);
+                        handleAddNewSubStep(index);
+                      }}
+                    >
+                      <Add size={18} />
+                    </Button>
+                  </div>
+                </SlideIntoView>
+
                 {openStep === index && (
                   <motion.ul
                     initial={{ height: 0 }}

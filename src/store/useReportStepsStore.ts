@@ -52,9 +52,21 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
         id: maxId + 1,
         title,
         isLocked: false,
-        data: `###### Heading 6
-               You can type in some content here simply by clicking on the edit button above`,
-        description: `Add a Description for this sub section`,
+        data: `
+
+###### Primary Itenerary Core Activities
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sagittis. Donec ornare rutrum augue non finibus. In ullamcorper diam ut bibendum venenatis. Proin dapibus magna in mattis imperdiet. Integer quis nisi est. Nullam non nisi quis ipsum interdum consectetur. Suspendisse fringilla vitae tellus in ullamcorper. Nullam rutrum risus vitae lorem faucibus interdum. Vivamus eget vehicula ante. Etiam sagittis neque massa, nec sodales est venenatis id.
+
+###### Secondary Itenerary Core Activities
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sagittis. Donec ornare rutrum augue non finibus. In ullamcorper diam ut bibendum venenatis. Proin dapibus magna in mattis imperdiet. Integer quis nisi est. Nullam non nisi quis ipsum interdum consectetur. Suspendisse fringilla vitae tellus in ullamcorper. Nullam rutrum risus vitae lorem faucibus interdum. Vivamus eget vehicula ante. Etiam sagittis neque massa, nec sodales est venenatis id.
+
+
+
+
+  `,
+        description: `Add Description`,
         markupTitle: `#### ${title}`,
       };
 
