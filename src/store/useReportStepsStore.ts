@@ -24,13 +24,13 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
         sIdx === stepIndex
           ? {
-              ...step,
-              substeps: step.substeps.map((substep, ssIdx) =>
-                ssIdx === subIndex
-                  ? { ...substep, isLocked: !substep.isLocked }
-                  : substep
-              ),
-            }
+            ...step,
+            substeps: step.substeps.map((substep, ssIdx) =>
+              ssIdx === subIndex
+                ? { ...substep, isLocked: !substep.isLocked }
+                : substep
+            ),
+          }
           : step
       );
 
@@ -52,27 +52,30 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
         id: maxId + 1,
         title,
         isLocked: false,
-        data: `###### Objective
+        data: `
 
-        Provide a detailed EMPA report that evaluates GreenLife's environmental assets, identifies carbon credit opportunities, and offers strategic recommendations to enhance market positioning and sustainability.
-        
-        ###### Tasks and Deliverables
-        
-        - **Project Kickoff Meeting**: Initiate the project with a comprehensive meeting to understand GreenLife's objectives, project scope, and expectations.
-        - **Data Collection**: Gather relevant data from GreenLife, including project details, financials, and environmental impact information.
-        - **Analysis and Reporting**: Conduct a thorough analysis following the 27-step EMPA framework, incorporating data validation, compliance screening, carbon estimation, and market analysis.
-        - **Draft Report Submission**: Provide a draft EMPA report for GreenLife's review and feedback.
-        - **Final Report Delivery**: Submit the finalized EMPA report incorporating GreenLife's feedback and additional insights`,
-        description: `Add a Description for this sub section`,
+###### Primary Activities
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sagittis. Donec ornare rutrum augue non finibus. In ullamcorper diam ut bibendum venenatis. Proin dapibus magna in mattis imperdiet. Integer quis nisi est. Nullam non nisi quis ipsum interdum consectetur. Suspendisse fringilla vitae tellus in ullamcorper. Nullam rutrum risus vitae lorem faucibus interdum. Vivamus eget vehicula ante. Etiam sagittis neque massa, nec sodales est venenatis id.
+
+###### Secondary Activities
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sagittis. Donec ornare rutrum augue non finibus. In ullamcorper diam ut bibendum venenatis. Proin dapibus magna in mattis imperdiet. Integer quis nisi est. Nullam non nisi quis ipsum interdum consectetur. Suspendisse fringilla vitae tellus in ullamcorper. Nullam rutrum risus vitae lorem faucibus interdum. Vivamus eget vehicula ante. Etiam sagittis neque massa, nec sodales est venenatis id.
+
+
+
+
+  `,
+        description: `Add Description`,
         markupTitle: `#### ${title}`,
       };
 
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
         sIdx === stepIndex
           ? {
-              ...step,
-              substeps: [...step.substeps, newSubStep],
-            }
+            ...step,
+            substeps: [...step.substeps, newSubStep],
+          }
           : step
       );
 
@@ -83,9 +86,9 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
         sIdx === stepIndex
           ? {
-              ...step,
-              substeps: newSubSteps,
-            }
+            ...step,
+            substeps: newSubSteps,
+          }
           : step
       );
 
@@ -96,11 +99,11 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
         sIdx === stepIndex
           ? {
-              ...step,
-              substeps: step.substeps.filter(
-                (substep) => substep.title !== subStepTitle
-              ),
-            }
+            ...step,
+            substeps: step.substeps.filter(
+              (substep) => substep.title !== subStepTitle
+            ),
+          }
           : step
       );
 
