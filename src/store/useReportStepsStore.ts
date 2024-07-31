@@ -52,8 +52,17 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
         id: maxId + 1,
         title,
         isLocked: false,
-        data: `###### Heading 6
-               You can type in some content here simply by clicking on the edit button above`,
+        data: `###### Objective
+
+        Provide a detailed EMPA report that evaluates GreenLife's environmental assets, identifies carbon credit opportunities, and offers strategic recommendations to enhance market positioning and sustainability.
+        
+        ###### Tasks and Deliverables
+        
+        - **Project Kickoff Meeting**: Initiate the project with a comprehensive meeting to understand GreenLife's objectives, project scope, and expectations.
+        - **Data Collection**: Gather relevant data from GreenLife, including project details, financials, and environmental impact information.
+        - **Analysis and Reporting**: Conduct a thorough analysis following the 27-step EMPA framework, incorporating data validation, compliance screening, carbon estimation, and market analysis.
+        - **Draft Report Submission**: Provide a draft EMPA report for GreenLife's review and feedback.
+        - **Final Report Delivery**: Submit the finalized EMPA report incorporating GreenLife's feedback and additional insights`,
         description: `Add a Description for this sub section`,
         markupTitle: `#### ${title}`,
       };

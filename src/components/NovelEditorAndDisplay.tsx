@@ -23,7 +23,7 @@ export default function NovelEditorAndDisplay({
   useEffect(() => {
     setHtmlContent(parseMKD(markupContent));
   }, [markupContent]);
-
+console.log(novelJSONContent,"here")
   return (
     <div className={`${className} markdown flex-col flex gap-3 h-full`}>
       {isEditor ? (
