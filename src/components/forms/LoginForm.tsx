@@ -7,6 +7,8 @@ import { z } from 'zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Googleicon } from '@/icons';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useRouter } from 'next/navigation';
 
 
 const LoginFormSchema = z.object({
@@ -15,7 +17,8 @@ const LoginFormSchema = z.object({
 })
 type LoginFormType = z.infer<typeof LoginFormSchema>;
 function LoginForm() {
-
+  const router = useRouter()
+  const { login, isLoading, error, refreshAccessToken } = useAuthStore()
   const form = useForm<LoginFormType>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -24,11 +27,17 @@ function LoginForm() {
     }
   })
 
+  const handleLogin = async (data: LoginFormType) => {
+    await login(data)
 
+
+    router.push("/internal-tools")
+
+  }
   return (
     <FormProvider {...form}>
       <div className=' bg-white p-8 max-w-[678px] mx-auto rounded-[32px]'>
-        <form className="max-w-[550px] mx-auto">
+        <form onSubmit={form.handleSubmit(handleLogin)} className="max-w-[550px] mx-auto">
           <div className="text-center mb-4">
             <h4 className="heading-h4 font-generalSans mb-1 font-bold text-grey-700">Welcome Back</h4>
             <p className="text-[#585264] font-light font-satoshi">Please enter your details to Log In</p>
@@ -92,7 +101,7 @@ function LoginForm() {
           </div>
           <div className="flex items-center mt-3 justify-between mb-4">
             <label className="flex items-center font-satoshi text-lg font-light text-grey-300">
-              <Checkbox/>
+              <Checkbox />
               Please remember me
             </label>
             <Link href="#" className="font-satoshi text-lg underline text-grey-300">Forgot Password?</Link>
@@ -100,25 +109,29 @@ function LoginForm() {
           <Button
             type="submit"
             color='primary'
+            disabled={isLoading}
+            isLoading={isLoading}
             className="w-full  h-[56px] cursor-pointer  text-grey-20 font-medium text-lg "
           >
-            Log In →
+            {
+              isLoading ? "Logging In..." : "Log In →"
+            }
           </Button>
           <div className="text-center mt-4">
             <p className="text-grey-300 font-satoshi">
-            You don’t have an account? <a href="#" className="text-[#5C73DB]">Sign Up</a>
+              You don’t have an account? <a href="#" className="text-[#5C73DB]">Sign Up</a>
             </p>
           </div>
           <div className="flex items-center my-4">
             <div className="flex-grow border-t-[1px] border-[#C1C2C0]/[65%]"></div>
-            <span className="mx-2 text-sm font-satoshi text-center text-grey-100">OR <br/>CONTINUE WITH</span>
+            <span className="mx-2 text-sm font-satoshi text-center text-grey-100">OR <br />CONTINUE WITH</span>
             <div className="flex-grow border-t-[1px] border-[#C1C2C0]/[65%]"></div>
           </div>
           <Button
             type="button"
             className="w-full h-[56px] gap-x-2 py-2 px-4 text-grey-300 text-lg font-medium bg-white border-[1px] border-[#C1C2C0]/[65%]  flex items-center justify-center focus:outline-none hover:bg-gray-100 transition duration-200"
           >
-           <Googleicon/>
+            <Googleicon />
             Google
           </Button>
 

@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Googleicon } from '@/icons';
+import { useAuthStore } from '@/store/useAuthStore';
 
 
 const SignUpFormSchema = z.object({
@@ -17,6 +18,8 @@ const SignUpFormSchema = z.object({
 type SignUpFormType = z.infer<typeof SignUpFormSchema>;
 function SignUpForm() {
 
+const {signup, isLoading, error} = useAuthStore()
+
   const form = useForm<SignUpFormType>({
     resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
@@ -24,12 +27,15 @@ function SignUpForm() {
       password: ""
     }
   })
+const handleUserSignup = async (data: SignUpFormType) => {
+    await signup(data)
+  }
 
 
   return (
     <FormProvider {...form}>
       <div className=' bg-white p-8 max-w-[678px] mx-auto rounded-[32px]'>
-        <form className="max-w-[550px] mx-auto">
+        <form onSubmit={form.handleSubmit(handleUserSignup)} className="max-w-[550px] mx-auto">
           <div className="text-center mb-4">
             <h4 className="heading-h4 font-generalSans mb-1 font-bold text-grey-700">Create Account</h4>
             <p className="text-[#585264] font-light font-satoshi">Please enter your details to continue</p>
@@ -123,9 +129,11 @@ function SignUpForm() {
           <Button
             type="submit"
             color='primary'
+            disabled={isLoading}
+            isLoading={isLoading}
             className="w-full  h-[56px] cursor-pointer  text-grey-20 font-medium text-lg "
           >
-            Log In →
+            {isLoading ? "Creating Acoount": "Sign Up →"} 
           </Button>
           <div className="text-center mt-4">
             <p className="text-grey-300 font-satoshi">
