@@ -39,16 +39,9 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${generalSans.variable} ${satoshi.variable} bg-background`}>
+      <body className={`${inter.className} ${generalSans.variable} ${satoshi.variable} bg-background min-h-screen`}>
         <Providers>
-          <div className="flex max-w-screen min-w-full w-full h-screen p-4 max-h-screen prose">
-            <Suspense fallback={<div>Loading...</div>}>
-              <Sidebar />
-            </Suspense>
-            <div className="px-4 max-h-full bg-background w-full flex flex-col gap-8 overflow-x-hidden">
-              {children}
-            </div>
-          </div>
+         {children}
         </Providers>
       </body>
     </html>

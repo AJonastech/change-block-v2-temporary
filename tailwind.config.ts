@@ -38,7 +38,8 @@ const config: Config = {
         lemon: {
           50: "#F3FAE9",
           75:"#CFE8A6",
-          100:"#bbdf81"
+          100:"#bbdf81",
+          300:"#8AC825"
         },
         G10: "#FAFAFA",
         G500: "#3F423C",
