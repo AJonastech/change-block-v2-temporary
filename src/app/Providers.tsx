@@ -5,7 +5,6 @@ import { ThemeProviderProps } from "next-themes/dist/types";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import withAuth from "./WithAuth";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -32,12 +31,12 @@ export default function Providers({ children, ...props }: ThemeProviderProps) {
   const queryClient = getQueryClient();
 
   // Wrap children with withAuth HOC
-  const AuthWrappedChildren = withAuth(() => <>{children}</>);
+
 
   return (
     <QueryClientProvider client={queryClient}>
       <NextUIProvider>
-        <AuthWrappedChildren />
+        {children}
         <ToastContainer />
       </NextUIProvider>
       <ReactQueryDevtools initialIsOpen={false} />
