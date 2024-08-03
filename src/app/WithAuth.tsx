@@ -1,55 +1,57 @@
-"use client"
-import React, { useLayoutEffect, useEffect, useState } from 'react';
+"use client";
+
+import React, { useLayoutEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
     const AuthHOC: React.FC = (props) => {
         const router = useRouter();
-        const { accessToken, user, refreshAccessToken, isLoading, fetchMe, error } = useAuthStore();
+        const { accessToken, user, refreshAccessToken, isLoading, fetchMe, isAuthenticated } = useAuthStore();
         const [isInitialized, setIsInitialized] = useState(false);
 
-  
-        //This function will handle the authentication checks for the user
-        useLayoutEffect(() => {
-            const checkAuth = async () => {
-                try {
-                    if (!accessToken) {
-                        await refreshAccessToken();
-                    }
-                 
-                    if(!user){
-                        fetchMe()
-                    }
-                    setIsInitialized(true);
-                } catch (err) {
-                    console.error('Error refreshing access token:', err);
-                    router.push('/login');
+
+        const checkAuth = async () => {
+            try {
+                if (!accessToken) {
+                    await refreshAccessToken();
                 }
-            };
+                if (!user) {
+                    await fetchMe();
+                }
+                setIsInitialized(true);
+            } catch (err) {
+                console.error('Error refreshing access token:', err);
+                setIsInitialized(true);
+            }
+        };
+        // Handle authentication checks
+        useLayoutEffect(() => {
+        
 
             checkAuth();
-        }, [refreshAccessToken, router]);
+            // run checkAuth every focus changes
+      window.addEventListener('focus', checkAuth);
+      return () => {
+        window.removeEventListener('focus', checkAuth);
+      };
+        }, [refreshAccessToken, fetchMe]);
 
-
-
-        useEffect(() => {
-            if (isInitialized && !accessToken ) {
+        // Redirect to login if not authenticated
+        useLayoutEffect(() => {
+            if (isInitialized && !isAuthenticated) {
                 router.push('/login');
-            } 
-        }, [accessToken, isInitialized, router]);
+                return
+            }
+        }, [isAuthenticated, isInitialized, router]);
 
+        // Display loading spinner until initialization is complete
         if (isLoading || !isInitialized) {
-            return <div>
-                This is the loading state
-            </div>;
+            return <LoadingSpinner />;
         }
 
-        if (error) {
-            router.push('/login')
-        }
-
-        return <WrappedComponent {...props} />;
+      if (!isLoading && isAuthenticated)  return <WrappedComponent {...props} />;
     };
 
     return AuthHOC;

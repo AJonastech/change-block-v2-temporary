@@ -73,12 +73,27 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         // Attempt to refresh the access token
         await refreshAccessToken();
         // Retry fetching the user data
-        return get().fetchMe();
+        const { accessToken: newAccessToken } = get();
+        if (newAccessToken) {
+          const retryResponse = await fetch('/api/auth/me', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${newAccessToken}`,
+            },
+            credentials: 'include',
+          });
+          const retryData = await retryResponse.json();
+          if (!retryResponse.ok) throw new Error(retryData.message || 'Failed to fetch user data');
+          set({ user: retryData.user, isAuthenticated: true, isLoading: false });
+        } else {
+          throw new Error('Failed to refresh access token');
+        }
+      } else {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Failed to fetch user data');
+        set({ user: data.user, isAuthenticated: true, isLoading: false });
       }
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Failed to fetch user data');
-      set({ user: data.user, isAuthenticated: true, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
@@ -91,5 +106,5 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
-  }
+  },
 }));
