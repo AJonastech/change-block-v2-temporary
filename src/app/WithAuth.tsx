@@ -36,9 +36,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
         useEffect(() => {
             if (isInitialized && !accessToken ) {
                 router.push('/login');
-            } else if (isInitialized && accessToken) {
-                router.push('/internal-tools')
-            }
+            } 
         }, [accessToken, isInitialized, router]);
 
         if (isLoading || !isInitialized) {

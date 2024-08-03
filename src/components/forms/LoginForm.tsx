@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link';
 import { Button, Checkbox, Input } from '@nextui-org/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import FormField from './FormField';
 import { z } from 'zod';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -19,6 +19,7 @@ type LoginFormType = z.infer<typeof LoginFormSchema>;
 function LoginForm() {
   const router = useRouter()
   const { login, isLoading, error, refreshAccessToken } = useAuthStore()
+  const {isAuthenticated} = useAuthStore()
   const form = useForm<LoginFormType>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -26,6 +27,12 @@ function LoginForm() {
       password: ""
     }
   })
+
+  useEffect(()=>{
+    if(isAuthenticated){
+      router.push("/empa")
+    }
+  },[isAuthenticated])
 
   const handleLogin = async (data: LoginFormType) => {
     await login(data)

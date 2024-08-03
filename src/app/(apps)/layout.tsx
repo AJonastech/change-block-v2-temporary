@@ -1,11 +1,15 @@
-"use client"
+
 import BreadCrumb from "@/components/BreadCrumb";
 import Sidebar from "@/components/Sidebar";
 import React, { Suspense } from "react";
-import withAuth from "../WithAuth";
+import AuthWrapper from "../AuthWrapper";
+
 function layout({ children }: { children: React.ReactNode }) {
-  const AuthChildren = withAuth(()=><>{children}</>)
+  
   return (
+    <AuthWrapper>
+
+  
     <div className="flex max-w-screen min-w-full w-full h-screen p-4 max-h-screen prose">
       <Suspense fallback={<div>Loading...</div>}>
         <Sidebar />
@@ -16,12 +20,13 @@ function layout({ children }: { children: React.ReactNode }) {
 
           <div className=" w-full h-full   flex-grow rounded-xl !max-h-full overflow-y-auto   flex">
             <div className="w-full  overflow-x-hidden  no-scrollbar overflow-auto bg-white  p-8 rounded-xl ">
-              <AuthChildren/>
+         {children}
             </div>
           </div>
         </div>
       </div>
     </div>
+    </AuthWrapper>
 
   );
 }

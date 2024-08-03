@@ -1,11 +1,10 @@
-// stores/authStore.js
 import { refreshAccessToken } from '@/actions/authActions';
-import { create} from 'zustand';
-
+import { create } from 'zustand';
 
 interface AuthState {
   user: User | null;
   accessToken: string | null;
+  isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
   login: ({ email, password }: { email: string, password: string }) => Promise<void>;
@@ -18,6 +17,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   accessToken: null,
+  isAuthenticated: false,
   isLoading: false,
   error: null,
   login: async ({ email, password }) => {
@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Login failed');
-      set({ user: data.user, accessToken: data.token.access_token, isLoading: false });
+      set({ user: data.user, accessToken: data.token.access_token, isAuthenticated: true, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
@@ -45,7 +45,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Signup failed');
-      set({ user: data.user, accessToken: data.token.access_token, isLoading: false });
+      set({ user: data.user, accessToken: data.token.access_token, isAuthenticated: true, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: () => {
     // Clear cookies on logout
     document.cookie = 'refresh_token=; Max-Age=0; path=/; secure; SameSite=Strict';
-    set({ user: null, accessToken: null });
+    set({ user: null, accessToken: null, isAuthenticated: false });
   },
   fetchMe: async () => {
     set({ isLoading: true, error: null });
@@ -78,7 +78,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Failed to fetch user data');
-      set({ user: data.user, isLoading: false });
+      set({ user: data.user, isAuthenticated: true, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
@@ -87,7 +87,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const tokens = await refreshAccessToken();
-      set({ accessToken: tokens.access_token, isLoading: false });
+      set({ accessToken: tokens.access_token, isAuthenticated: !!tokens.access_token, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }

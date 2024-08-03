@@ -9,6 +9,7 @@ import useIsMounted from "@/hooks/useIsMounted";
 import { menuItems } from "@/config/panelConfig";
 import useGetApp from "@/hooks/useGetApp";
 import WeeklyInsightsNav from "./WeeklyInsightNav";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const SideBarDrawer = dynamic(() => import('./SideBarDrawer'));
 const EMPAGeneratorNav = dynamic(() => import('./EMPAGeneratorNav'));
@@ -16,6 +17,7 @@ const AutomatedIssuesNav = dynamic(() => import('./AutomatedIssuesNav'));
 
 const Sidebar = () => {
   const { data, section, currentApp, currentPath, pathName } = useGetApp();
+  const {user} = useAuthStore()
   const isMounted = useIsMounted();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -107,8 +109,8 @@ const Sidebar = () => {
               />
               {!isCollapsed && (
                 <div>
-                  <p className="text-[22px] leading-[28.6px] font-semibold text-grey-800 font-generalSans">Mary Jane</p>
-                  <p className="text-[15px] font-satoshi font-medium leading-[21px] text-grey-100">m.jane@changeblock.co</p>
+                  <p className="text-[22px] leading-[28.6px] font-semibold text-grey-800 font-generalSans">{user?.full_name}</p>
+                  <p className="text-[15px] font-satoshi font-medium leading-[21px] text-grey-100">{user?.email}</p>
                 </div>
               )}
             </motion.div>
