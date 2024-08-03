@@ -43,10 +43,10 @@ const handleUserSignup = async (data: SignUpFormType) => {
             <p className="text-[#585264] font-light font-satoshi">Please enter your details to continue</p>
           </div>
           <div className="flex justify-center mb-6 bg-grey-10 rounded-full p-[5px] w-fit mx-auto">
-          <Link href="" className=" text-green-500 bg-lemon-75 py-2 px-4 rounded-full">
+          <Link href="/sign-up" className=" text-green-500 bg-lemon-75 py-2 px-4 rounded-full">
               Sign Up
             </Link>
-            <Link href="" className="font-satoshi py-2 px-4 font-semibold text-grey-100 text-lg ">
+            <Link href="/login" className="font-satoshi py-2 px-4 font-semibold text-grey-100 text-lg ">
               Log In
             </Link>
            

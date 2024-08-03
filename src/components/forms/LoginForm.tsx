@@ -43,10 +43,10 @@ function LoginForm() {
             <p className="text-[#585264] font-light font-satoshi">Please enter your details to Log In</p>
           </div>
           <div className="flex justify-center mb-6 bg-grey-10 rounded-full p-[5px] w-fit mx-auto">
-            <Link href="" className="font-satoshi py-2 px-4 font-semibold text-grey-100 text-lg ">
+            <Link href="/sign-up" className="font-satoshi py-2 px-4 font-semibold text-grey-100 text-lg ">
               Sign Up
             </Link>
-            <Link href="" className=" text-green-500 bg-lemon-75 py-2 px-4 rounded-full">
+            <Link href="/login" className=" text-green-500 bg-lemon-75 py-2 px-4 rounded-full">
               Log In
             </Link>
           </div>
