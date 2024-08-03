@@ -10,9 +10,7 @@ function layout({children}: {children: React.ReactNode}) {
               className={`max-h-12  "w-[184px] h-[44px] object-cover"}`}
             />
         </div>
-        <div>
-            {children}
-        </div>
+        <div>{children}</div>
     </div>
   )
 }

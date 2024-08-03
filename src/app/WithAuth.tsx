@@ -4,45 +4,57 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
-  const AuthHOC: React.FC = (props) => {
-    const router = useRouter();
-    const { accessToken, refreshAccessToken, isLoading, error } = useAuthStore();
-    const [isInitialized, setIsInitialized] = useState(false);
+    const AuthHOC: React.FC = (props) => {
+        const router = useRouter();
+        const { accessToken, user, refreshAccessToken, isLoading, fetchMe, error } = useAuthStore();
+        const [isInitialized, setIsInitialized] = useState(false);
 
-    useLayoutEffect(() => {
-      const checkAuth = async () => {
-        try {
-          if (!accessToken) {
-            await refreshAccessToken();
-          }
-          setIsInitialized(true);
-        } catch (err) {
-          console.error('Error refreshing access token:', err);
-          router.push('/login');
+  
+        //This function will handle the authentication checks for the user
+        useLayoutEffect(() => {
+            const checkAuth = async () => {
+                try {
+                    if (!accessToken) {
+                        await refreshAccessToken();
+                    }
+                 
+                    if(!user){
+                        fetchMe()
+                    }
+                    setIsInitialized(true);
+                } catch (err) {
+                    console.error('Error refreshing access token:', err);
+                    router.push('/login');
+                }
+            };
+
+            checkAuth();
+        }, [refreshAccessToken, router]);
+
+
+
+        useEffect(() => {
+            if (isInitialized && !accessToken ) {
+                router.push('/login');
+            } else if (isInitialized && accessToken) {
+                router.push('/internal-tools')
+            }
+        }, [accessToken, isInitialized, router]);
+
+        if (isLoading || !isInitialized) {
+            return <div>
+                This is the loading state
+            </div>;
         }
-      };
 
-      checkAuth();
-    }, [refreshAccessToken, router]);
+        if (error) {
+            router.push('/login')
+        }
 
-    useEffect(() => {
-      if (isInitialized && !accessToken) {
-        router.push('/login');
-      }
-    }, [accessToken, isInitialized, router]);
+        return <WrappedComponent {...props} />;
+    };
 
-    if (isLoading || !isInitialized) {
-      return <div></div>;
-    }
-
-    if (error) {
-       router.push('/login')
-    }
-
-    return <WrappedComponent {...props} />;
-  };
-
-  return AuthHOC;
+    return AuthHOC;
 };
 
 export default withAuth;

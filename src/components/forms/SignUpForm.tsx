@@ -8,6 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Googleicon } from '@/icons';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useRouter } from 'next/navigation';
 
 
 const SignUpFormSchema = z.object({
@@ -17,7 +18,7 @@ const SignUpFormSchema = z.object({
 })
 type SignUpFormType = z.infer<typeof SignUpFormSchema>;
 function SignUpForm() {
-
+const router = useRouter()
 const {signup, isLoading, error} = useAuthStore()
 
   const form = useForm<SignUpFormType>({
@@ -29,6 +30,7 @@ const {signup, isLoading, error} = useAuthStore()
   })
 const handleUserSignup = async (data: SignUpFormType) => {
     await signup(data)
+    router.push("/login")
   }
 
 

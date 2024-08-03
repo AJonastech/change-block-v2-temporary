@@ -2,7 +2,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export async function GET(req:Request) {
+export async function GET(req: Request) {
   const accessToken = req.headers.get('authorization')?.split(' ')[1];
   const refreshToken = cookies().get('refresh_token')?.value;
 
@@ -23,7 +23,7 @@ export async function GET(req:Request) {
   }
 
   const data = await response.json();
-  return NextResponse.json({ user: data.user, access_token: accessToken }, { status: 200 });
+  return NextResponse.json({ user: data }, { status: 200 });
 }
 
 export function OPTIONS() {
