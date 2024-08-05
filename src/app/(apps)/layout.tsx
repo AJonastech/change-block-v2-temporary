@@ -2,12 +2,11 @@
 import BreadCrumb from "@/components/BreadCrumb";
 import Sidebar from "@/components/Sidebar";
 import React, { Suspense } from "react";
-import AuthWrapper from "../AuthWrapper";
 
 function layout({ children }: { children: React.ReactNode }) {
   
   return (
-    <AuthWrapper>
+
 
   
     <div className="flex max-w-screen min-w-full w-full h-screen p-4 max-h-screen prose">
@@ -26,7 +25,7 @@ function layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
     </div>
-    </AuthWrapper>
+
 
   );
 }

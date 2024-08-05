@@ -1,4 +1,3 @@
-import { refreshAccessToken } from '@/actions/authActions';
 import { create } from 'zustand';
 
 interface AuthState {
@@ -7,104 +6,42 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  login: ({ email, password }: { email: string, password: string }) => Promise<void>;
-  signup: ({ name, email, password }: { name: string, email: string, password: string }) => Promise<void>;
-  logout: () => void;
-  fetchMe: () => Promise<void>;
-  refreshAccessToken: () => Promise<void>;
+  setUser: (user: User | null) => void;
+  setAccessToken: (token: string) => void;
+  setError: (error: string | null) => void;
+  setIsLoading: (isLoading: boolean) => void;
+ 
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   accessToken: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
-  login: async ({ email, password }) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Login failed');
-      set({ user: data.user, accessToken: data.token.access_token, isAuthenticated: true, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-    }
-  },
-  signup: async ({ name, email, password }) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Signup failed');
-      set({ user: data.user, accessToken: data.token.access_token, isAuthenticated: true, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-    }
-  },
-  logout: () => {
-    // Clear cookies on logout
-    document.cookie = 'refresh_token=; Max-Age=0; path=/; secure; SameSite=Strict';
-    set({ user: null, accessToken: null, isAuthenticated: false });
-  },
-  fetchMe: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const { accessToken, refreshAccessToken } = get();
+  setUser: (user) => set({ user, isAuthenticated: !!user }),
+  setAccessToken: (token) => set({ accessToken: token }),
+  setError: (error) => set({ error }),
+  setIsLoading: (isLoading) => set({ isLoading }),
+  // fetchMe: async () => {
+  //   set({ isLoading: true, error: null });
+  //   try {
+  //     const response = await fetch('/api/auth/me', {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${accessToken}`,
+  //       },
+  //       credentials: 'include', // Include cookies
+  //     });
 
-      const response = await fetch('/api/auth/me', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        credentials: 'include', // Include cookies
-      });
-
-      if (response.status === 401) {
-        // Attempt to refresh the access token
-        await refreshAccessToken();
-        // Retry fetching the user data
-        const { accessToken: newAccessToken } = get();
-        if (newAccessToken) {
-          const retryResponse = await fetch('/api/auth/me', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${newAccessToken}`,
-            },
-            credentials: 'include',
-          });
-          const retryData = await retryResponse.json();
-          if (!retryResponse.ok) throw new Error(retryData.message || 'Failed to fetch user data');
-          set({ user: retryData.user, isAuthenticated: true, isLoading: false });
-        } else {
-          throw new Error('Failed to refresh access token');
-        }
-      } else {
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.message || 'Failed to fetch user data');
-        set({ user: data.user, isAuthenticated: true, isLoading: false });
-      }
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-    }
-  },
-  refreshAccessToken: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const tokens = await refreshAccessToken();
-      set({ accessToken: tokens.access_token, isAuthenticated: !!tokens.access_token, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
-    }
-  },
+  //     const data = await response.json();
+  //     if (!response.ok) throw new Error(data.message || 'Failed to fetch user data');
+  //     set({ user: data.user, isAuthenticated: true, isLoading: false });
+  //   } catch (error: any) {
+  //     set({ error: error.message, isLoading: false });
+  //   }
+  // },
 }));
+
+

@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { useInitializeAuth } from "@/hooks/useInitializeAuth";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -37,7 +38,7 @@ export function getQueryClient() {
 }
 
 export default function Providers({ children, ...props }: ThemeProviderProps) {
-
+useInitializeAuth()
   const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>

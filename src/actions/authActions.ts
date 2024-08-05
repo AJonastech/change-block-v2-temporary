@@ -1,43 +1,59 @@
-'use server';
-
-import { cookies } from 'next/headers';
+'use server'
+import { headers } from 'next/headers';
+import { getServerSession } from '@/lib/getServerSession';
 
 export async function refreshAccessToken() {
-    try {
-        const cookieStore = cookies();
-        const refresh_token = cookieStore.get('refresh_token')?.value;
 
+    try {
+        const session = await getServerSession();
+        const refresh_token = session?.refreshToken
         if (!refresh_token) {
             throw new Error('Refresh token not found');
         }
 
-        const response = await fetch(`${process.env.BACKEND_URL}/v1/auth/refresh-token`, {
+        const response = await fetch(`http://localhost:3000/api/auth/refresh`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers(),
             body: JSON.stringify({ refresh_token }),
+
         });
 
-        const refreshedTokens = await response.json();
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(refreshedTokens.message || 'Failed to refresh access token');
+            throw new Error(data.message || 'Failed to refresh access token');
         }
 
-        // Set the new refresh token as an HTTP-only cookie
-        cookieStore.set({
-            name: 'refresh_token',
-            value: refreshedTokens.refresh_token,
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            path: '/',
-        });
 
-        return {
-            access_token: refreshedTokens.access_token as string,
-        };
     } catch (err) {
-        console.error('Error refreshing access token:', err);
+        console.error('Error refreshing access token: tHIS IS THE ERROR', err);
         throw err;
     }
 }
+
+
+
+  export async function signup(name: string, email: string, password: string) {
+    try {
+      const response = await fetch('http://localhost:3000/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Signup failed');
+      }
+  
+      // Handle signup response
+      return data;
+    } catch (err) {
+      console.error('Error signing up:', err);
+      throw err;
+    }
+  }
+  

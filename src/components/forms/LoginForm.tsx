@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link';
 import { Button, Checkbox, Input } from '@nextui-org/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import FormField from './FormField';
 import { z } from 'zod';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -10,7 +10,6 @@ import { Googleicon } from '@/icons';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';
 
-
 const LoginFormSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -18,8 +17,6 @@ const LoginFormSchema = z.object({
 type LoginFormType = z.infer<typeof LoginFormSchema>;
 function LoginForm() {
   const router = useRouter()
-  const { login, isLoading, error, refreshAccessToken } = useAuthStore()
-  const {isAuthenticated} = useAuthStore()
   const form = useForm<LoginFormType>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -28,17 +25,30 @@ function LoginForm() {
     }
   })
 
-  useEffect(()=>{
-    if(isAuthenticated){
-      router.push("/empa")
+
+
+  const handleLogin = async (credentials: LoginFormType) => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+      router.push("/EMPA")
+
+    } catch (err) {
+      console.error('Error logging in:', err);
+
+      throw err;
     }
-  },[isAuthenticated])
-
-  const handleLogin = async (data: LoginFormType) => {
-    await login(data)
-
-
-    router.push("/internal-tools")
 
   }
   return (
@@ -116,12 +126,12 @@ function LoginForm() {
           <Button
             type="submit"
             color='primary'
-            disabled={isLoading}
-            isLoading={isLoading}
+            disabled={form.formState.isSubmitting}
+            isLoading={form.formState.isSubmitting}
             className="w-full  h-[56px] cursor-pointer  text-grey-20 font-medium text-lg "
           >
             {
-              isLoading ? "Logging In..." : "Log In →"
+              form.formState.isSubmitting ? "Logging In..." : "Log In →"
             }
           </Button>
           <div className="text-center mt-4">

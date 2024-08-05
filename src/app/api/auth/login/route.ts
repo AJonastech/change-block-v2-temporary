@@ -1,9 +1,12 @@
-// app/api/auth/login/route.js
+// app/api/auth/login/route.ts
 import { NextResponse } from 'next/server';
+import { getIronSession } from 'iron-session';
+import { sessionOptions, SessionData } from '@/lib/session';
 import { cookies } from 'next/headers';
-export async function POST(req:Request) {
-  const { email, password } = await req.json();
 
+
+export async function POST(req: Request) {
+  const { email, password } = await req.json();
   const response = await fetch(`${process.env.BACKEND_URL}/v1/auth/signin`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -16,17 +19,11 @@ export async function POST(req:Request) {
     return NextResponse.json({ message: data.message }, { status: response.status });
   }
 
-  const responseData = NextResponse.json({ user: data.user, token: data.token }, { status: 200 });
-cookies().set('refresh_token', data.token.refresh_token, { httpOnly: true, secure: true, sameSite: 'strict' });
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  session.user = data.user;
+  session.refreshToken = data.token.refresh_token; // Storing refresh token in the session
+  await session.save();
 
-  return responseData;
-}
 
-export function OPTIONS() {
-  return NextResponse.json(null, {
-    status: 204,
-    headers: {
-      Allow: 'POST',
-    },
-  });
+  return NextResponse.json({ success:true}, { status: 200 });
 }
