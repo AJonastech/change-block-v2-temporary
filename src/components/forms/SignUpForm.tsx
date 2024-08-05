@@ -19,7 +19,7 @@ const SignUpFormSchema = z.object({
 type SignUpFormType = z.infer<typeof SignUpFormSchema>;
 function SignUpForm() {
 const router = useRouter()
-const {signup, isLoading, error} = useAuthStore()
+const { isLoading, error} = useAuthStore()
 
   const form = useForm<SignUpFormType>({
     resolver: zodResolver(SignUpFormSchema),
@@ -29,7 +29,7 @@ const {signup, isLoading, error} = useAuthStore()
     }
   })
 const handleUserSignup = async (data: SignUpFormType) => {
-    await signup(data)
+   
     router.push("/login")
   }
 
