@@ -7,16 +7,10 @@ const OAuthCallbackComponent = () => {
 
     useEffect(() => {
         const handleGoogleAuth = async () => {
-            const code = new URLSearchParams(window.location.search).get('code');
+            const code = new URLSearchParams(window.location.search).get('code') 
 
             if (code) {
-                const response = await fetch('/api/auth/google', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ code }),
-                });
+                const response = await fetch(`/api/auth/google?code=${encodeURIComponent(code)}`);
 
                 if (response.ok) {
                     // Redirect to the homepage or desired page after successful login
@@ -24,11 +18,10 @@ const OAuthCallbackComponent = () => {
                 } else {
                     // Handle errors (e.g., show a message to the user)
                     console.error('Failed to authenticate with Google');
-                    router.push("/login")
+                    // router.push("/login")
                 }
             }
         };
-
         handleGoogleAuth();
     }, [router]);
 
