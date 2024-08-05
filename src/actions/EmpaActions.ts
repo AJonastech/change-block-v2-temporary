@@ -7,3 +7,7 @@ export async function getEmpaReports(){
  return await fetchData(`/v1/empa-reports`, 'GET')
 
 }
+
+export async function createEmpaReport(data:any){
+    return fetchData(`/v1/empa-reports`, 'POST', data)
+}

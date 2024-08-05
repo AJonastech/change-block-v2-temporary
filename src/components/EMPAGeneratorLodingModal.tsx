@@ -28,6 +28,7 @@ const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
         onPress={() => {
          valid && onConfirmOpen();
         }}
+        color="primary"
         className="rounded-xl"
         size="lg"
         type="submit"
