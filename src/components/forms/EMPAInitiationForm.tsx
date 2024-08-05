@@ -71,10 +71,10 @@ const formFields: Array<{
 
 const industryOptions = ["Renewable Energy", "Forestry", "Energy Efficiency", "Infrastructure", "Mining", "Professional Services", "Water Services", "Waste Management", "Transportation", "Agriculture", "Manufacturing", "Technology", "Tourism and Hospitality"];
 const defaultValues = {
-  client_name: "Test",
-  client_industry: "Technology",
-  client_project_name: "Test",
-  client_country: "USA",
+  client_name: "",
+  client_industry: "",
+  client_project_name: "",
+  client_country: "",
 };
 
 const EMPAInitiationForm: React.FC = () => {
