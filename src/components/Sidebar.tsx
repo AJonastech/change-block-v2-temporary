@@ -4,38 +4,50 @@ import { motion } from "framer-motion";
 import { Button, Image, Tooltip } from "@nextui-org/react";
 import { LuArrowLeftToLine, LuArrowRightToLine } from "react-icons/lu";
 import Link from "next/link";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import useIsMounted from "@/hooks/useIsMounted";
 import { menuItems } from "@/config/panelConfig";
 import useGetApp from "@/hooks/useGetApp";
 import WeeklyInsightsNav from "./WeeklyInsightNav";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useSearchParams } from "next/navigation";
 
-const SideBarDrawer = dynamic(() => import('./SideBarDrawer'));
-const EMPAGeneratorNav = dynamic(() => import('./EMPAGeneratorNav'));
-const AutomatedIssuesNav = dynamic(() => import('./AutomatedIssuesNav'));
+const SideBarDrawer = dynamic(() => import("./SideBarDrawer"));
+const EMPAGeneratorNav = dynamic(() => import("./EMPAGeneratorNav"));
+const AutomatedIssuesNav = dynamic(() => import("./AutomatedIssuesNav"));
 
 const Sidebar = () => {
   const { data, section, currentApp, currentPath, pathName } = useGetApp();
-  const {user} = useAuthStore()
+  const { user } = useAuthStore();
   const isMounted = useIsMounted();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   useEffect(() => {
-    if (data !== null || pathName.includes("/internal-tools/automated-issue-system") || pathName.includes("/internal-tools/weekly-insights")) {
+    if (
+      data !== null ||
+      pathName.includes("/internal-tools/automated-issue-system") ||
+      pathName.includes("/internal-tools/weekly-insights")
+    ) {
       setIsCollapsed(true);
     } else {
       setIsCollapsed(false);
     }
   }, [data, pathName]);
 
-  const handleToggleCollapse = () => setIsCollapsed(prev => !prev);
+  const handleToggleCollapse = () => setIsCollapsed((prev) => !prev);
 
   const sidebarWidth = useMemo(() => (isCollapsed ? 80 : 290), [isCollapsed]);
-  const drawerWidth = useMemo(() => (data === "report" && isMounted || pathName.includes("/internal-tools/automated-issue-system") || pathName.includes("/internal-tools/weekly-insights") ? 306 : 0), [data, isMounted, pathName]);
-
-
-
+  const drawerWidth = useMemo(
+    () =>
+      (data === "report" && isMounted) ||
+      pathName.includes("/internal-tools/automated-issue-system") ||
+      pathName.includes("/internal-tools/weekly-insights")
+        ? 306
+        : 0,
+    [data, isMounted, pathName]
+  );
 
   return (
     <div className="transition-all duration-200 flex gap-1 h-full">
@@ -45,11 +57,17 @@ const Sidebar = () => {
         animate={{ width: sidebarWidth }}
       >
         <div className="flex flex-col h-full py-5">
-          <div className={`flex ${isCollapsed ? "flex-col items-center" : "flex-row items-center"} justify-between gap-[1rem] w-full px-4`}>
+          <div
+            className={`flex ${
+              isCollapsed ? "flex-col items-center" : "flex-row items-center"
+            } justify-between gap-[1rem] w-full px-4`}
+          >
             <motion.img
               src={isCollapsed ? "/logo-badge.svg" : "/logo.svg"}
               alt="Logo"
-              className={`max-h-12 h-full ${!isCollapsed && "w-[184px] h-[44px] object-cover"}`}
+              className={`max-h-12 h-full ${
+                !isCollapsed && "w-[184px] h-[44px] object-cover"
+              }`}
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
             />
@@ -58,12 +76,26 @@ const Sidebar = () => {
               isIconOnly
               onClick={handleToggleCollapse}
             >
-              {isCollapsed ? <LuArrowRightToLine width={20} height={20} /> : <LuArrowLeftToLine width={20} height={20} />}
+              {isCollapsed ? (
+                <LuArrowRightToLine width={20} height={20} />
+              ) : (
+                <LuArrowLeftToLine width={20} height={20} />
+              )}
             </Button>
           </div>
           <div className="flex-grow gap-2 mt-[80px]">
-            <div className={`p-4 text-gray-500 text-sm uppercase ${isCollapsed ? "" : ""}`}>
-              <span className={`${isCollapsed ? "hidden mx-1" : "font-satoshi text-[15px] text-grey-100 font-bold"}`}>
+            <div
+              className={`p-4 text-gray-500 text-sm uppercase ${
+                isCollapsed ? "" : ""
+              }`}
+            >
+              <span
+                className={`${
+                  isCollapsed
+                    ? "hidden mx-1"
+                    : "font-satoshi text-[15px] text-grey-100 font-bold"
+                }`}
+              >
                 Tools
               </span>
               {isCollapsed && (
@@ -71,8 +103,6 @@ const Sidebar = () => {
               )}
             </div>
             <div className="flex flex-col gap-2">
-
-
               {menuItems.map((item, index) => (
                 <Link key={index} href={`/${item.path}`}>
                   <Tooltip
@@ -82,7 +112,11 @@ const Sidebar = () => {
                     className=""
                   >
                     <motion.div
-                      className={`flex items-center text-nowrap font-satoshi rounded-r-full text-lg py-3 pl-7 pr-4 cursor-pointer hover:bg-gray-200 mr-4 ${currentPath?.toLowerCase() === item?.path?.toLowerCase() ? "bg-secondary  text-green-500 font-bold " : "font-medium text-grey-300"}`}
+                      className={`flex items-center text-nowrap font-satoshi rounded-r-full text-lg py-3 pl-7 pr-4 cursor-pointer hover:bg-gray-200 mr-4 ${
+                        currentPath?.toLowerCase() === item?.path?.toLowerCase()
+                          ? "bg-secondary  text-green-500 font-bold "
+                          : "font-medium text-grey-300"
+                      }`}
                     >
                       <span className="text-xl text-nowrap">
                         <item.icon />
@@ -109,8 +143,12 @@ const Sidebar = () => {
               />
               {!isCollapsed && (
                 <div>
-                  <p className="text-[22px] leading-[28.6px] font-semibold text-grey-800 font-generalSans">{user?.full_name}</p>
-                  <p className="text-[15px] font-satoshi font-medium leading-[21px] text-grey-100">{user?.email}</p>
+                  <p className="text-[22px] leading-[28.6px] font-semibold text-grey-800 font-generalSans">
+                    {user?.full_name}
+                  </p>
+                  <p className="text-[15px] font-satoshi font-medium leading-[21px] text-grey-100">
+                    {user?.email}
+                  </p>
                 </div>
               )}
             </motion.div>
@@ -124,12 +162,12 @@ const Sidebar = () => {
       >
         <SideBarDrawer>
           {currentApp === "EMPA" && data === "report" && (
-            <EMPAGeneratorNav data={data} section={section} />
+            <EMPAGeneratorNav id={id as string} data={data} section={section} />
           )}
-          {(pathName.includes("/internal-tools/automated-issue-system")) && (
+          {pathName.includes("/internal-tools/automated-issue-system") && (
             <AutomatedIssuesNav />
           )}
-          {(pathName.includes("/internal-tools/weekly-insights")) && (
+          {pathName.includes("/internal-tools/weekly-insights") && (
             <WeeklyInsightsNav />
           )}
         </SideBarDrawer>

@@ -41,14 +41,34 @@ interface ProseMirrorMark {
   text?: string;
 }
 
-
-interface User{
-  
-    "full_name": string,
-    "email": string,
-    "profile_image": string,
-    "is_verified": boolean,
-    "user_id": string
-  
+interface User {
+  full_name: string;
+  email: string;
+  profile_image: string | null;
+  is_verified: boolean;
+  user_id: string;
 }
 
+interface UserRole {
+  user_id: string;
+  report_id: string;
+  role: string;
+  empa_user_id: string;
+  user: User;
+}
+
+interface Report {
+  client_name: string;
+  client_industry: string;
+  client_project_name: string;
+  client_country: string;
+  client_files: any[];
+  report_stages: any[];
+  start_date: string | null;
+  total_days_to_complete: number;
+  report_details: string;
+  report_id: string;
+  date_created: string;
+  date_updated: string;
+  user_role: UserRole;
+}

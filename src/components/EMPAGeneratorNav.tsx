@@ -36,6 +36,7 @@ const DraggableSubStep = ({
   setCurrentSubStep,
   section,
   step,
+  id,
   toggleSubStepLock,
 }: any) => {
   const ref = useRef<HTMLLIElement>(null);
@@ -117,7 +118,7 @@ const DraggableSubStep = ({
       }}
     >
       <Link
-        href={`/EMPA/${step.title}?data=report&&section=${subStep.title}`}
+        href={`/EMPA/${step.title}?data=report&&id=${id}&&section=${subStep.title}`}
         className={`w-full hover:text-green-700 capitalize text-nowrap ${
           section === subStep.title
             ? "text-primary-100 font-semibold"
@@ -158,9 +159,11 @@ const DraggableSubStep = ({
 
 const EMPAGeneratorNav = ({
   data,
+  id,
   section,
 }: {
   data: string | null;
+  id: string;
   section: string | null;
 }) => {
   const router = useRouter();
@@ -203,7 +206,7 @@ const EMPAGeneratorNav = ({
         console.log({ index, step });
         addNewSubStep(newSubStepIndex!, newSubStepTitle);
         router.push(
-          `/EMPA/${step?.title}?data=report&&section=${newSubStepTitle}`
+          `/EMPA/${step?.title}?data=report&&id=${id}&&section=${newSubStepTitle}`
         );
       }
     }
@@ -308,6 +311,7 @@ const EMPAGeneratorNav = ({
                     </div>
                     {step.substeps.map((subStep, subIndex) => (
                       <DraggableSubStep
+                        id={id}
                         key={subStep.id}
                         stepIndex={index}
                         subStepIndex={subIndex}
@@ -328,7 +332,7 @@ const EMPAGeneratorNav = ({
 
         <div className="mt-4 px-4 w-full ">
           <Link
-            href="/EMPA/question-box?data=report"
+            href={`/EMPA/question-box?data=report&&id=${id}`}
             className="flex w-full rounded-full py-2 px-[1rem] hover:bg-gray-300/20 gap-2 mb-4 items-center"
           >
             <QuestionBoxIcon />

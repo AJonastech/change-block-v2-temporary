@@ -6,9 +6,18 @@ import { EMPAReportSteps } from "@/config/reportStepConfig";
 import EMPAReportProjectTimeline from "./EMPAReportProjectTimeLine";
 import useIsMounted from "@/hooks/useIsMounted";
 import { Skeleton } from "@nextui-org/react";
+import { useFetchData } from "@/hooks/useFetchData";
+import { getEmpaReport } from "@/actions/EmpaActions";
 
-const EMPAReportHome = () => {
+const EMPAReportHome = ({ id }: { id: string }) => {
   const isMounted = useIsMounted();
+  const {
+    data: report,
+    isLoading,
+    error,
+  } = useFetchData([`empa-reports/${id}`], () => getEmpaReport(id));
+
+  console.log({ report });
 
   return (
     <div className="flex flex-col relative h-full max-h-fit gap-6">
@@ -83,7 +92,7 @@ const cards = [
         ],
       },
     ],
-  }
+  },
 ];
 const stages = [
   {
