@@ -13,14 +13,14 @@ import { signup } from '@/actions/authActions';
 
 
 const SignUpFormSchema = z.object({
-  name: z.string().min(1, "Please enter your name"),
+  full_name: z.string().min(1, "Please enter your name"),
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 })
 type SignUpFormType = z.infer<typeof SignUpFormSchema>;
 function SignUpForm() {
-const router = useRouter()
-const { isLoading, error} = useAuthStore()
+  const router = useRouter()
+
 
   const form = useForm<SignUpFormType>({
     resolver: zodResolver(SignUpFormSchema),
@@ -29,9 +29,29 @@ const { isLoading, error} = useAuthStore()
       password: ""
     }
   })
-const handleUserSignup = async (data: SignUpFormType) => {
-   await   signup(data.name, data.email, data.password)
-    router.push("/login")
+  const handleUserSignup = async (cred: SignUpFormType) => {
+    console.log(cred)
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cred),
+      });
+  
+      const data = await response.json();
+ 
+      if (!response.ok) {
+        throw new Error(data.message || 'Signup failed');
+      }
+  
+      // Handle signup response
+      return router.push('/login');
+    } catch (err) {
+      console.error('Error signing up:', err);
+      throw err;
+    }
   }
 
 
@@ -44,17 +64,17 @@ const handleUserSignup = async (data: SignUpFormType) => {
             <p className="text-[#585264] font-light font-satoshi">Please enter your details to continue</p>
           </div>
           <div className="flex justify-center mb-6 bg-grey-10 rounded-full p-[5px] w-fit mx-auto">
-          <Link href="/sign-up" className=" text-green-500 bg-lemon-75 py-2 px-4 rounded-full">
+            <Link href="/sign-up" className=" text-green-500 bg-lemon-75 py-2 px-4 rounded-full">
               Sign Up
             </Link>
             <Link href="/login" className="font-satoshi py-2 px-4 font-semibold text-grey-100 text-lg ">
               Log In
             </Link>
-           
+
           </div>
           <div className='flex flex-col gap-10'>
-          <FormField<SignUpFormType>
-              name="name"
+            <FormField<SignUpFormType>
+              name="full_name"
               render={({ field }) => (
                 <Input
                   label="Name"
@@ -124,7 +144,7 @@ const handleUserSignup = async (data: SignUpFormType) => {
           </div>
           <div className="flex items-center mt-3 justify-between mb-4">
             <label className="flex items-center font-satoshi text-lg font-light text-grey-300">
-              <Checkbox/>
+              <Checkbox />
               Please remember me
             </label>
             <Link href="#" className="font-satoshi text-lg underline text-grey-300">Forgot Password?</Link>
@@ -132,27 +152,27 @@ const handleUserSignup = async (data: SignUpFormType) => {
           <Button
             type="submit"
             color='primary'
-            disabled={isLoading}
-            isLoading={isLoading}
+            disabled={form.formState.isSubmitting}
+            isLoading={form.formState.isSubmitting}
             className="w-full  h-[56px] cursor-pointer  text-grey-20 font-medium text-lg "
           >
-            {isLoading ? "Creating Acoount": "Sign Up →"} 
+            {form.formState.isSubmitting ? "Creating Acoount" : "Sign Up →"}
           </Button>
           <div className="text-center mt-4">
             <p className="text-grey-300 font-satoshi">
-            I accept <Link href="#" className="text-[#5C73DB]">the terms and conditions of use</Link>
+              I accept <Link href="#" className="text-[#5C73DB]">the terms and conditions of use</Link>
             </p>
           </div>
           <div className="flex items-center my-4">
             <div className="flex-grow border-t-[1px] border-[#C1C2C0]/[65%]"></div>
-            <span className="mx-2 text-sm font-satoshi text-center text-grey-100">OR <br/>CONTINUE WITH</span>
+            <span className="mx-2 text-sm font-satoshi text-center text-grey-100">OR <br />CONTINUE WITH</span>
             <div className="flex-grow border-t-[1px] border-[#C1C2C0]/[65%]"></div>
           </div>
           <Button
             type="button"
             className="w-full h-[56px] gap-x-2 py-2 px-4 text-grey-300 text-lg font-medium bg-white border-[1px] border-[#C1C2C0]/[65%]  flex items-center justify-center focus:outline-none hover:bg-gray-100 transition duration-200"
           >
-           <Googleicon/>
+            <Googleicon />
             Google
           </Button>
 

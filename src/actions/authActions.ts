@@ -11,7 +11,7 @@ export async function refreshAccessToken() {
             throw new Error('Refresh token not found');
         }
 
-        const response = await fetch(`${process.env.CB_AUTH_URL}/api/auth/refresh`, {
+        const response = await fetch(`http://localhost:3000/api/auth/refresh`, {
             method: 'POST',
             headers: headers(),
             body: JSON.stringify({ refresh_token }),

@@ -51,3 +51,10 @@ interface User{
     "user_id": string
   
 }
+
+export interface TReport {
+  title: string;
+  role: 'Editor' | 'Viewer' | 'Owner';
+  lastEdited: string;
+  image:string
+}

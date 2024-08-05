@@ -10,5 +10,5 @@ export async function GET() {
     return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
   }
 
-  return NextResponse.json({user:session.user, token: session?.token}, { status: 200 });
+  return NextResponse.json({user:session.user}, { status: 200 });
 }

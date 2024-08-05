@@ -17,14 +17,14 @@ export async function middleware(req: NextRequest) {
     }
     
     // Attempt to refresh the access token
-    try {
-      await refreshAccessToken()
-    } catch (error) {
-        // Redirect to login if token refresh fails
-        console.error('Error refreshing access token: here', error);
-        url.pathname = '/login';
-        return NextResponse.redirect(url);
-    }
+    // try {
+    //   await refreshAccessToken()
+    // } catch (error) {
+    //     // Redirect to login if token refresh fails
+    //     console.error('Error refreshing access token: here', error);
+    //     url.pathname = '/login';
+    //     return NextResponse.redirect(url);
+    // }
 
     return NextResponse.next();
 }
