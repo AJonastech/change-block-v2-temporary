@@ -12,6 +12,7 @@ export const useInitializeAuth = () => {
         if (response.ok) {
           const sessionData = await response.json();
           setUser(sessionData.user);
+          console.log(sessionData)
         } else {
           setUser(null);
         }

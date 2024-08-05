@@ -4,17 +4,36 @@ import { reports } from '@/mockdata/empaReportsHistory';
 import Link from 'next/link';
 import Image from 'next/image';
 import GeneratedEmpaSkeleton from './skeletons/EmpaHistorySkeleton';
+import { useFetchData } from '@/hooks/useFetchData';
+import { getEmpaReports } from '@/actions/EmpaActions';
 
 function GeneratedEmpa() {
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // Simulate a network request
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 3000);
 
-        return () => clearTimeout(timer);
+    const { data: reportsD } = useFetchData(["empa-reports"], () => getEmpaReports());
+    console.log(reportsD)
+    useEffect(() => {
+        const fetchReports = async () => {
+            try {
+
+                const response = await fetch(`${process.env.BACKEND_URL}/api/empa/reports`,
+                    {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer .eJwNyt0OgiAYANB38QHcQPvxkpHTjwJbqYl3Sk5ByVYtJ09f5_p43cqGNlE60wwKB0hoeMPjslEUtjA-q5KyyP8npHC5VngawcxaGImFhVDk94G7PhQHMUkzoiwpFp4zy6103JVDfeP6RNnUpURnJg64gQ3P5SJcHfmENK82nNG5H5cYp-T4xQXNyWcOtG6VuTIbK1s3-52JvR9QTTeb.6j48mg0HadBMGhMWreuL2P0u33w` },
+                    }
+                )
+                const data = await response.json()
+                if (!response.ok) {
+                    throw new Error(data.message)
+                }
+                console.log(data, "This is me")
+                return data
+            } catch (error) {
+                console.error(`Error during getEmpaReports:`, error);
+            }
+        }
+        fetchReports()
     }, []);
 
     return (

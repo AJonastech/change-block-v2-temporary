@@ -35,8 +35,9 @@ export const useFetchData = <TData,>(
         ((error as any)?.response?.status === 400 || (error as any)?.response?.status === 401)
       ) {
         // Some action here
-        queryClient.clear();
-        router.push("/login");
+        console.log("Error 400 or 401");
+        // queryClient.clear();
+        // router.push("/login");
       }
     };
 
