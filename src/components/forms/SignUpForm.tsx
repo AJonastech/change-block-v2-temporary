@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Googleicon } from '@/icons';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';
+import { signup } from '@/actions/authActions';
 
 
 const SignUpFormSchema = z.object({
@@ -29,7 +30,7 @@ const { isLoading, error} = useAuthStore()
     }
   })
 const handleUserSignup = async (data: SignUpFormType) => {
-   
+   await   signup(data.name, data.email, data.password)
     router.push("/login")
   }
 
