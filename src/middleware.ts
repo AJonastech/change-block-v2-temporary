@@ -15,7 +15,7 @@ export async function middleware(req: NextRequest) {
         url.pathname = '/login';
         return NextResponse.redirect(url);
     }
-
+    
     // Attempt to refresh the access token
     try {
       await refreshAccessToken()

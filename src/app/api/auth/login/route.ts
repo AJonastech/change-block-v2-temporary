@@ -21,6 +21,7 @@ export async function POST(req: Request) {
 
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   session.user = data.user;
+  session.token = data.token.access_token; // Storing access token in the session
   session.refreshToken = data.token.refresh_token; // Storing refresh token in the session
   await session.save();
 

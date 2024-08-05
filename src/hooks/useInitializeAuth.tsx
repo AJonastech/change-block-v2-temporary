@@ -11,7 +11,7 @@ export const useInitializeAuth = () => {
         const response = await fetch('/api/auth/session');
         if (response.ok) {
           const sessionData = await response.json();
-          setUser(sessionData);
+          setUser(sessionData.user);
         } else {
           setUser(null);
         }

@@ -4,6 +4,7 @@ import { SessionOptions } from 'iron-session';
 export type SessionData = {
     user?: User
     refreshToken?: string;
+    token?:string;
 };
 
 export const sessionOptions: SessionOptions = {

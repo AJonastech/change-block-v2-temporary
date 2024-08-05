@@ -21,7 +21,7 @@ export async function POST() {
     return NextResponse.json({ message: data.message }, { status: response.status });
   }
 
-
+   session.token = data.access_token; // Update access token in the session
   session.refreshToken = data.refresh_token; // Update refresh token in the session
   await session.save();
 

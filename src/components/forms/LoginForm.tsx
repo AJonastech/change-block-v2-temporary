@@ -7,7 +7,6 @@ import { z } from 'zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Googleicon } from '@/icons';
-import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';
 
 const LoginFormSchema = z.object({
