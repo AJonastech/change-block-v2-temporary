@@ -50,6 +50,16 @@ function LoginForm() {
     }
 
   }
+
+
+  const handleGoogleLogin = async ( )=>{
+  const response = await fetch(`https://api.cbinternaltools.com/v1/auth/google/initiate-sso`)
+  const data = await response.json()
+  if(!response.ok){
+
+  }
+  return router.push(data.redirect_url)
+  }
   return (
     <FormProvider {...form}>
       <div className=' bg-white p-8 max-w-[678px] mx-auto rounded-[32px]'>
@@ -144,6 +154,7 @@ function LoginForm() {
             <div className="flex-grow border-t-[1px] border-[#C1C2C0]/[65%]"></div>
           </div>
           <Button
+          onClick={handleGoogleLogin}
             type="button"
             className="w-full h-[56px] gap-x-2 py-2 px-4 text-grey-300 text-lg font-medium bg-white border-[1px] border-[#C1C2C0]/[65%]  flex items-center justify-center focus:outline-none hover:bg-gray-100 transition duration-200"
           >
