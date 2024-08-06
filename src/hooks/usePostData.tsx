@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { getQueryClient } from "@/app/Providers";
+import { toast } from "react-toastify";
 
 // Define a type for errors that include a response property
 interface ErrorWithResponse {
@@ -10,6 +10,7 @@ interface ErrorWithResponse {
       message?: string;
     };
   };
+  message?: string; // Add the message property here
 }
 
 type UsePostArgs<TData, TError extends ErrorWithResponse, TVariables> = {
@@ -28,7 +29,7 @@ type UsePostReturn<TData, TError, TVariables> = {
 };
 
 const usePost = <TData, TError extends ErrorWithResponse, TVariables>({
-  handleSuccess = () => {},
+  handleSuccess = () => { },
   mutateFn,
 }: UsePostArgs<TData, TError, TVariables>): UsePostReturn<
   TData,
@@ -44,6 +45,9 @@ const usePost = <TData, TError extends ErrorWithResponse, TVariables>({
     },
     retry: false,
     onError: (error: TError) => {
+      const errorMessage = error.response?.data?.message || error.message || "An error occurred";
+      toast.error(errorMessage);
+
       if (error?.response?.status === 400 || error?.response?.status === 401) {
         return router.push("/login");
       }

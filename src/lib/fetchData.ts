@@ -1,20 +1,18 @@
 "use server"
-
 import { getServerSession } from "./getServerSession";
 
-
-
 const baseUrl = process.env.BACKEND_URL;
+
 export async function fetchData(
   endpoint: string,
   method: string,
-
   body?: any,
   isJson: boolean = true
 ) {
   try {
-    const token = (await getServerSession()).token
-    if (!token) return
+    const token = (await getServerSession()).token;
+    if (!token) return;
+
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
     };
@@ -31,14 +29,15 @@ export async function fetchData(
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage = errorData?.error || `Failed to ${method} ${endpoint}`;
-      throw new Error(errorMessage);
+      const errorMessage = errorData?.details || `Failed to ${method} ${endpoint}`;
+      const error = new Error(errorMessage);
+      (error as any).response = { status: response.status, data: errorData };
+      throw error;
     }
 
     return await response.json();
   } catch (error) {
     console.error(`Error during ${method} ${endpoint}:`, error);
     throw error;
-
   }
 }

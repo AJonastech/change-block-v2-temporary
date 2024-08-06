@@ -7,6 +7,7 @@ import { useFetchData } from "@/hooks/useFetchData";
 import { getEmpaReports } from "@/actions/EmpaActions";
 import { Button } from "@nextui-org/react";
 import { formatDistanceToNow } from "date-fns";
+import { trimSentence } from "@/lib/utils";
 
 function EmpaOverview() {
   const {
@@ -46,7 +47,7 @@ function EmpaOverview() {
             <h2 className="!mb-0 heading-h2 font-semibold font-generalSans leading-[58.5px] text-G700 text-xl sm:text-2xl lg:text-3xl">
               EMPA Generator
             </h2>
-            <span className="w-[90%] text-center max-w-[600px] text-G100 text-lg leading-[25.2px] font-normal font-satoshi text-base sm:text-lg lg:text-xl">
+            <span className="w-[90%] text-center max-w-[600px] text-G100 leading-[25.2px] font-normal font-satoshi text-base sm:text-lg lg:text-xl">
               Hello! How can I assist you today? Whether it&apos;s data
               collection, analysis, or report generation for your EMPA, I&apos;m
               here to help. Just let me know what you need.
@@ -83,10 +84,10 @@ function EmpaOverview() {
                     className="w-full h-[233px] aspect-square object-cover object-left-top rounded-md"
                   />
                   <h6 className="heading-h6 capitalize font-generalSans font-semibold text-grey-500 leading-[28.6px] text-base sm:text-lg lg:text-xl">
-                    {report.client_project_name}
+                    {trimSentence(report.client_project_name,30)}
                   </h6>
-                  <div className="text-lg font-normal flex flex-wrap items-center gap-x-2 leading-[25.2px] text-grey-100 text-sm sm:text-base lg:text-lg">
-                    <span className="capitalize">{report.client_name}</span>
+                  <div className=" font-normal flex flex-wrap items-center gap-x-2 leading-[25.2px] text-grey-100 text-sm sm:text-base lg:text-lg">
+                    <span className="capitalize">{trimSentence(report.client_name,15)}</span>
                     <span className="bg-grey-50 inline-block w-[6px] h-[6px] aspect-square rounded-full"></span>
                     <span>Edited {formatDate(report.date_updated)}</span>
                   </div>

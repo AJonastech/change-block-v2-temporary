@@ -29,7 +29,7 @@ const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
          valid && onConfirmOpen();
         }}
         color="primary"
-        className="rounded-xl"
+        className="rounded-xl !bg-primary"
         size="lg"
         type="submit"
       >

@@ -1,10 +1,15 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod'
 import FormField from './FormField'
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
+import { useFetchData } from '@/hooks/useFetchData'
+import { getAllTeams } from '@/actions/IasActions'
+import { useQuery } from '@tanstack/react-query'
+
+
 
 
 
@@ -20,8 +25,12 @@ function AutomatedChannelSettingsForm() {
         resolver: zodResolver(channelSettingsFormSchema)
     })
 
+
+
+    const { data: teamOption, isError, error } = useFetchData(["teams"], ()=>getAllTeams())
     const teamOptions = ["team A", "Team B", "Team C"]
 
+   
     const onSubmit = (data: ChannelSettingsFormType) => {
 
         //do something with the data here
@@ -105,25 +114,25 @@ function AutomatedChannelSettingsForm() {
 
                     name={"projectKey"}
                     render={({ field }) => (
-                            <Input
-                                label={"Project Key ( From Jira)"}
-                                placeholder="Type Project Key here"
-                                {...field}
-                                type="text"
-                                className="placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-300 placeholder:leading-[25.2px]"
-                                classNames={{
-                                    label: " font-normal font-satoshi !text-grey-500 pb-4 !text-lg leading-[25.2px]",
-                                    input: ["bg-transparent"],
+                        <Input
+                            label={"Project Key ( From Jira)"}
+                            placeholder="Type Project Key here"
+                            {...field}
+                            type="text"
+                            className="placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-300 placeholder:leading-[25.2px]"
+                            classNames={{
+                                label: " font-normal font-satoshi !text-grey-500 pb-4 !text-lg leading-[25.2px]",
+                                input: ["bg-transparent"],
 
-                                    innerWrapper: "bg-transparent px-4  ",
-                                    inputWrapper: ["bg-transparent border-[1px] !h-[3.5rem]"],
-                                }}
-                                color={form.formState.errors[field.name as keyof typeof form.formState.errors] ? "danger" : "default"}
-                                description={form.formState.errors[field.name as keyof typeof form.formState.errors]?.message}
-                                variant="bordered"
-                                labelPlacement="outside"
-                            />
-                  
+                                innerWrapper: "bg-transparent px-4  ",
+                                inputWrapper: ["bg-transparent border-[1px] !h-[3.5rem]"],
+                            }}
+                            color={form.formState.errors[field.name as keyof typeof form.formState.errors] ? "danger" : "default"}
+                            description={form.formState.errors[field.name as keyof typeof form.formState.errors]?.message}
+                            variant="bordered"
+                            labelPlacement="outside"
+                        />
+
                     )}
 
                 />

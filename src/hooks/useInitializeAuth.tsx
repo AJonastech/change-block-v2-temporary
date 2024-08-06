@@ -4,6 +4,10 @@ import { useAuthStore } from '@/store/useAuthStore';
 export const useInitializeAuth = () => {
   const { setUser, setIsLoading } = useAuthStore();
 
+
+
+
+
   useEffect(() => {
     const fetchSession = async () => {
       try {
@@ -12,7 +16,7 @@ export const useInitializeAuth = () => {
         if (response.ok) {
           const sessionData = await response.json();
           setUser(sessionData.user);
-          console.log(sessionData)
+        
         } else {
           setUser(null);
         }

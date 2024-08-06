@@ -1,12 +1,19 @@
-// app/middleware.js or pages/middleware.js
 import { NextResponse, NextRequest } from 'next/server';
 import { getServerSession } from './lib/getServerSession';
 import { headers } from 'next/headers';
 import { refreshAccessToken } from './actions/authActions';
 
 export async function middleware(req: NextRequest) {
-    console.log("Here is my file")
     const url = req.nextUrl.clone();
+    
+    // Redirect root route "/" to "/EMPA"
+    if (url.pathname === '/') {
+        url.pathname = '/EMPA';
+        return NextResponse.redirect(url);
+    }
+
+    console.log("Here is my file");
+    
     const session = await getServerSession();
     const refreshToken = session?.refreshToken;
 
@@ -31,8 +38,8 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
     matcher: [
-        '/internal-tools',                // Protect the root route
-        '/', // Protect all routes under /internal-tool/,
-        '/EMPA/:path*' // Protect all routes under /internal-tool/,
+        '/internal-tools', // Protect the internal-tools route
+        '/',               // Protect the root route
+        '/EMPA/:path*'     // Protect all routes under /EMPA/
     ],
 };

@@ -1,10 +1,12 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod'
 import FormField from './FormField'
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
+import { useFetchData } from '@/hooks/useFetchData'
+import { getAllChats } from '@/actions/IasActions'
 
 const chatSettingsFormSchema = z.object({
     chat: z.string().min(1, "Please enter the name of the team"),
@@ -17,6 +19,13 @@ function AutomatedChatSettingsForm() {
     const form = useForm<ChatSettingsFormType>({
         resolver: zodResolver(chatSettingsFormSchema)
     })
+
+    const { data: chats, isError, error } = useFetchData(["chats"], () => getAllChats())
+    useEffect(() => {
+        if (isError) {
+           console.log(error?.message)
+        }
+    }, [chats, isError])
 
     const chatOptions = ["team A", "Team B", "Team C"]
 

@@ -18,11 +18,8 @@ import {
   DropTargetMonitor,
 } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-const trimSentence = (sentence: string) => {
-  if (sentence.length <= 17) return sentence;
+import { trimSentence } from "@/lib/utils";
 
-  return `${sentence.slice(0, 17)}...`;
-};
 
 const ItemTypes = {
   SUBSTEP: "substep",
@@ -133,7 +130,7 @@ const DraggableSubStep = ({
           })
         }
       >
-        {trimSentence(subStep.title)}
+        {trimSentence(subStep.title,17)}
       </Link>
       <div
         className={`transition-all duration-300 ${
@@ -233,7 +230,7 @@ const EMPAGeneratorNav = ({
     updateSubSteps(openStep!, newSubSteps);
   };
 
-  console.log({ currentSubStep });
+
 
   return (
     <DndProvider backend={HTML5Backend}>

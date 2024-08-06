@@ -5,9 +5,9 @@ import Link from 'next/link'
 
 function AutomatedIssuesNav() {
   return (
-    <div className="w-full pb-[2rem] flex flex-col h-full overflow-x-hidden ">
-      <h6 className=" heading-h6 text-grey-500 font-generalSans font-semibold mb-4 pb-3 px-4 mt-7 ">Actions</h6>
-      <ul className="h-full flex flex-col px-3 not-prose">
+    <div className="w-full pb-[2rem] flex flex-col px-4 justify-between h-full overflow-x-hidden ">
+      <h6 className=" heading-h6 text-grey-500 font-generalSans font-semibold mb-4 pb-3 mt-7 ">Actions</h6>
+      <ul className="h-full flex flex-col px-1 not-prose">
         {automatedIssuesItems.map((item, index) => (
           <li key={index} className="mb-2 ">
 
@@ -28,7 +28,9 @@ function AutomatedIssuesNav() {
           </li>
         ))}
       </ul>
-
+      <div className="border-[1px] cursor-pointer text-red-500 px-4 py-3 text-center border-[#C1C2C0]/50 rounded-2xl">
+                Clear Cache
+            </div>
     </div>
   )
 }

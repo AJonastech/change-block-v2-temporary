@@ -1,10 +1,10 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import {
-  Button,
   Input,
   Select,
   SelectItem,
+  Avatar,
 } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,9 +19,9 @@ import { createEmpaReport } from "@/actions/EmpaActions";
 
 const empaInitiationFormSchema = z.object({
   client_name: z.string().min(1, "Please enter your Company's name"),
-  client_industry: z.string().optional(), // Assuming that the industry dropdown can be empty
+  client_industry: z.string().optional(),
   client_project_name: z.string().min(1, "Please enter the name of your project"),
-  client_country: z.string().optional(), // Assuming that the country dropdown can be empty,
+  client_country: z.string().optional(),
   client_files: z.array(z.string().url("File must be a valid URL")),
 });
 
@@ -34,40 +34,40 @@ const formFields: Array<{
   type: string;
   required?: boolean;
 }> = [
-    {
-      name: "client_name",
-      label: "Company Name",
-      placeholder: "Enter Company Name",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "client_industry",
-      label: "Industry or Sector",
-      placeholder: "Select Industry",
-      type: "dropdown",
-    },
-    {
-      name: "client_country",
-      label: "Please select the country where the project is",
-      placeholder: "Select Country",
-      type: "dropdown",
-    },
-    {
-      name: "client_project_name",
-      label: "Project Name",
-      placeholder: "Enter Project Name",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "client_files",
-      label: "Upload File",
-      type: "file",
-      required: true,
-      placeholder: "Select File",
-    },
-  ];
+  {
+    name: "client_name",
+    label: "Company Name",
+    placeholder: "Enter Company Name",
+    type: "text",
+    required: true,
+  },
+  {
+    name: "client_industry",
+    label: "Industry or Sector",
+    placeholder: "Select Industry",
+    type: "dropdown",
+  },
+  {
+    name: "client_country",
+    label: "Please select the country where the project is",
+    placeholder: "Select Country",
+    type: "dropdown",
+  },
+  {
+    name: "client_project_name",
+    label: "Project Name",
+    placeholder: "Enter Project Name",
+    type: "text",
+    required: true,
+  },
+  {
+    name: "client_files",
+    label: "Upload File",
+    type: "file",
+    required: true,
+    placeholder: "Select File",
+  },
+];
 
 const industryOptions = ["Renewable Energy", "Forestry", "Energy Efficiency", "Infrastructure", "Mining", "Professional Services", "Water Services", "Waste Management", "Transportation", "Agriculture", "Manufacturing", "Technology", "Tourism and Hospitality"];
 const defaultValues = {
@@ -84,33 +84,36 @@ const EMPAInitiationForm: React.FC = () => {
     defaultValues,
   });
 
-  const [countryOptions, setCountryOptions] = useState<string[]>([]);
+  const [countryOptions, setCountryOptions] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchCountries = async () => {
       const response = await fetch("https://restcountries.com/v3.1/all");
       const data = await response.json();
-      setCountryOptions(data.map((country: any) => country.name.common).sort());
+      setCountryOptions(data.map((country: any) => ({
+        name: country.name.common,
+        flag: country.flags.svg,
+      })).sort((a: any, b: any) => a.name.localeCompare(b.name)));
     };
     fetchCountries();
   }, []);
 
   const handleSuccess = () => {
-    // Handle success actions here
     toast.success("Form submitted successfully!");
     return router.push("/EMPA/home?data=report");
   }
 
   const { mutate, error, isSuccess, isError } = usePost({ handleSuccess, mutateFn: (data: EMPAInitiationFormType) => createEmpaReport(data) });
 
+ useEffect(()=>{
   if (isError) {
-    toast.error("This is an error");
-    console.log(error);
+    toast.error(error?.message);
+    
   }
+ },[isError])
+  
   const onSubmit = async (values: EMPAInitiationFormType) => {
-
     await mutate(values);
-
   };
 
   return (
@@ -167,17 +170,9 @@ const EMPAInitiationForm: React.FC = () => {
                     defaultSelectedKeys={[field.value]}
                     onChange={field.onChange}
                     isRequired
-                    label={
-                      fieldItem.name === "client_industry"
-                        ? "Industry or Sector"
-                        : "Country"
-                    }
+                    label={fieldItem.label}
                     variant="bordered"
-                    placeholder={
-                      field.name === "industry"
-                        ? "Select industry"
-                        : "Select country"
-                    }
+                    placeholder={fieldItem.placeholder}
                     className="w-full placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-300 placeholder:leading-[25.2px]"
                     classNames={{
                       label:
@@ -191,17 +186,30 @@ const EMPAInitiationForm: React.FC = () => {
                     labelPlacement="outside"
                   >
                     {(fieldItem.name === "client_industry"
-                      ? industryOptions
-                      : countryOptions
-                    ).map((option) => (
-                      <SelectItem className="capitalize" key={option}>
-                        {option}
-                      </SelectItem>
-                    ))}
+                      ? industryOptions.map((option) => (
+                        <SelectItem
+                          className="capitalize"
+                          key={option}
+                        >
+                          {option}
+                        </SelectItem>
+                      ))
+                      : countryOptions.map((option) => (
+                        <SelectItem
+                          className="capitalize"
+                          key={option.name}
+                          startContent={
+                            <Avatar alt={option.name} className="w-6 h-6" src={option.flag} />
+                          }
+                        >
+                          {option.name}
+                        </SelectItem>
+                      )))}
                   </Select>
                 )}
               />
             )}
+
             {fieldItem.type === "file" && (
               <FormField<EMPAInitiationFormType>
                 name={fieldItem.name}

@@ -31,7 +31,7 @@ const EMPAReportSegment = ({
     error,
   } = useFetchData([`empa-reports/${id}`], () => getEmpaReport(id));
 
-console.log({ report });
+console.log(report );
 
   // Get the current location and parameters from the URL
   const location = useLocation();
