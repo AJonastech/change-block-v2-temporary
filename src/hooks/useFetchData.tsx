@@ -47,9 +47,9 @@ export const useFetchData = <TData,>(
         toast.error(errorMessage);
         if (status === 400 || status === 401) {
           // Some action here
-          console.log("Error 400 or 401");
-          // queryClient.clear();
-          // router.push("/login");
+          
+          queryClient.clear();
+          router.push("/login");
         }
       }
     };
