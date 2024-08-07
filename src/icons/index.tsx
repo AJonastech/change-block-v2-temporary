@@ -16,6 +16,12 @@ import Image from "next/image";
 export const HomeIcon = () => {
   return <Image src="/icons/home.svg" width={16} height={15.75} alt="T" />;
 };
+export const AccountSettingsIcon = () => {
+  return <Image src="/icons/account_setting.svg" width={20} height={20} alt="T" />;
+};
+export const LogOutIcon = () => {
+  return <Image src="/icons/logout.svg" width={20} height={20} alt="T" />;
+};
 export const Googleicon = () => {
   return <Image src="/icons/google.svg" width={20} height={20} alt="T" />;
 };

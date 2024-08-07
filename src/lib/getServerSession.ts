@@ -1,4 +1,4 @@
-// lib/getServerSession.ts
+"use server"
 import { getIronSession } from 'iron-session';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { cookies } from 'next/headers';

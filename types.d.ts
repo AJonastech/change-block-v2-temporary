@@ -72,3 +72,14 @@ interface Report {
   date_updated: string;
   user_role: UserRole;
 }
+
+interface ErrorWithResponse extends Error {
+  response?: {
+    status: number;
+    data?: {
+      message?: string;
+      details?: string;
+      detail?: string;
+    };
+  };
+}

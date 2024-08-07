@@ -1,5 +1,5 @@
-"use server"
 import { getServerSession } from "./getServerSession";
+
 
 const baseUrl = process.env.BACKEND_URL;
 
@@ -10,8 +10,12 @@ export async function fetchData(
   isJson: boolean = true
 ) {
   try {
-    const token = (await getServerSession()).token;
-    if (!token) return;
+    const session = await getServerSession();
+    const token = session?.token;
+
+    if (!token) {
+      throw new Error('No token found');
+    }
 
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
@@ -29,15 +33,22 @@ export async function fetchData(
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage = errorData?.details || `Failed to ${method} ${endpoint}`;
-      const error = new Error(errorMessage);
-      (error as any).response = { status: response.status, data: errorData };
+      const errorMessage = errorData?.details || errorData.detail || `Failed to ${method} ${endpoint}`;
+      const error: ErrorWithResponse = Object.assign(new Error(errorMessage), {
+        response: { status: response.status, data: errorData }
+      });
       throw error;
+
     }
 
     return await response.json();
-  } catch (error) {
-    console.error(`Error during ${method} ${endpoint}:`, error);
-    throw error;
+  } catch (error: any) {
+    if (error.response) {
+      throw error;
+    } else {
+      const genericError: ErrorWithResponse = new Error(error.message) as ErrorWithResponse;
+      genericError.response = { status: 500, data: { message: error.message } };
+      throw genericError;
+    }
   }
 }

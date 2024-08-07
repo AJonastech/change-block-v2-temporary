@@ -12,15 +12,27 @@ import { trimSentence } from "@/lib/utils";
 function EmpaOverview() {
   const {
     data: reports,
+    isError,
     isLoading,
     error,
+   
   } = useFetchData(["empa-reports"], () => getEmpaReports());
 
-  if (error) {
-    console.log(error, "This is the error");
+
+
+  if (error || isError ) {
+  
+    return (
+      <div className="flex justify-center flex-col gap-3 w-full items-center">
+        <h2 className="!mb-0 heading-h2 font-semibold font-generalSans leading-[58.5px] text-G700 text-xl sm:text-2xl lg:text-3xl">
+          An error occurred
+        </h2>
+        <span className="w-[90%] text-center max-w-[600px] text-G100 leading-[25.2px] font-normal font-satoshi text-base sm:text-lg lg:text-xl">
+          Sorry, we couldn't fetch the reports. Please try again later.
+        </span>
+      </div>
+    );
   }
-
-
   return (
     <main className="w-full min-h-full bg-white overflow-auto rounded-xl no-scrollbar flex flex-col gap-10 p-9 py-12">
       {(isLoading || reports.length !== 0) && (
@@ -70,7 +82,7 @@ function EmpaOverview() {
               Array.from({ length: 9 }).map((_, id) => (
                 <GeneratedEmpaSkeleton key={id} />
               ))
-            : reports.map((report: Report, id: number) => (
+            :  reports?.map((report: Report, id: number) => (
                 <Link
                   key={id}
                   href={`/EMPA/home?data=report&&id=${report.report_id}`}

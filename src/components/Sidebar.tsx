@@ -11,6 +11,9 @@ import useGetApp from "@/hooks/useGetApp";
 import WeeklyInsightsNav from "./WeeklyInsightNav";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSearchParams } from "next/navigation";
+import { IoIosArrowDown, IoIosMore } from "react-icons/io";
+import { trimSentence } from "@/lib/utils";
+import AccountPopover from "./AccountPopover";
 
 const SideBarDrawer = dynamic(() => import("./SideBarDrawer"));
 const EMPAGeneratorNav = dynamic(() => import("./EMPAGeneratorNav"));
@@ -42,8 +45,8 @@ const Sidebar = () => {
   const drawerWidth = useMemo(
     () =>
       (data === "report" && isMounted) ||
-      pathName.includes("/internal-tools/automated-issue-system") ||
-      pathName.includes("/internal-tools/weekly-insights")
+        pathName.includes("/internal-tools/automated-issue-system") ||
+        pathName.includes("/internal-tools/weekly-insights")
         ? 306
         : 0,
     [data, isMounted, pathName]
@@ -58,16 +61,14 @@ const Sidebar = () => {
       >
         <div className="flex flex-col h-full py-5">
           <div
-            className={`flex ${
-              isCollapsed ? "flex-col items-center" : "flex-row items-center"
-            } justify-between gap-[1rem] w-full px-4`}
+            className={`flex ${isCollapsed ? "flex-col items-center" : "flex-row items-center"
+              } justify-between gap-[1rem] w-full px-4`}
           >
             <motion.img
               src={isCollapsed ? "/logo-badge.svg" : "/logo.svg"}
               alt="Logo"
-              className={`max-h-12 h-full ${
-                !isCollapsed && "w-[184px] h-[44px] object-cover"
-              }`}
+              className={`max-h-12 h-full ${!isCollapsed && "w-[184px] h-[44px] object-cover"
+                }`}
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
             />
@@ -85,16 +86,14 @@ const Sidebar = () => {
           </div>
           <div className="flex-grow gap-2 mt-[80px]">
             <div
-              className={`p-4 text-gray-500 text-sm uppercase ${
-                isCollapsed ? "" : ""
-              }`}
+              className={`p-4 text-gray-500 text-sm uppercase ${isCollapsed ? "" : ""
+                }`}
             >
               <span
-                className={`${
-                  isCollapsed
+                className={`${isCollapsed
                     ? "hidden mx-1"
                     : "font-satoshi text-[15px] text-grey-100 font-bold"
-                }`}
+                  }`}
               >
                 Tools
               </span>
@@ -112,11 +111,10 @@ const Sidebar = () => {
                     className=""
                   >
                     <motion.div
-                      className={`flex items-center text-nowrap font-satoshi rounded-r-full text-lg py-3 pl-7 pr-4 cursor-pointer hover:bg-gray-200 mr-4 ${
-                        currentPath?.toLowerCase() === item?.path?.toLowerCase()
+                      className={`flex items-center text-nowrap font-satoshi rounded-r-full text-lg py-3 pl-7 pr-4 cursor-pointer hover:bg-gray-200 mr-4 ${currentPath?.toLowerCase() === item?.path?.toLowerCase()
                           ? "bg-secondary  text-green-500 font-bold "
                           : "font-medium text-grey-300"
-                      }`}
+                        }`}
                     >
                       <span className="text-xl text-nowrap">
                         <item.icon />
@@ -132,27 +130,8 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
-          <div className="p-4 w-full mx-auto">
-            <motion.div className="flex gap-x-4 items-center w-full mx-auto">
-              <Image
-                src="/profile.png"
-                alt="Profile"
-                className="h-[52px] w-[52px] rounded-full object-cover mx-auto aspect-square"
-                width={100}
-                height={100}
-              />
-              {!isCollapsed && (
-                <div>
-                  <p className="text-[22px] leading-[28.6px] font-semibold text-grey-800 font-generalSans">
-                    {user?.full_name}
-                  </p>
-                  <p className="text-[15px] font-satoshi font-medium leading-[21px] text-grey-100">
-                    {user?.email}
-                  </p>
-                </div>
-              )}
-            </motion.div>
-          </div>
+          <AccountPopover isCollapsed={isCollapsed} user={user}/>
+         
         </div>
       </motion.div>
       <motion.div

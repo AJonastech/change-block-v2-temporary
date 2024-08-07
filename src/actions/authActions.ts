@@ -2,31 +2,37 @@
 import { headers } from 'next/headers';
 import { getServerSession } from '@/lib/getServerSession';
 
-export async function refreshAccessToken() {
 
+
+export async function refreshAccessToken() {
+    console.log("OKAY TESTING TO SEE IF I GOT CALLED")
     try {
-        const session = await getServerSession();
-        const refresh_token = session?.refreshToken
-        if (!refresh_token) {
-            throw new Error('Refresh token not found');
-        }
+       
+       
+        // if (!refresh_token) {
+        //     throw new Error('Refresh token not found');
+        // }
+      
 
         const response = await fetch(`http://localhost:3000/api/auth/refresh`, {
             method: 'POST',
-            headers: headers(),
-            body: JSON.stringify({ refresh_token }),
-
+            headers: {
+                'Content-Type': 'application/json',
+           
+            },
         });
 
-        const data = await response.json();
+     
 
         if (!response.ok) {
-            throw new Error(data.message || 'Failed to refresh access token');
+     
+            throw new Error('Failed to refresh access token');
         }
 
-
+   
     } catch (err) {
-        console.error('Error refreshing access token: tHIS IS THE ERROR', err);
+      console.log("OKAY BE LIKE SAY I WORK SHA");
+        console.error('Error refreshing access token:', err);
         throw err;
     }
 }

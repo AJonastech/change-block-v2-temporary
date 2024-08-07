@@ -3,9 +3,11 @@ import { NextResponse } from 'next/server';
 import { getIronSession } from 'iron-session';
 import { SessionData, sessionOptions } from '@/lib/session';
 import { cookies } from 'next/headers';
+import { getServerSession } from '@/lib/getServerSession';
 
-export async function POST() {
+export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+
   if (!session.refreshToken) {
     return NextResponse.json({ message: 'Refresh token not found' }, { status: 401 });
   }
@@ -17,11 +19,12 @@ export async function POST() {
   });
 
   const data = await response.json();
+
   if (!response.ok) {
     return NextResponse.json({ message: data.message }, { status: response.status });
   }
 
-   session.token = data.access_token; // Update access token in the session
+  session.token = data.access_token; // Update access token in the session
   session.refreshToken = data.refresh_token; // Update refresh token in the session
   await session.save();
 

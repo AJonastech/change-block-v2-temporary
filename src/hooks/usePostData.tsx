@@ -49,6 +49,7 @@ const usePost = <TData, TError extends ErrorWithResponse, TVariables>({
       toast.error(errorMessage);
 
       if (error?.response?.status === 400 || error?.response?.status === 401) {
+
         return router.push("/login");
       }
     },

@@ -3,23 +3,24 @@ import { useQuery, QueryKey, UseQueryResult } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { refreshAccessToken } from '@/actions/authActions'; // Ensure the path is correct
 
-// Define a type for errors that include a response property
-interface ErrorWithResponse {
+interface ErrorWithResponse extends Error {
   response?: {
     status: number;
     data?: {
       message?: string;
+      details?: string;
+      detail?: string;
     };
   };
-  message?: string; // Add the message property here
 }
 
 interface FetchDataResult<TData> {
   data: TData | undefined;
   isLoading: boolean;
   isError: boolean;
-  error: ErrorWithResponse | null; // Ensure error is of the correct type
+  error: ErrorWithResponse | null;
   isSuccess: boolean;
 }
 
@@ -33,29 +34,37 @@ export const useFetchData = <TData,>(
 
   const { data, isLoading, isError, error, isSuccess }: UseQueryResult<TData, ErrorWithResponse> = useQuery<TData, ErrorWithResponse>({
     queryKey: key,
+
     queryFn: fetchFn,
     enabled: enabled,
+    retry: 1,
     refetchOnMount: true,
+
   });
 
   useEffect(() => {
     const handleErrors = async () => {
       if (isError && error) {
-        console.error("Query error:", error);
-        const status = error.response?.status;
-        const errorMessage = error.response?.data?.message || error.message || "An error occurred";
-        toast.error(errorMessage);
-        if (status === 400 || status === 401) {
-          // Some action here
-          
+
+        try {
+          // Attempt to refresh the token
+          const response = await fetch('/api/auth/refresh');
+          if (!response.ok) {
+            throw new Error('Failed to refresh access token');
+          }
+          queryClient.invalidateQueries({ queryKey: key }); // Retry the query after refreshing the token
+        } catch (refreshError) {
+          console.error('Error refreshing access token', refreshError);
           queryClient.clear();
           router.push("/login");
         }
+
+
       }
     };
 
     handleErrors();
-  }, [isError, error, queryClient, router]);
+  }, [isError, error, queryClient, router, key]);
 
   return { data, error, isLoading, isError, isSuccess };
 };
