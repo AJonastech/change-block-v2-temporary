@@ -25,7 +25,7 @@ function AutomatedChatSettingsForm() {
         if (isError) {
            console.log(error?.message)
         }
-    }, [chats, isError])
+    }, [chats, isError, error?.message])
 
     const chatOptions = ["team A", "Team B", "Team C"]
 

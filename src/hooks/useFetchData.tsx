@@ -1,9 +1,9 @@
+"use client"
 import { getQueryClient } from "@/app/Providers";
 import { useQuery, QueryKey, UseQueryResult } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
-import { refreshAccessToken } from '@/actions/authActions'; // Ensure the path is correct
+
 
 interface ErrorWithResponse extends Error {
   response?: {

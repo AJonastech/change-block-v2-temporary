@@ -110,7 +110,7 @@ const EMPAInitiationForm: React.FC = () => {
     toast.error(error?.message);
     
   }
- },[isError])
+ },[isError, error?.message])
   
   const onSubmit = async (values: EMPAInitiationFormType) => {
     await mutate(values);
