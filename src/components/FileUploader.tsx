@@ -20,7 +20,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   const [files, setFiles] = useState<File[]>(initialFiles);
   const [fileUrls, setFileUrls] = useState<string[]>([]);
   const [filesForUpload, setFilesForUpload] = useState<File[]>([]);
-  const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
+  const [isDraggingOver, setIsDraggingOver] = useState<boolean>(true);
 
   const handleSuccess = () => {
     toast.success("Files uploaded successfully!");
