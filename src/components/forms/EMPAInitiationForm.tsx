@@ -1,11 +1,6 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
-import {
-  Input,
-  Select,
-  SelectItem,
-  Avatar,
-} from "@nextui-org/react";
+import { Input, Select, SelectItem, Avatar } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FileUploader from "../FileUploader";
@@ -20,7 +15,9 @@ import { createEmpaReport } from "@/actions/EmpaActions";
 const empaInitiationFormSchema = z.object({
   client_name: z.string().min(1, "Please enter your Company's name"),
   client_industry: z.string().optional(),
-  client_project_name: z.string().min(1, "Please enter the name of your project"),
+  client_project_name: z
+    .string()
+    .min(1, "Please enter the name of your project"),
   client_country: z.string().optional(),
   client_files: z.array(z.string().url("File must be a valid URL")),
 });
@@ -69,7 +66,21 @@ const formFields: Array<{
   },
 ];
 
-const industryOptions = ["Renewable Energy", "Forestry", "Energy Efficiency", "Infrastructure", "Mining", "Professional Services", "Water Services", "Waste Management", "Transportation", "Agriculture", "Manufacturing", "Technology", "Tourism and Hospitality"];
+const industryOptions = [
+  "Renewable Energy",
+  "Forestry",
+  "Energy Efficiency",
+  "Infrastructure",
+  "Mining",
+  "Professional Services",
+  "Water Services",
+  "Waste Management",
+  "Transportation",
+  "Agriculture",
+  "Manufacturing",
+  "Technology",
+  "Tourism and Hospitality",
+];
 const defaultValues = {
   client_name: "",
   client_industry: "",
@@ -90,10 +101,14 @@ const EMPAInitiationForm: React.FC = () => {
     const fetchCountries = async () => {
       const response = await fetch("https://restcountries.com/v3.1/all");
       const data = await response.json();
-      setCountryOptions(data.map((country: any) => ({
-        name: country.name.common,
-        flag: country.flags.svg,
-      })).sort((a: any, b: any) => a.name.localeCompare(b.name)));
+      setCountryOptions(
+        data
+          .map((country: any) => ({
+            name: country.name.common,
+            flag: country.flags.svg,
+          }))
+          .sort((a: any, b: any) => a.name.localeCompare(b.name))
+      );
     };
     fetchCountries();
   }, []);
@@ -101,18 +116,21 @@ const EMPAInitiationForm: React.FC = () => {
   const handleSuccess = () => {
     toast.success("Form submitted successfully!");
     return router.push("/EMPA/home?data=report");
-  }
+  };
 
-  const { mutate, error, isSuccess, isError } = usePost({ handleSuccess, mutateFn: (data: EMPAInitiationFormType) => createEmpaReport(data) });
+  const { mutate, error, isSuccess, isError } = usePost({
+    handleSuccess,
+    mutateFn: (data: EMPAInitiationFormType) => createEmpaReport(data),
+  });
 
- useEffect(()=>{
-  if (isError) {
-    toast.error(error?.message);
-    
-  }
- },[isError, error?.message])
-  
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message);
+    }
+  }, [isError, error?.message]);
+
   const onSubmit = async (values: EMPAInitiationFormType) => {
+    console.log({ values });
     await mutate(values);
   };
 
@@ -185,26 +203,27 @@ const EMPAInitiationForm: React.FC = () => {
                     name="service"
                     labelPlacement="outside"
                   >
-                    {(fieldItem.name === "client_industry"
+                    {fieldItem.name === "client_industry"
                       ? industryOptions.map((option) => (
-                        <SelectItem
-                          className="capitalize"
-                          key={option}
-                        >
-                          {option}
-                        </SelectItem>
-                      ))
+                          <SelectItem className="capitalize" key={option}>
+                            {option}
+                          </SelectItem>
+                        ))
                       : countryOptions.map((option) => (
-                        <SelectItem
-                          className="capitalize"
-                          key={option.name}
-                          startContent={
-                            <Avatar alt={option.name} className="w-6 h-6" src={option.flag} />
-                          }
-                        >
-                          {option.name}
-                        </SelectItem>
-                      )))}
+                          <SelectItem
+                            className="capitalize"
+                            key={option.name}
+                            startContent={
+                              <Avatar
+                                alt={option.name}
+                                className="w-6 h-6"
+                                src={option.flag}
+                              />
+                            }
+                          >
+                            {option.name}
+                          </SelectItem>
+                        ))}
                   </Select>
                 )}
               />
@@ -215,7 +234,15 @@ const EMPAInitiationForm: React.FC = () => {
                 name={fieldItem.name}
                 render={({ field }) => (
                   <div className="" key={fieldItem.name}>
-                    <FileUploader onFilesChange={(files) => field.onChange(Array.isArray(files) ? files.map(file => URL.createObjectURL(file)) : [])} />
+                    <FileUploader
+                      onFilesChange={(files) =>
+                        field.onChange(
+                          Array.isArray(files)
+                            ? files
+                            : []
+                        )
+                      }
+                    />
                     <span className="text-xs text-red-500">
                       {
                         form.formState.errors[
