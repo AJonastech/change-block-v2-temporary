@@ -19,7 +19,7 @@ type UsePostArgs<TData, TError extends ErrorWithResponse, TVariables> = {
 };
 
 type UsePostReturn<TData, TError, TVariables> = {
-  mutate: (variables: TVariables) => Promise<void>;
+  mutate: (variables: TVariables) => Promise<TData>;
   isSuccess: boolean;
   isError: boolean;
   error: TError | null;
@@ -55,15 +55,14 @@ const usePost = <TData, TError extends ErrorWithResponse, TVariables>({
     },
   });
 
-  const mutate = (variables: TVariables): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      mutation.mutate(variables, {
-        onSuccess: () => resolve(),
-        onError: (error) => reject(error),
-      });
-    });
-  };
-
+ const mutate = (variables: TVariables): Promise<TData> => {
+   return new Promise((resolve, reject) => {
+     mutation.mutate(variables, {
+       onSuccess: (data) => resolve(data),
+       onError: (error) => reject(error),
+     });
+   });
+ };
   return {
     mutate,
     status: mutation.status,

@@ -1,12 +1,16 @@
 "use client";
-import { Button } from "@nextui-org/react";
-import React, { useState, useCallback } from "react";
+import { uploadFile } from "@/actions/EmpaActions";
+import { useFetchData } from "@/hooks/useFetchData";
+import usePost from "@/hooks/usePostData";
+import { Button, Spinner } from "@nextui-org/react";
+import React, { useState, useCallback, useEffect } from "react";
 import { MdInsertDriveFile } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
+import { toast } from "react-toastify";
 
 interface FileUploaderProps {
   initialFiles?: File[];
-  onFilesChange?: (files: string) => void;
+  onFilesChange?: (files: string[]) => void;
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({
@@ -14,20 +18,50 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   onFilesChange,
 }) => {
   const [files, setFiles] = useState<File[]>(initialFiles);
+  const [fileUrls, setFileUrls] = useState<string[]>([]);
+  const [filesForUpload, setFilesForUpload] = useState<File[]>([]);
+  const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
 
-  const handleFilesChange = useCallback(
-    (newFiles: File[]) => {
-      setFiles(newFiles);
-      if (onFilesChange && files) {
-        const uploadedFileURL = "https://example.com/uploaded-file-url"; // Replace with actual upload logic
-        onFilesChange(uploadedFileURL);
+  const handleSuccess = () => {
+    toast.success("Files uploaded successfully!");
+  };
+
+  const { mutate, error, isSuccess, isError, isPending, data } = usePost({
+    handleSuccess,
+    mutateFn: async (files: File[]) => {
+      const urls: string[] = [];
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_target", "DOCUMENT");
+
+        const res = await uploadFile(formData);
+        urls.push(res.file_link);
       }
+      setFileUrls([...urls, ...fileUrls]);
+      return [...urls, ...fileUrls];
     },
-    [files, onFilesChange]
-  );
+  });
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message);
+    }
+    // if (onFilesChange && fileUrls) {
+    //   console.log({ fileUrls, urls });
+    //   onFilesChange(fileUrls);
+    // }
+  }, [isError, error?.message]);
+
+  const handleFilesChange = useCallback((newFiles: File[]) => {
+    setFiles(newFiles);
+  }, []);
+
   const handleDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
+    async (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
+      setIsDraggingOver(true);
+
       const droppedFiles = Array.from(event.dataTransfer.files).filter(
         (file) =>
           file.type === "application/pdf" ||
@@ -36,12 +70,20 @@ const FileUploader: React.FC<FileUploaderProps> = ({
           file.type === "application/msword" ||
           file.type === "text/plain"
       );
+      const urls = await mutate(droppedFiles);
+      console.log({ fileUrls, urls, data });
+
+      if (onFilesChange && urls) {
+        onFilesChange(urls);
+      }
       handleFilesChange([...files, ...droppedFiles]);
     },
-    [files, handleFilesChange]
+    [data, fileUrls, files, handleFilesChange, mutate, onFilesChange]
   );
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const selectedFiles = Array.from(event.target.files ?? []).filter(
       (file) =>
         file.type === "application/pdf" ||
@@ -50,6 +92,12 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         file.type === "application/msword" ||
         file.type === "text/plain"
     );
+    const urls = await mutate(selectedFiles);
+    console.log({ fileUrls, urls, data });
+
+    if (onFilesChange && urls) {
+      onFilesChange(urls);
+    }
     handleFilesChange([...files, ...selectedFiles]);
   };
 
@@ -61,6 +109,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
+  console.log({ fileUrls, isPending });
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -68,16 +117,60 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         Upload File
       </label>
       <div
-        className="px-5 border-[1px] border-grey rounded-2xl py-[1rem]"
-        onDrop={handleDrop}
+        className={`px-5 border-[1px]  rounded-2xl py-[1rem] relative border-grey`}
+        onDragExit={() => {
+          setIsDraggingOver(true);
+        }}
+        onDragEnd={() => {
+          setIsDraggingOver(true);
+        }}
+        onDragEnter={() => {
+          setIsDraggingOver(false);
+        }}
+        onDrop={(event) => {
+          const droppedFiles = Array.from(event.dataTransfer.files).filter(
+            (file) =>
+              file.type === "application/pdf" ||
+              file.type ===
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+              file.type === "application/msword" ||
+              file.type === "text/plain"
+          );
+          setFilesForUpload(droppedFiles);
+          handleDrop(event);
+        }}
         onDragOver={handleDragOver}
       >
-        <label className="flex justify-between items-center sm:flex-row flex-col sm:gap-4 cursor-pointer">
+        <div
+          className={`${
+            !isDraggingOver ? "block opacity-[300%}" : "opacity-0"
+          } absolute h-full w-full border bg-primary/5 justify-center flex items-center top-0 -translate-x-[1.25rem] rounded-2xl font-bold text-lg transition-all duration-250`}
+        >
+          Drop Files here
+        </div>
+        <label
+          className={` ${
+            !isDraggingOver ? "-dashed -primary-100 opacity-25" : "-grey"
+          } flex justify-between items-center sm:flex-row flex-col sm:gap-4 cursor-pointer`}
+        >
           <div className="flex justify-start items-center gap-3">
             <input
               type="file"
               multiple
-              onChange={handleFileSelect}
+              onChange={(event) => {
+                const selectedFiles = Array.from(
+                  event.target.files ?? []
+                ).filter(
+                  (file) =>
+                    file.type === "application/pdf" ||
+                    file.type ===
+                      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                    file.type === "application/msword" ||
+                    file.type === "text/plain"
+                );
+                setFilesForUpload(selectedFiles);
+                handleFileSelect(event);
+              }}
               className="hidden"
               name="file"
             />
@@ -141,9 +234,37 @@ const FileUploader: React.FC<FileUploaderProps> = ({
                 </Button>
               </div>
             </div>
+
             {index === files.length - 1 && <br />}
           </div>
         ))}
+
+        {isPending &&
+          filesForUpload.map((file, index) => (
+            <div key={index} className="mt-3">
+              <div className="flex justify-between items-start gap-4 w-[80%] sm:w-full">
+                <div className="flex justify-start items-center gap-2">
+                  <div className="text-black-50 text-2xl">
+                    {" "}
+                    <MdInsertDriveFile />
+                  </div>
+
+                  <p className="text-black-50 font-Satoshi leading-5 font-medium text-md">
+                    {file.name}
+                  </p>
+                  <p className="ml-3 text-black-30 font-Satoshi leading-5 font-medium text-md">
+                    {(file.size / (1024 * 1024)).toFixed(2)} MB
+                  </p>
+                  <div className="ml-10 text-black-50 text-lg ">
+                    {" "}
+                    <Spinner />
+                  </div>
+                </div>
+              </div>
+
+              {index === files.length - 1 && <br />}
+            </div>
+          ))}
       </div>
     </div>
   );
