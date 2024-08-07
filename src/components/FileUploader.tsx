@@ -141,13 +141,6 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         }}
         onDragOver={handleDragOver}
       >
-        <div
-          className={`${
-            !isDraggingOver ? "block opacity-[300%}" : "opacity-0"
-          } absolute h-full w-full border bg-primary/5 justify-center flex items-center top-0 -translate-x-[1.25rem] rounded-2xl font-bold text-lg transition-all duration-250`}
-        >
-          Drop Files here
-        </div>
         <label
           className={` ${
             !isDraggingOver ? "-dashed -primary-100 opacity-25" : "-grey"
