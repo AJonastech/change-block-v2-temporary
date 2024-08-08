@@ -7,7 +7,6 @@ import { Button, Progress, Spinner } from "@nextui-org/react";
 import React, { useState, useCallback, useEffect } from "react";
 import { MdInsertDriveFile } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
-import { toast } from "react-toastify";
 
 interface FileUploaderProps {
   initialFiles?: File[];

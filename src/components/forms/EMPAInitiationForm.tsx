@@ -4,7 +4,6 @@ import { Input, Select, SelectItem, Avatar, Button } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FileUploader from "../FileUploader";
-import { toast } from "react-toastify";
 import EMPAGeneratorLoadingModal from "@/components/EMPAGeneratorLodingModal";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -123,7 +122,6 @@ const EMPAInitiationForm: React.FC = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(error?.message);
     }
   }, [isError, error?.message]);
 
