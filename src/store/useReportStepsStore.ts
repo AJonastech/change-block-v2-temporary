@@ -7,10 +7,11 @@ interface ReportStepsState {
   reportSteps: TStep[];
   currentSubStep: TSubStep | null;
   setCurrentSubStep: (subStep: TSubStep) => void;
+  setReportSteps: (steps: TStep[]) => void;
   toggleSubStepLock: (stepIndex: number, subIndex: number) => void;
   addNewSubStep: (stepIndex: number, title: string) => void;
-  updateSubSteps: (stepIndex: number, newSubSteps: TSubStep[]) => void; // Add this
-  deleteSubStep: (stepIndex: number, subStepId: number) => void; // Add this
+  updateSubSteps: (stepIndex: number, newSubSteps: TSubStep[]) => void;
+  deleteSubStep: (stepIndex: number, subStepTitle: string) => void;
 }
 
 const useReportStepsStore = create<ReportStepsState>((set) => ({
@@ -19,18 +20,19 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
   reportSteps: EMPAReportSteps,
   currentSubStep: null,
   setCurrentSubStep: (subStep: TSubStep) => set({ currentSubStep: subStep }),
+  setReportSteps: (steps: TStep[]) => set({ reportSteps: steps }),
   toggleSubStepLock: (stepIndex, subIndex) =>
     set((state) => {
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
         sIdx === stepIndex
           ? {
-            ...step,
-            substeps: step.substeps.map((substep, ssIdx) =>
-              ssIdx === subIndex
-                ? { ...substep, isLocked: !substep.isLocked }
-                : substep
-            ),
-          }
+              ...step,
+              substeps: step.substeps.map((substep, ssIdx) =>
+                ssIdx === subIndex
+                  ? { ...substep, isLocked: !substep.isLocked }
+                  : substep
+              ),
+            }
           : step
       );
 
@@ -73,9 +75,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sag
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
         sIdx === stepIndex
           ? {
-            ...step,
-            substeps: [...step.substeps, newSubStep],
-          }
+              ...step,
+              substeps: [...step.substeps, newSubStep],
+            }
           : step
       );
 
@@ -86,9 +88,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sag
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
         sIdx === stepIndex
           ? {
-            ...step,
-            substeps: newSubSteps,
-          }
+              ...step,
+              substeps: newSubSteps,
+            }
           : step
       );
 
@@ -99,11 +101,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sag
       const updatedSteps = state.reportSteps.map((step, sIdx) =>
         sIdx === stepIndex
           ? {
-            ...step,
-            substeps: step.substeps.filter(
-              (substep) => substep.title !== subStepTitle
-            ),
-          }
+              ...step,
+              substeps: step.substeps.filter(
+                (substep) => substep.title !== subStepTitle
+              ),
+            }
           : step
       );
 

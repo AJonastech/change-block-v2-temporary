@@ -83,3 +83,17 @@ interface ErrorWithResponse extends Error {
     };
   };
 }
+
+
+//new set of types 
+interface TSubSection {
+  sub_section_name: string;
+  sub_section_data: string;
+  sub_section_summary: string;
+  section_id: string;
+  is_locked: boolean;
+  generation_status: string;
+  sub_section_identifier_in_empa: string;
+  sub_section_id: string;
+  locker_id: any;
+}

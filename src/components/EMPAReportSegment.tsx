@@ -16,22 +16,37 @@ import { EMPAReportSteps } from "@/config/reportStepConfig";
 import markdownToProseMirror from "@/config/markdownToProseMirror";
 import { useFetchData } from "@/hooks/useFetchData";
 import { getEmpaReport } from "@/actions/EmpaActions";
-
+//we are importing the web socket here
+import useWebSocket, { ReadyState } from "react-use-websocket";
 const EMPAReportSegment = ({
+
   section,
   id,
+  data
 }: {
   section: string;
   id: string;
+  data:TSubSection
 }) => {
 
-  const {
-    data: report,
-    isLoading,
-    error,
-  } = useFetchData([`empa-reports/${id}`], () => getEmpaReport(id));
 
-console.log(report );
+if(!data){
+  return
+}
+  if(data.generation_status ==="GENERATING"){
+    return(
+      <div>
+        This content is still generating
+      </div>
+    )
+  }
+
+  // const {
+  //   data: report,
+  //   isLoading,
+  //   error,
+  // } = useFetchData([`empa-reports/${id}/gen`], () => getEmpaReport(id));
+
 
   // Get the current location and parameters from the URL
   const location = useLocation();
@@ -90,11 +105,11 @@ console.log(report );
 
   // Memoize content transformation from markdown to ProseMirror format
   const markupContent = useMemo(
-    () => (subStep?.data as string) || "",
+    () => (data?.sub_section_data as string) || "",
     [subStep]
   );
   const titleMarkupContent = useMemo(
-    () => (subStep?.markupTitle as string) || "",
+    () => (data.sub_section_name as string) || "",
     [subStep]
   );
   const descriptionMarkupContent = useMemo(
@@ -187,7 +202,8 @@ console.log(report );
             </div>
           )}
 
-          {/* Step Indicator */}
+         {
+          data.generation_status === "generating"? "Generating...":<> {/* Step Indicator */}
           <div className="flex flex-col gap-4 h-fit">
             <Skeleton isLoaded={isMounted} className="rounded-full w-[15rem]">
               <div className="bg-background items-center rounded-full py-2 w-fit px-4 flex gap-2 capitalize text-nowrap">
@@ -235,7 +251,8 @@ console.log(report );
               <div className="h-8 w-full bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
               <RichInput />
             </div>
-          </div>
+          </div></>
+         }
         </div>
       )}
     </Suspense>

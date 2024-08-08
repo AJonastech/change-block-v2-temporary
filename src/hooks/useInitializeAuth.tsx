@@ -3,18 +3,19 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { getServerSession } from '@/lib/getServerSession';
 
 export const useInitializeAuth = () => {
-  const { setUser, setIsLoading } = useAuthStore();
+  const { setUser, setIsLoading, setAccessToken } = useAuthStore();
 
   useEffect(() => {
-    
+
     const fetchSession = async () => {
       try {
-  
+
         setIsLoading(true);
         const response = await fetch('/api/auth/session');
         if (response.ok) {
           const sessionData = await response.json();
           setUser(sessionData.user);
+          setAccessToken(sessionData.token);
         } else {
           setUser(null);
         }

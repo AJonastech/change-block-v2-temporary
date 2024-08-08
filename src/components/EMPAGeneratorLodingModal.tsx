@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/react";
 
 import SubmitButton from "@/components/SubmitButton";
-import { useFormStatus } from "react-dom";
+
 
 const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
   const {
@@ -25,13 +25,14 @@ const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
     <div className="flex  justify-between items-center  h-full my-auto">
       {" "}
       <SubmitButton
+       type="submit"
         onPress={() => {
          valid && onConfirmOpen();
         }}
         color="primary"
         className="rounded-xl !bg-primary"
         size="lg"
-        type="submit"
+       
       >
         Generate EMPA
       </SubmitButton>
