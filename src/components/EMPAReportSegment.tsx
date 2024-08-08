@@ -26,15 +26,15 @@ const EMPAReportSegment = ({
 }: {
   section: string;
   id: string;
-  data:TSubSection
+  data: TSubSection
 }) => {
 
 
-if(!data){
-  return
-}
-  if(data.generation_status ==="GENERATING"){
-    return(
+  if (!data) {
+    return
+  }
+  if (data.generation_status === "GENERATING") {
+    return (
       <div>
         This content is still generating
       </div>
@@ -181,6 +181,7 @@ if(!data){
           {/* Menu Component */}
           <div>
             <EMPAReportMenu
+              reportId={id}
               toggleChatDrawer={toggleChatDrawer}
               toggleEditor={toggleEditor}
               isEditor={isEditor}
@@ -202,57 +203,57 @@ if(!data){
             </div>
           )}
 
-         {
-          data.generation_status === "generating"? "Generating...":<> {/* Step Indicator */}
-          <div className="flex flex-col gap-4 h-fit">
-            <Skeleton isLoaded={isMounted} className="rounded-full w-[15rem]">
-              <div className="bg-background items-center rounded-full py-2 w-fit px-4 flex gap-2 capitalize text-nowrap">
-                <step.icon />
-                {step?.title}
+          {
+            data.generation_status === "generating" ? "Generating..." : <> {/* Step Indicator */}
+              <div className="flex flex-col gap-4 h-fit">
+                <Skeleton isLoaded={isMounted} className="rounded-full w-[15rem]">
+                  <div className="bg-background items-center rounded-full py-2 w-fit px-4 flex gap-2 capitalize text-nowrap">
+                    <step.icon />
+                    {step?.title}
+                  </div>
+                </Skeleton>
+
+                {/* Header Card for the Section */}
+                {titleNovelJSONContent && (
+                  <EMPAReportSegmentHeaderCard
+                    titleNovelJSONContent={titleNovelJSONContent}
+                    titleMarkupContent={titleMarkupContent}
+                    descriptionNovelJSONContent={descriptionNovelJSONContent}
+                    descriptionMarkupContent={descriptionMarkupContent}
+                    isEditor={isEditor}
+                  />
+                )}
               </div>
-            </Skeleton>
 
-            {/* Header Card for the Section */}
-            {titleNovelJSONContent && (
-              <EMPAReportSegmentHeaderCard
-                titleNovelJSONContent={titleNovelJSONContent}
-                titleMarkupContent={titleMarkupContent}
-                descriptionNovelJSONContent={descriptionNovelJSONContent}
-                descriptionMarkupContent={descriptionMarkupContent}
-                isEditor={isEditor}
-              />
-            )}
-          </div>
+              {/* Main Content Editor/Display */}
+              <div className="h-full">
+                {novelJSONContent && (
+                  <div className="h-max min-h-max">
+                    <NovelEditorAndDisplay
+                      novelJSONContent={novelJSONContent}
+                      markupContent={markupContent}
+                      isEditor={isEditor}
+                    />
+                  </div>
+                )}
+              </div>
 
-          {/* Main Content Editor/Display */}
-          <div className="h-full">
-            {novelJSONContent && (
-              <div className="h-max min-h-max">
-                <NovelEditorAndDisplay
-                  novelJSONContent={novelJSONContent}
-                  markupContent={markupContent}
-                  isEditor={isEditor}
+              {/* Comments Drawer */}
+              <div className="w-full">
+                <CommentsDrawer
+                  onClick={toggleChatDrawer}
+                  isOpen={isChatDrawerOpen}
                 />
               </div>
-            )}
-          </div>
 
-          {/* Comments Drawer */}
-          <div className="w-full">
-            <CommentsDrawer
-              onClick={toggleChatDrawer}
-              isOpen={isChatDrawerOpen}
-            />
-          </div>
-
-          {/* Rich Input at the Bottom */}
-          <div className="absolute bottom-[32px] left-0 gap-2 w-full flex">
-            <div className="w-full mx-auto flex flex-col">
-              <div className="h-8 w-full bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
-              <RichInput />
-            </div>
-          </div></>
-         }
+              {/* Rich Input at the Bottom */}
+              <div className="absolute bottom-[32px] left-0 gap-2 w-full flex">
+                <div className="w-full mx-auto flex flex-col">
+                  <div className="h-8 w-full bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
+                  <RichInput />
+                </div>
+              </div></>
+          }
         </div>
       )}
     </Suspense>

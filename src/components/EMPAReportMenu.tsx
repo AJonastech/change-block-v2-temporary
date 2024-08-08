@@ -26,9 +26,11 @@ import EMPAConfirmation from "./EMPAConfirmation";
 const EMPAReportMenu = ({
   toggleChatDrawer,
   toggleEditor,
+  reportId,
   isEditor,
 }: {
   toggleChatDrawer: () => void;
+  reportId: string;
   toggleEditor: () => void;
   isEditor: boolean;
 }) => {
@@ -127,7 +129,7 @@ const EMPAReportMenu = ({
             >
               <ShareEMPAForm />
             </EMPAModal>
-            <ConfirmDeleteModal data={decodedSection} />
+            <ConfirmDeleteModal reportId={reportId} data={decodedSection} />
           </div>
           <EMPAModal
             className={`${showPreviewReport ? "min-w-[968px]" : "min-w-[650px]"

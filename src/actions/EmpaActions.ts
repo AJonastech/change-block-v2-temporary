@@ -17,3 +17,8 @@ export async function uploadFile(data: any) {
 export async function createEmpaReport(data: any) {
   return fetchData(`/v1/empa-reports`, "POST", data);
 }
+
+
+export async function deleteEmpa(reportId:string){
+      return await fetchData(`/v1/empa-reports/${reportId}`, "DELETE");
+}

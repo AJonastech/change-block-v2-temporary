@@ -17,14 +17,18 @@ import { useParams, useRouter } from "next/navigation"; // Import useRouter
 import { Trash } from "iconsax-react";
 import SubmitButton from "../SubmitButton";
 import useReportStepsStore from "@/store/useReportStepsStore";
+import usePost from "@/hooks/usePostData";
+import { deleteEmpa } from "@/actions/EmpaActions";
 
 const ConfirmDeleteModal = ({
   data,
   collection,
+  reportId,
   children,
 }: {
   data: any;
   collection?: string;
+  reportId:string;
   children?: ReactNode;
 }) => {
   const {
@@ -73,13 +77,21 @@ const ConfirmDeleteModal = ({
           
         }
       }
-
+      await mutate(reportId)
       onConfirmClose();
+      router.push(`/EMPA`);
     } catch (error) {
-
+      console.log(error)
       onConfirmClose();
     }
   };
+
+  const {mutate,  error, isSuccess, isError} = usePost({
+    handleSuccess: () => {},
+    mutateFn: (data: any) => deleteEmpa(data),
+  })
+
+
 
   return (
     <div className="flex  justify-between items-center  h-full my-auto  ">
