@@ -113,7 +113,7 @@ const EMPAInitiationForm: React.FC = () => {
   }, []);
 
   const handleSuccess = () => {
-
+    return router.push(`/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`);
   };
 
   const { mutate, data, error, isSuccess, isError, isPending } = usePost({
@@ -131,13 +131,10 @@ const EMPAInitiationForm: React.FC = () => {
     console.log(form.formState.errors);
   }, [form.formState.errors]);
 
-  const onSubmit =  (values: EMPAInitiationFormType) => {
+  const onSubmit = async (values: EMPAInitiationFormType) => {
  
-     mutate(values);
-    if (isSuccess) {
-      // toast.success("Form submitted successfully!");
-      return router.push(`/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`);
-    }
+    await  mutate(values);
+  
   };
 
   return (
