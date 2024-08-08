@@ -29,6 +29,7 @@ const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
         type="submit"
         onClick={() => {
           valid && onConfirmOpen();
+          
         }}
         color="primary"
         className="rounded-xl !bg-primary"

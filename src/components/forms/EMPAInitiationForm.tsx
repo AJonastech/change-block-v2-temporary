@@ -113,6 +113,7 @@ const EMPAInitiationForm: React.FC = () => {
 
   const handleSuccess = () => {
 
+
   };
 
   const { mutate, data, error, isSuccess, isError, isPending } = usePost({
@@ -133,8 +134,7 @@ const EMPAInitiationForm: React.FC = () => {
 
     await mutate(values);
 
-      return router.push(`/EMPA/home?data=report&&id=${data.report_id}&&status=GENERATING`);
-    
+    window.location.href = `/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`
   };
 
   return (
