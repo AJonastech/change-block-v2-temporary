@@ -132,9 +132,9 @@ const EMPAInitiationForm: React.FC = () => {
   const onSubmit = async (values: EMPAInitiationFormType) => {
 
     await mutate(values);
-    if (isSuccess) {
-      return router.push(`/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`);
-    }
+
+      return router.push(`/EMPA/home?data=report&&id=${data.report_id}&&status=GENERATING`);
+    
   };
 
   return (
