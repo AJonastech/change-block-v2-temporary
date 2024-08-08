@@ -136,7 +136,7 @@ const EMPAInitiationForm: React.FC = () => {
     await mutate(values);
     if (isSuccess) {
       // toast.success("Form submitted successfully!");
-      return router.push(`/EMPA/home?data=report&&id=${data.report_id}`);
+      return router.push(`/EMPA/home?data=report&&id=${data.report_id}&&status=GENERATING`);
     }
   };
 

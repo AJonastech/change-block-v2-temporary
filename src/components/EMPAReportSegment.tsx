@@ -12,42 +12,66 @@ import NovelEditorAndDisplay from "./NovelEditorAndDisplay";
 
 import useIsMounted from "@/hooks/useIsMounted";
 import useReportStepsStore from "@/store/useReportStepsStore";
-import { EMPAReportSteps } from "@/config/reportStepConfig";
-import markdownToProseMirror from "@/config/markdownToProseMirror";
-import { useFetchData } from "@/hooks/useFetchData";
-import { getEmpaReport } from "@/actions/EmpaActions";
-//we are importing the web socket here
-import useWebSocket, { ReadyState } from "react-use-websocket";
-const EMPAReportSegment = ({
 
+import markdownToProseMirror from "@/config/markdownToProseMirror";
+
+const EMPAReportSegment = ({
   section,
   id,
-  data
+  data,
 }: {
   section: string;
   id: string;
-  data:TSubSection
+  data: TSubSection;
 }) => {
-
-
-if(!data){
-  return
-}
-  if(data.generation_status ==="GENERATING"){
-    return(
-      <div>
-        This content is still generating
+  console.log({ data });
+  const { reportSteps } = useReportStepsStore();
+  if (
+    (!data && reportSteps.length >= 0) ||
+    data.generation_status === "GENERATING"
+  ) {
+    return (
+      <div className="flex flex-col justify-start items-start min-h-full h-full w-full gap-4">
+        <Skeleton className="w-[10rem] h-[3rem] p-3 rounded-full">Tag</Skeleton>
+        <div className="relative text-dark-100   w-[calc(100%-10px)] mx-auto">
+          <div className="relative flex flex-col overflow-hidden gap-3 z-30 bg-secondary-100 px-8 py-4 rounded-lg !space-y-0">
+            <Skeleton className="rounded-lg h-[2rem] w-[30%]  ">
+              Editor
+            </Skeleton>
+            <Skeleton className="rounded-lg h-[6rem]">Editor</Skeleton>
+          </div>
+          <div className="absolute z-10 h-full w-[10rem] bg-primary rounded-xl -translate-x-[5px] left-0 top-0"></div>
+        </div>
+        <div className="flex flex-col w-full gap-4 pt-[2rem]">
+          <Skeleton className="w-[50%] h-[2rem] p-3 rounded-md"></Skeleton>
+          <Skeleton className="w-full h-[5rem] p-3 rounded-md"></Skeleton>
+        </div>
+        <div className="flex flex-col gap-4 w-full pt-[2rem]">
+          {" "}
+          <Skeleton className="w-[50%] h-[2rem] p-3 rounded-md"></Skeleton>
+          <Skeleton className="w-full h-[5rem] p-3 rounded-md"></Skeleton>
+        </div>
       </div>
-    )
+    );
   }
+  // if (!data && reportSteps.length > 0) {
+  //   return;
+  // }
 
-  // const {
-  //   data: report,
-  //   isLoading,
-  //   error,
-  // } = useFetchData([`empa-reports/${id}/gen`], () => getEmpaReport(id));
+  return <EMPAReportContent section={section} data={data} id={id} />;
+};
 
+export default EMPAReportSegment;
 
+const EMPAReportContent = ({
+  section,
+  id,
+  data,
+}: {
+  section: string;
+  id: string;
+  data: TSubSection;
+}) => {
   // Get the current location and parameters from the URL
   const location = useLocation();
   const { segment } = useParams();
@@ -106,11 +130,11 @@ if(!data){
   // Memoize content transformation from markdown to ProseMirror format
   const markupContent = useMemo(
     () => (data?.sub_section_data as string) || "",
-    [subStep]
+    [data?.sub_section_data]
   );
   const titleMarkupContent = useMemo(
-    () => (data.sub_section_name as string) || "",
-    [subStep]
+    () => (`#### ${data.sub_section_name}` as string) || "",
+    [data.sub_section_name]
   );
   const descriptionMarkupContent = useMemo(
     () => (subStep?.description as string) || "",
@@ -150,13 +174,27 @@ if(!data){
   // Render an error message if step or subStep is not found
   if (!step || !subStep) {
     return (
-      <div className="flex justify-center items-center min-h-full h-full"></div>
+      <div className="flex justify-center items-center min-h-full h-full w-full">
+        <Skeleton className="w-full mb-4 h-[200px] rounded-md"></Skeleton>
+        <div className="mb-4">
+          <Skeleton className="w-56 h-6 rounded-md" />
+        </div>
+        <div className="space-y-4">
+          <div>
+            <Skeleton className="w-48 h-6 rounded-md" />
+            <Skeleton className="w-full h-6 mt-2 rounded-md" />
+          </div>
+          <div>
+            <Skeleton className="w-48 h-6 rounded-md" />
+            <Skeleton className="w-full h-6 mt-2 rounded-md" />
+          </div>
+        </div>
+      </div>
     );
   }
-
   return (
     <Suspense>
-      {isRegenerating ? (
+      {reportSteps.length === 0 ? (
         <div>
           <Skeleton className="w-full mb-4 h-[200px] rounded-md"></Skeleton>
           <div className="mb-4">
@@ -202,61 +240,64 @@ if(!data){
             </div>
           )}
 
-         {
-          data.generation_status === "generating"? "Generating...":<> {/* Step Indicator */}
-          <div className="flex flex-col gap-4 h-fit">
-            <Skeleton isLoaded={isMounted} className="rounded-full w-[15rem]">
-              <div className="bg-background items-center rounded-full py-2 w-fit px-4 flex gap-2 capitalize text-nowrap">
-                <step.icon />
-                {step?.title}
+          {reportSteps.length === 0 ? (
+            "Generating..."
+          ) : (
+            <>
+              {" "}
+              {/* Step Indicator */}
+              <div className="flex flex-col gap-4 h-fit">
+                <Skeleton
+                  isLoaded={isMounted}
+                  className="rounded-full w-[15rem]"
+                >
+                  <div className="bg-background items-center rounded-full py-2 w-fit px-4 flex gap-2 capitalize text-nowrap">
+                    <step.icon />
+                    {step?.title}
+                  </div>
+                </Skeleton>
+
+                {/* Header Card for the Section */}
+                {titleNovelJSONContent && (
+                  <EMPAReportSegmentHeaderCard
+                    titleNovelJSONContent={titleNovelJSONContent}
+                    titleMarkupContent={titleMarkupContent}
+                    descriptionNovelJSONContent={descriptionNovelJSONContent}
+                    descriptionMarkupContent={descriptionMarkupContent}
+                    isEditor={isEditor}
+                  />
+                )}
               </div>
-            </Skeleton>
-
-            {/* Header Card for the Section */}
-            {titleNovelJSONContent && (
-              <EMPAReportSegmentHeaderCard
-                titleNovelJSONContent={titleNovelJSONContent}
-                titleMarkupContent={titleMarkupContent}
-                descriptionNovelJSONContent={descriptionNovelJSONContent}
-                descriptionMarkupContent={descriptionMarkupContent}
-                isEditor={isEditor}
-              />
-            )}
-          </div>
-
-          {/* Main Content Editor/Display */}
-          <div className="h-full">
-            {novelJSONContent && (
-              <div className="h-max min-h-max">
-                <NovelEditorAndDisplay
-                  novelJSONContent={novelJSONContent}
-                  markupContent={markupContent}
-                  isEditor={isEditor}
+              {/* Main Content Editor/Display */}
+              <div className="h-full">
+                {novelJSONContent && (
+                  <div className="h-max min-h-max">
+                    <NovelEditorAndDisplay
+                      novelJSONContent={novelJSONContent}
+                      markupContent={markupContent}
+                      isEditor={isEditor}
+                    />
+                  </div>
+                )}
+              </div>
+              {/* Comments Drawer */}
+              <div className="w-full">
+                <CommentsDrawer
+                  onClick={toggleChatDrawer}
+                  isOpen={isChatDrawerOpen}
                 />
               </div>
-            )}
-          </div>
-
-          {/* Comments Drawer */}
-          <div className="w-full">
-            <CommentsDrawer
-              onClick={toggleChatDrawer}
-              isOpen={isChatDrawerOpen}
-            />
-          </div>
-
-          {/* Rich Input at the Bottom */}
-          <div className="absolute bottom-[32px] left-0 gap-2 w-full flex">
-            <div className="w-full mx-auto flex flex-col">
-              <div className="h-8 w-full bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
-              <RichInput />
-            </div>
-          </div></>
-         }
+              {/* Rich Input at the Bottom */}
+              <div className="absolute bottom-[32px] left-0 gap-2 w-full flex">
+                <div className="w-full mx-auto flex flex-col">
+                  <div className="h-8 w-full bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
+                  <RichInput />
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
     </Suspense>
   );
 };
-
-export default EMPAReportSegment;
