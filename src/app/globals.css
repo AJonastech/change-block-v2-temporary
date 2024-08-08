@@ -25,19 +25,19 @@
   }
 
   .markdown h1 {
-    @apply heading-h1 my-4 mt-8 text-grey-500 capitalize font-bold;
+    @apply heading-h4 my-4 mt-8 text-grey-500 capitalize font-bold;
   }
 
   .markdown h2 {
-    @apply heading-h2 my-4 mt-8 text-grey-500 capitalize font-bold;
+    @apply heading-h6 my-4 mt-8 text-grey-500 capitalize font-bold;
   }
 
   .markdown h3 {
-    @apply heading-h3 my-4 mt-8 text-grey-500 capitalize font-semibold;
+    @apply heading-h6 my-4 mt-8 text-grey-500 capitalize font-semibold;
   }
 
   .markdown h4 {
-    @apply heading-h4 mt-8 text-grey-500 capitalize font-semibold my-4;
+    @apply heading-h6 mt-8 text-grey-500 capitalize font-semibold my-4;
   }
 
   .markdown h6 {

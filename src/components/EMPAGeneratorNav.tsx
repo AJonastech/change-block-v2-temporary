@@ -2,10 +2,10 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Skeleton, Spinner } from "@nextui-org/react";
 import Link from "next/link";
 import { LockIcon, QuestionBoxIcon, UnlockIcon } from "@/icons";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import SlideIntoView from "./SlideIntoView";
 import { Add } from "iconsax-react";
 import useReportStepsStore from "@/store/useReportStepsStore";
@@ -19,7 +19,7 @@ import {
 } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { trimSentence } from "@/lib/utils";
-
+import { useLocation } from "react-use";
 
 const ItemTypes = {
   SUBSTEP: "substep",
@@ -36,6 +36,12 @@ const DraggableSubStep = ({
   id,
   toggleSubStepLock,
 }: any) => {
+  const location = useLocation();
+
+  // Extract query parameters from the URL
+  const queryParams = new URLSearchParams(location.search);
+  const status = queryParams.get("status");
+
   const ref = useRef<HTMLLIElement>(null);
   const [initialY, setInitialY] = useState<number | null>(null);
 
@@ -104,7 +110,7 @@ const DraggableSubStep = ({
       style={{ opacity: isDragging ? 0 : 1 }}
       className={`rounded-full ${
         isDragging && "scale-105 rounded-full"
-      } group pl-[2rem] flex justify-between relative w-full py-1 gap-2 ${
+      } group pl-[2rem] flex items-center justify-between relative w-full py-1 gap-2 ${
         section === subStep.title ? "bg-background" : ""
       }`}
       onMouseDown={() => {
@@ -114,8 +120,9 @@ const DraggableSubStep = ({
         }
       }}
     >
+      {subStep.generation_status === "GENERATING" && <Spinner size="sm" />}
       <Link
-        href={`/EMPA/${step.title}?data=report&&id=${id}&&section=${subStep.title}`}
+        href={`/EMPA/${step.title}?data=report&&id=${id}&&section=${subStep.title}&&status=${status}`}
         className={`w-full hover:text-green-700 capitalize text-nowrap ${
           section === subStep.title
             ? "text-primary-100 font-semibold"
@@ -130,7 +137,7 @@ const DraggableSubStep = ({
           })
         }
       >
-        {trimSentence(subStep.title,17)}
+        {trimSentence(subStep.title, 17)}
       </Link>
       <div
         className={`transition-all duration-300 ${
@@ -165,6 +172,7 @@ const EMPAGeneratorNav = ({
 }) => {
   const router = useRouter();
   const { segment } = useParams();
+
   const decodedSegment = decodeURIComponent(segment as string);
   const [openStep, setOpenStep] = useState<number | null>(null);
 
@@ -230,8 +238,9 @@ const EMPAGeneratorNav = ({
     updateSubSteps(openStep!, newSubSteps);
   };
 
+  const skeleton = Array.from({ length: 13 });
 
-
+  console.log({ reportSteps });
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="w-full pb-[2rem] flex flex-col h-full overflow-x-hidden ">
@@ -239,9 +248,19 @@ const EMPAGeneratorNav = ({
           <h6 className="heading-h6 text-grey-500 font-generalSans font-semibold mb-4 pb-3 px-4 mt-7">
             Report Steps
           </h6>
-          <ul className="h-full flex flex-col pl-3 pr-1 not-prose">
+          <ul className="h-full gap-2 flex flex-col pl-3 pr-1 not-prose">
+            {reportSteps.length === 0 &&
+              skeleton.map((sk, index) => {
+                return (
+                  <>
+                    <SlideIntoView from="left" index={index}>
+                      <Skeleton className="w-[90%] h-6 rounded-md py-5 mb-1" />
+                    </SlideIntoView>
+                  </>
+                );
+              })}
             {reportSteps.map((step, index) => (
-              <li key={index} className="mb-2 ">
+              <li key={index} className=" ">
                 <SlideIntoView from="left" index={index}>
                   <div className="flex cursor-pointer items-center w-full group">
                     <Button
