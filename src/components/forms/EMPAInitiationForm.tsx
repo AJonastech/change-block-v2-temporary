@@ -266,6 +266,7 @@ const EMPAInitiationForm: React.FC = () => {
         color="primary"
         className="rounded-xl w-fit !bg-primary"
         size="lg"
+        isDisabled={isPending}
         isLoading={isPending}
 
       >
