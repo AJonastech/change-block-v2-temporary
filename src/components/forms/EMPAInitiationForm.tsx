@@ -112,7 +112,7 @@ const EMPAInitiationForm: React.FC = () => {
   }, []);
 
   const handleSuccess = () => {
-    return router.push(`/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`);
+
   };
 
   const { mutate, data, error, isSuccess, isError, isPending } = usePost({
@@ -130,9 +130,11 @@ const EMPAInitiationForm: React.FC = () => {
   }, [form.formState.errors]);
 
   const onSubmit = async (values: EMPAInitiationFormType) => {
- 
-    await  mutate(values);
-  
+
+    await mutate(values);
+    if (isSuccess) {
+      return router.push(`/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`);
+    }
   };
 
   return (
@@ -255,19 +257,8 @@ const EMPAInitiationForm: React.FC = () => {
             )}
           </React.Fragment>
         ))}
-          <Button
-        type="submit"
-      
-        color="primary"
-        className="rounded-xl w-fit !bg-primary"
-        size="lg"
-        isDisabled={isPending}
-        isLoading={isPending}
 
-      >
-        Generate EMPA
-      </Button>
-        {/* <EMPAGeneratorLoadingModal valid={form.formState.isValid} /> */}
+        <EMPAGeneratorLoadingModal valid={form.formState.isValid} />
       </form>
     </FormProvider>
   );

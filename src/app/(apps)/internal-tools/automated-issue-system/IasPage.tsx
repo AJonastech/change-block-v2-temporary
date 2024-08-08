@@ -8,14 +8,14 @@ import usePost from '@/hooks/usePostData';
 function IasPage() {
     const router = useRouter()
     const handleSuccess = () => {
-        toast.success("Form submitted successfully!");
+   
        
     }
 
     const { mutate: sweepChannel, error, isPending: isSweepingChannel, isSuccess, isError } = usePost({ handleSuccess, mutateFn: () => sweepChannelMessages() });
 
     if (isError) {
-        toast.error("This is an error");
+   
         console.log(error, "The error occured here");
     }
 

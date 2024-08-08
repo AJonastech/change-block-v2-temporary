@@ -36,7 +36,7 @@ const EMPAEditForm = ({ onClose }: { onClose?: () => void }) => {
   });
 
   const onSubmit = async (values: EMPAEditFormType) => {
-    toast.success("Form submitted successfully!");
+
     // Handle form submission
     router.push("/some-path");
   };
@@ -65,18 +65,16 @@ const EMPAEditForm = ({ onClose }: { onClose?: () => void }) => {
           variant="bordered"
           labelPlacement="outside"
           classNames={{
-            label: ` font-normal font-satoshi  pb-4 !text-lg leading-[25.2px] ${
-              form.formState.errors.description
+            label: ` font-normal font-satoshi  pb-4 !text-lg leading-[25.2px] ${form.formState.errors.description
                 ? "text-red-500"
                 : "!text-grey-500"
-            } `,
+              } `,
             input: ["bg-transparent"],
 
             innerWrapper: "bg-transparent px-4  ",
             inputWrapper: ["bg-transparent border-[1px] !h-[3.5rem]"],
-            description: `${
-              form.formState.errors.description ? "text-red-500" : ""
-            } `,
+            description: `${form.formState.errors.description ? "text-red-500" : ""
+              } `,
           }}
         />
 
@@ -91,17 +89,15 @@ const EMPAEditForm = ({ onClose }: { onClose?: () => void }) => {
           labelPlacement="outside"
           classNames={{
             input: " !min-h-[calc(220px-1rem)] ",
-            label: `${
-              form.formState.errors.description
+            label: `${form.formState.errors.description
                 ? "text-red-500"
                 : "!text-grey-500"
-            } font-normal font-satoshi  pb-4 !text-lg leading-[25.2px]`,
+              } font-normal font-satoshi  pb-4 !text-lg leading-[25.2px]`,
 
             innerWrapper: "bg-transparent px-4 pt-2  ",
             inputWrapper: ["bg-transparent border-[1px]  pb-[4rem]"],
-            description: `${
-              form.formState.errors.description ? "text-red-500" : ""
-            } `,
+            description: `${form.formState.errors.description ? "text-red-500" : ""
+              } `,
           }}
         />
         <span className="-translate-y-[4rem] px-[2rem] text-sm text-grey-300">1/300</span>

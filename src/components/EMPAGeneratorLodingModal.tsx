@@ -27,7 +27,7 @@ const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
       {" "}
       <Button
         type="submit"
-        onPress={() => {
+        onClick={() => {
           valid && onConfirmOpen();
         }}
         color="primary"

@@ -28,7 +28,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
  
   };
 
-  console.log(accessToken)
+
 
   const uploadFile = async (file: File, onProgress: (progress: number) => void) => {
     const formData = new FormData();
@@ -144,7 +144,6 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
-  console.log({ fileUrls, isPending });
 
   return (
     <div className="flex flex-col gap-4 w-full">
