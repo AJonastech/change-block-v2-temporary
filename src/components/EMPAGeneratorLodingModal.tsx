@@ -3,6 +3,7 @@
 import "react-toastify/dist/ReactToastify.css";
 
 import {
+  Button,
   Modal,
   ModalBody,
   ModalContent,
@@ -24,23 +25,23 @@ const EMPAGeneratorLoadingModal = ({ valid }: { valid: boolean }) => {
   return (
     <div className="flex  justify-between items-center  h-full my-auto">
       {" "}
-      <SubmitButton
-       type="submit"
+      <Button
+        type="submit"
         onPress={() => {
-         valid && onConfirmOpen();
+          valid && onConfirmOpen();
         }}
         color="primary"
         className="rounded-xl !bg-primary"
         size="lg"
-       
+
       >
         Generate EMPA
-      </SubmitButton>
+      </Button>
       <Modal size="xl" isOpen={isConfirmOpen} onOpenChange={onConfirmOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalBody  className=" bg-gradient-to-b from-secondary  to-white">
+              <ModalBody className=" bg-gradient-to-b from-secondary  to-white">
                 <div className="flex items-center justify-center  bg-gradient-to-b from-secondary to-white">
                   <div className=" p-6 rounded-lg  text-center ">
                     <div className="flex justify-center mb-4">

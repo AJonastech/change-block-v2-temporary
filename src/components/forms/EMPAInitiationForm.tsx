@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Input, Select, SelectItem, Avatar } from "@nextui-org/react";
+import { Input, Select, SelectItem, Avatar, Button } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FileUploader from "../FileUploader";
@@ -17,7 +17,7 @@ const empaInitiationFormSchema = z.object({
   client_industry: z.string().optional(),
   client_project_name: z.string().min(1, "Please enter the name of your project"),
   client_country: z.string().optional(),
-  client_files: z.array(z.string().url("File must be a valid URL").optional()),
+  client_files: z.array(z.string().url("File must be a valid URL").optional()).optional(),
 });
 
 type EMPAInitiationFormType = z.infer<typeof empaInitiationFormSchema>;
@@ -116,7 +116,7 @@ const EMPAInitiationForm: React.FC = () => {
 
   };
 
-  const { mutate, data, error, isSuccess, isError } = usePost({
+  const { mutate, data, error, isSuccess, isError, isPending } = usePost({
     handleSuccess,
     mutateFn: (data: EMPAInitiationFormType) => createEmpaReport(data),
   });
@@ -132,7 +132,7 @@ const EMPAInitiationForm: React.FC = () => {
   }, [form.formState.errors]);
 
   const onSubmit =  (values: EMPAInitiationFormType) => {
-
+ 
      mutate(values);
     if (isSuccess) {
       // toast.success("Form submitted successfully!");
@@ -260,7 +260,18 @@ const EMPAInitiationForm: React.FC = () => {
             )}
           </React.Fragment>
         ))}
-        <EMPAGeneratorLoadingModal valid={form.formState.isValid} />
+          <Button
+        type="submit"
+      
+        color="primary"
+        className="rounded-xl w-fit !bg-primary"
+        size="lg"
+        isLoading={isPending}
+
+      >
+        Generate EMPA
+      </Button>
+        {/* <EMPAGeneratorLoadingModal valid={form.formState.isValid} /> */}
       </form>
     </FormProvider>
   );
