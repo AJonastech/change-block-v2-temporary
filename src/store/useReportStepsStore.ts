@@ -17,7 +17,7 @@ interface ReportStepsState {
 const useReportStepsStore = create<ReportStepsState>((set) => ({
   isRegenerating: false,
   setIsRegenerating: (isRegenerating) => set({ isRegenerating }),
-  reportSteps: EMPAReportSteps,
+  reportSteps: [],
   currentSubStep: null,
   setCurrentSubStep: (subStep: TSubStep) => set({ currentSubStep: subStep }),
   setReportSteps: (steps: TStep[]) => set({ reportSteps: steps }),

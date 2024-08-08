@@ -34,31 +34,6 @@ export const applications = [
   },
   
     {
-      img: Translator,
-      name: "Translator",
-      desc: "Translate seamlessly and easily between languages, making communication across borders effortless.",
-      text: "Hi there! Do you need to understand policies, compliance checks, or navigating regulatory frameworks for your business, I'm here to assist.  Share your queries, and I'll provide the guidance you need.",
-      href:"/internal-tools/translator",
-      cards: [
-        {
-          heading: "Optimize",
-          text: "the strategies of a Climatetech business",
-        },
-        {
-          heading: "Learn More About",
-          text: "the intricacies of waste recycling policies",
-        },
-        {
-          heading: "Explore",
-          text: "the opportunities in restrategizing",
-        },
-        {
-          heading: "Generate Insights",
-          text: "from the policies of a Climatetech business",
-        },
-      ],
-    },
-    {
       img: RecommenderGPT,
       name: "Automated Issue System",
       desc: "Automates the creation of Environmental Asset Identifier reports, saving time and ensuring accuracy in assessment.",

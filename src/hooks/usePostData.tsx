@@ -46,7 +46,7 @@ const usePost = <TData, TError extends ErrorWithResponse, TVariables>({
     retry: false,
     onError: (error: TError) => {
       const errorMessage = error.response?.data?.message || error.message || "An error occurred";
-      toast.error(errorMessage);
+
 
       if (error?.response?.status === 400 || error?.response?.status === 401) {
 

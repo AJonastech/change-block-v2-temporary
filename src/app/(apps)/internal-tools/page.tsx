@@ -16,12 +16,12 @@ export default function page() {
         </span>
       </div>
       <div className=" h-full px-[2rem]">
-        <div className="grid lg:grid-cols-2 xl:grid-cols-3  justify-start items-stretch !gap-4 !space-y-0   !sm:gap-2 sm:justify-center">
+        <div className="flex   justify-center !gap-4 !space-y-0   !sm:gap-2 sm:justify-center">
           {applications?.map((a, index) => (
             <SlideIntoView key={index} index={index}>
               <Link
                 href={`${a.href}`}
-                className="  border-[1px]  border-grey/20 shadow-sm rounded-xl p-4  flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-G10 hover:bg-G10/80 h-full "
+                className="  border-[1px] max-w-[500px]  border-grey/20 shadow-sm rounded-xl p-4  flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-G10 hover:bg-G10/80 h-full "
               >
                 <div
                   className={`

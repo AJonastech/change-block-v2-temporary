@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -76,32 +76,37 @@ function EmpaOverview() {
         <div className="grid-container justify-start items-stretch !gap-4 !space-y-0 !sm:gap-2 sm:justify-center">
           {isLoading
             ? // Display the loading skeleton
-            Array.from({ length: 9 }).map((_, id) => (
-              <GeneratedEmpaSkeleton key={id} />
-            ))
-            : reports?.map((report: Report, id: number) => (
-              <Link
-                key={id}
-                href={`/EMPA/home?data=report&&id=${report.report_id}`}
-                className="border-[1px] w-full border-grey/20 shadow-sm rounded-xl p-4 flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-white hover:bg-G10/80 h-full"
-              >
-                <Image
-                  src={"/assets/empa_history_1.png"}
-                  alt="history"
-                  width={300}
-                  height={400}
-                  className="w-full h-[233px] aspect-square object-cover object-left-top rounded-md"
-                />
-                <h6 className="heading-h6 capitalize font-generalSans font-semibold text-grey-500 leading-[28.6px] text-base sm:text-lg lg:text-xl">
-                  {trimSentence(report.client_project_name, 30)}
-                </h6>
-                <div className="font-normal flex flex-wrap items-center gap-x-2 leading-[25.2px] text-grey-100 text-sm sm:text-base lg:text-lg">
-                  <span className="capitalize">{trimSentence(report.client_name, 15)}</span>
-                  <span className="bg-grey-50 inline-block w-[6px] h-[6px] aspect-square rounded-full"></span>
-                  <span>Edited {formatDate(report.date_updated)}</span>
-                </div>
-              </Link>
-            ))}
+              Array.from({ length: 9 }).map((_, id) => (
+                <GeneratedEmpaSkeleton key={id} />
+              ))
+            : reports?.map((report: Report, id: number) => {
+                console.log({ report });
+                return (
+                  <Link
+                    key={id}
+                    href={`/EMPA/home?data=report&&id=${report.report_id}&&status=${report.generation_status}`}
+                    className="border-[1px] w-full border-grey/20 shadow-sm rounded-xl p-4 flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-white hover:bg-G10/80 h-full"
+                  >
+                    <Image
+                      src={"/assets/empa_history_1.png"}
+                      alt="history"
+                      width={300}
+                      height={400}
+                      className="w-full h-[233px] aspect-square object-cover object-left-top rounded-md"
+                    />
+                    <h6 className="heading-h6 capitalize font-generalSans font-semibold text-grey-500 leading-[28.6px] text-base sm:text-lg lg:text-xl">
+                      {trimSentence(report.client_project_name, 30)}
+                    </h6>
+                    <div className="font-normal flex flex-wrap items-center gap-x-2 leading-[25.2px] text-grey-100 text-sm sm:text-base lg:text-lg">
+                      <span className="capitalize">
+                        {trimSentence(report.client_name, 15)}
+                      </span>
+                      <span className="bg-grey-50 inline-block w-[6px] h-[6px] aspect-square rounded-full"></span>
+                      <span>Edited {formatDate(report.date_updated)}</span>
+                    </div>
+                  </Link>
+                );
+              })}
         </div>
       </div>
     </main>

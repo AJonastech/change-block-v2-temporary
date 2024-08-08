@@ -1,43 +1,74 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod'
 import FormField from './FormField'
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
 import { useFetchData } from '@/hooks/useFetchData'
-import { getAllChats } from '@/actions/IasActions'
+import { getAllChats, saveChatDetails } from '@/actions/IasActions'
+import usePost from '@/hooks/usePostData'
+import SubmitButton from '../SubmitButton'
 
 const chatSettingsFormSchema = z.object({
-    chat: z.string().min(1, "Please enter the name of the team"),
-    projectKey: z.string().min(1, "Please enter the project key"),
+    chat_id: z.string().min(1, "Please select a chat"),
+    project_id: z.string().min(1, "Please enter the project key"),
 })
 
 type ChatSettingsFormType = z.infer<typeof chatSettingsFormSchema>;
 
 function AutomatedChatSettingsForm() {
     const form = useForm<ChatSettingsFormType>({
-        resolver: zodResolver(chatSettingsFormSchema)
-    })
+        resolver: zodResolver(chatSettingsFormSchema),
+        defaultValues: {
+            chat_id: '', // Default value, will be updated after fetching
+            project_id: '',
+        }
+    });
+
+    const [chatOptions, setChatOptions] = useState<{ id: string, display_name: string }[]>([]);
+    const [defaultChat, setDefaultChat] = useState<string | null>(null);
 
     const { data: chats, isError, error } = useFetchData(["chats"], () => getAllChats())
+
     useEffect(() => {
         if (isError) {
-           console.log(error?.message)
+            console.log(error?.message)
+        } else if (chats) {
+            const fetchedChats = chats.chats; // Assuming your response structure
+            setChatOptions(fetchedChats);
+            if (fetchedChats.length > 0) {
+                setDefaultChat(fetchedChats[0].id); // Set the default chat id
+            }
         }
-    }, [chats, isError, error?.message])
+    }, [chats, isError, error]);
 
-    const chatOptions = ["team A", "Team B", "Team C"]
+    useEffect(() => {
+        if (defaultChat) {
+            form.setValue("chat_id", defaultChat); // Update form default value
+        }
+    }, [defaultChat]);
 
+
+
+    const handleSuccess = () => {
+        console.log("Yup we are free")
+    }
+
+    const { mutate, } = usePost({
+        handleSuccess,
+        mutateFn: (data) => saveChatDetails(data)
+    })
     const onSubmit = (data: ChatSettingsFormType) => {
         // Do something with the data here
+        mutate(data)
     }
 
     return (
         <FormProvider {...form}>
             <form className='flex flex-col gap-10' onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField<ChatSettingsFormType>
-                    name="chat"
+                    name="chat_id"
                     render={({ field }) => (
                         <Select
                             defaultSelectedKeys={[field.value]}
@@ -45,7 +76,7 @@ function AutomatedChatSettingsForm() {
                             isRequired
                             label="Chat"
                             variant="bordered"
-                            placeholder="Select Team"
+                            placeholder="Select Chat"
                             className="w-full placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-300 placeholder:leading-[25.2px]"
                             classNames={{
                                 label: " font-normal pb-4  font-normal font-satoshi !text-grey-500 pb-4 !text-lg leading-[25.2px]",
@@ -55,12 +86,12 @@ function AutomatedChatSettingsForm() {
                                 listboxWrapper: "!bg-background !p-0",
                                 selectorIcon: "text-grey-100"
                             }}
-                            name="service"
+                            name="chat"
                             labelPlacement="outside"
                         >
-                            {chatOptions.map((option) => (
-                                <SelectItem className="capitalize" key={option}>
-                                    {option}
+                            {chatOptions.map((chat) => (
+                                <SelectItem className="capitalize" key={chat.id} value={chat.id}>
+                                    {chat.display_name}
                                 </SelectItem>
                             ))}
                         </Select>
@@ -68,7 +99,7 @@ function AutomatedChatSettingsForm() {
                 />
 
                 <FormField<ChatSettingsFormType>
-                    name="projectKey"
+                    name="project_id"
                     render={({ field }) => (
                         <Input
                             label="Project Key (From Jira)"
@@ -91,7 +122,7 @@ function AutomatedChatSettingsForm() {
                 />
 
                 <div className='flex items-center gap-4'>
-                    <Button type='submit' size="lg" color='primary' className='py-4 !bg-primary px-6 text-grey-20'>
+                <Button type="reset" size="lg" variant='bordered' className='!bg-primary text-lg text-grey-100'>
                         Save
                     </Button>
                     <Button type="reset" size="lg" variant='bordered' className='bg-transparent text-lg text-grey-100'>

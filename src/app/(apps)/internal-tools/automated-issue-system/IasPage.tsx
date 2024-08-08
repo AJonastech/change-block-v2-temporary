@@ -9,7 +9,7 @@ function IasPage() {
     const router = useRouter()
     const handleSuccess = () => {
         toast.success("Form submitted successfully!");
-        return router.push("/EMPA/home?data=report");
+       
     }
 
     const { mutate: sweepChannel, error, isPending: isSweepingChannel, isSuccess, isError } = usePost({ handleSuccess, mutateFn: () => sweepChannelMessages() });

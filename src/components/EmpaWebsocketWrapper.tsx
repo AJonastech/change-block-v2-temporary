@@ -20,6 +20,7 @@ interface Data {
     client_files: any[];
     report_stages: any[];
     start_date: any;
+
     total_days_to_complete: number;
     report_details: string;
     generation_status: string;
@@ -35,6 +36,7 @@ interface Data {
 interface Section {
     section_name: string;
     section_data: string;
+    position: number;
     stage: string;
     relative_start_date_in_days: number;
     days_to_complete: number;
@@ -83,9 +85,14 @@ function EmpaWebsocketWrapper({
     currentSegment: string;
     section: string;
 }) {
-    const { accessToken } = useAuthStore()
+    const { accessToken } = useAuthStore();
     const socketUrl = `wss://api.cbinternaltools.com/v1/empa-reports/${generatedId}/wss?token=${accessToken}`;
-    const { sendMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl);
+    const { sendMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
+        onClose: (event) => {
+            console.log("WebSocket closed with code:", event.code);
+            console.log("Reason:", event.reason);
+        }
+    });
 
     const setReportSteps = useReportStepsStore((state) => state.setReportSteps);
 
@@ -97,23 +104,25 @@ function EmpaWebsocketWrapper({
         [ReadyState.UNINSTANTIATED]: "Uninstantiated",
     }[readyState];
 
-    console.log(connectionStatus);
 
     useEffect(() => {
         if (lastJsonMessage) {
             const data = (lastJsonMessage as Root).data;
-            console.log(lastJsonMessage);
+
+            // Sort the sections based on the `position` field before mapping
+            const sortedSections = data.sections.sort((a, b) => a.position - b.position);
+
             // Transform the incoming data into the format your Zustand store expects
-            const transformedSteps: TStep[] = data.sections.map((section) => ({
+            const transformedSteps: TStep[] = sortedSections.map((section) => ({
                 id: parseInt(section.section_id),
                 title: section.section_name,
                 isLocked: false, // or however you determine this
-                substeps: section.sub_sections.map((subSection) => ({
-                    id: parseInt(subSection.section_id),
+                substeps: section.sub_sections.sort((a, b) => a.position - b.position).map((subSection) => ({
+                    id: parseInt(subSection.sub_section_id),
                     title: subSection.sub_section_name,
-                    isLocked: false, // or however you determine this
-                    data: subSection.sub_section_data, // Fix the property name here
-                    description: "",
+                    isLocked: subSection.is_locked,
+                    data: subSection.sub_section_data, // Fixed the property name here
+                    description: subSection.sub_section_summary, // Use the summary if you want
                     markupTitle: subSection.sub_section_name,
                 })),
                 icon: () => <></>, // Add the icon property here
@@ -123,12 +132,21 @@ function EmpaWebsocketWrapper({
         }
     }, [lastJsonMessage, setReportSteps]);
 
-    const getSubSection = (data: Data, sectionName: string, subSectionName: string): TSubSection | undefined => {
-        const section = data.sections.find((sec) => sec.section_name === sectionName);
+
+    const getSubSection = (
+        data: Data,
+        sectionName: string,
+        subSectionName: string
+    ): TSubSection | undefined => {
+        const section = data.sections.find(
+            (sec) => sec.section_name === sectionName
+        );
         if (!section) {
             return undefined;
         }
-        return section.sub_sections.find((sub) => sub.sub_section_name === subSectionName);
+        return section.sub_sections.find(
+            (sub) => sub.sub_section_name === subSectionName
+        );
     };
 
     // Decode the URL-encoded currentSegment
@@ -136,15 +154,23 @@ function EmpaWebsocketWrapper({
     console.log(decodedSegment);
 
     // Extract subsection data if available
-    const subSectionData = lastJsonMessage ? getSubSection((lastJsonMessage as Root).data, decodedSegment, section) : undefined;
-    console.log(subSectionData, accessToken);
+    const subSectionData = lastJsonMessage
+        ? getSubSection((lastJsonMessage as Root).data, decodedSegment, section)
+        : undefined;
+
+    console.log({ subSectionData, accessToken, connectionStatus });
+    console.log({ connectionStatus });
 
     return (
         <>
             {decodedSegment === "home" ? (
                 <EMPAReportHome id={generatedId} />
             ) : (
-                <EMPAReportSegment data={subSectionData as TSubSection} section={section} id={generatedId} />
+                <EMPAReportSegment
+                    data={subSectionData as TSubSection}
+                    section={section}
+                    id={generatedId}
+                />
             )}
         </>
     );

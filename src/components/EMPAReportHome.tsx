@@ -11,13 +11,13 @@ import { getEmpaReport } from "@/actions/EmpaActions";
 
 const EMPAReportHome = ({ id }: { id: string }) => {
   const isMounted = useIsMounted();
-  const {
-    data: report,
-    isLoading,
-    error,
-  } = useFetchData([`empa-reports/${id}`], () => getEmpaReport(id));
+  // const {
+  //   data: report,
+  //   isLoading,
+  //   error,
+  // } = useFetchData([`empa-reports/${id}`], () => getEmpaReport(id));
 
-  console.log({ report });
+  // console.log({ report });
 
   return (
     <div className="flex flex-col relative h-full max-h-fit gap-6">

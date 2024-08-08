@@ -131,12 +131,12 @@ const EMPAInitiationForm: React.FC = () => {
     console.log(form.formState.errors);
   }, [form.formState.errors]);
 
-  const onSubmit = async (values: EMPAInitiationFormType) => {
+  const onSubmit =  (values: EMPAInitiationFormType) => {
 
-    await mutate(values);
+     mutate(values);
     if (isSuccess) {
       // toast.success("Form submitted successfully!");
-      return router.push(`/EMPA/home?data=report&&id=${data.report_id}`);
+      return router.push(`/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`);
     }
   };
 
@@ -260,7 +260,6 @@ const EMPAInitiationForm: React.FC = () => {
             )}
           </React.Fragment>
         ))}
-        <button>Test button</button>
         <EMPAGeneratorLoadingModal valid={form.formState.isValid} />
       </form>
     </FormProvider>
