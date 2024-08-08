@@ -10,8 +10,8 @@ export async function getEmpaReport(id: string) {
   return await fetchData(`/v1/empa-reports/${id}`, "GET");
 }
 
-export async function uploadFile(data: any) {
-  return await fetchFile(`/v1/misc/upload`, "POST", data);
+export async function uploadFile(data: any,onProgress: (progress: number) => void) {
+  return await fetchFile(`/v1/misc/upload`, "POST", data,onProgress);
 }
 
 export async function createEmpaReport(data: any) {

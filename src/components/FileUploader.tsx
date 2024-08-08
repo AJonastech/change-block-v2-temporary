@@ -2,7 +2,8 @@
 import { uploadFile } from "@/actions/EmpaActions";
 import { useFetchData } from "@/hooks/useFetchData";
 import usePost from "@/hooks/usePostData";
-import { Button, Spinner } from "@nextui-org/react";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Button, Progress, Spinner } from "@nextui-org/react";
 import React, { useState, useCallback, useEffect } from "react";
 import { MdInsertDriveFile } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
@@ -21,31 +22,62 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   const [fileUrls, setFileUrls] = useState<string[]>([]);
   const [filesForUpload, setFilesForUpload] = useState<File[]>([]);
   const [isDraggingOver, setIsDraggingOver] = useState<boolean>(true);
-
+  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+  const [uploadComplete, setUploadComplete] = useState<{ [key: string]: boolean }>({});
+  const { accessToken } = useAuthStore();
   const handleSuccess = () => {
-    toast.success("Files uploaded successfully!");
+ 
+  };
+
+  console.log(accessToken)
+
+  const uploadFile = async (file: File, onProgress: (progress: number) => void) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_target", "DOCUMENT");
+
+    try {
+      const response = await fetch("https://api.cbinternaltools.com/v1/misc/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Attach the access token here
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("File upload failed");
+      }
+
+      const data = await response.json();
+      return data.url; // Assuming the response contains a URL to the uploaded file
+
+    } catch (error) {
+      console.error("Upload error:", error);
+      throw error;
+    }
   };
 
   const { mutate, error, isSuccess, isError, isPending, data } = usePost({
     handleSuccess,
-    mutateFn: async (files: File[]) => {
-      const urls: string[] = [];
-      for (const file of files) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_target", "DOCUMENT");
-
-        const res = await uploadFile(formData);
-        urls.push(res.file_link);
+    mutateFn: async (file: File) => {
+      try {
+        const url = await uploadFile(file, (progress) => {
+          setUploadProgress((prev) => ({ ...prev, [file.name]: progress }));
+        });
+        setFileUrls((prevUrls) => [...prevUrls, url]); // Update state with new URL
+        setUploadComplete((prev) => ({ ...prev, [file.name]: true })); // Mark this file as complete
+        return url; // Return the uploaded file's URL
+      } catch (error) {
+        console.error(`Error uploading ${file.name}:`, error);
+        throw error;
       }
-      setFileUrls([...urls, ...fileUrls]);
-      return [...urls, ...fileUrls];
     },
   });
 
   useEffect(() => {
     if (isError) {
-      toast.error(error?.message);
+
     }
     // if (onFilesChange && fileUrls) {
     //   console.log({ fileUrls, urls });
@@ -66,19 +98,20 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         (file) =>
           file.type === "application/pdf" ||
           file.type ===
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
           file.type === "application/msword" ||
           file.type === "text/plain"
       );
-      const urls = await mutate(droppedFiles);
-      console.log({ fileUrls, urls, data });
 
-      if (onFilesChange && urls) {
-        onFilesChange(urls);
-      }
       handleFilesChange([...files, ...droppedFiles]);
+
+      if (droppedFiles.length > 0) {
+        droppedFiles.forEach(async (file) => {
+          await mutate(file); // Trigger the upload for each file
+        });
+      }
     },
-    [data, fileUrls, files, handleFilesChange, mutate, onFilesChange]
+    [files, mutate, handleFilesChange]
   );
 
   const handleFileSelect = async (
@@ -88,18 +121,21 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       (file) =>
         file.type === "application/pdf" ||
         file.type ===
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
         file.type === "application/msword" ||
         file.type === "text/plain"
     );
-    const urls = await mutate(selectedFiles);
-    console.log({ fileUrls, urls, data });
 
-    if (onFilesChange && urls) {
-      onFilesChange(urls);
-    }
     handleFilesChange([...files, ...selectedFiles]);
+
+    if (selectedFiles.length > 0) {
+      selectedFiles.forEach(async (file) => {
+        await mutate(file); // Trigger the upload for each file
+      });
+    }
   };
+
+
 
   const handleRemoveFile = (index: number) => {
     const updatedFiles = files.filter((_, i) => i !== index);
@@ -132,7 +168,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
             (file) =>
               file.type === "application/pdf" ||
               file.type ===
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
               file.type === "application/msword" ||
               file.type === "text/plain"
           );
@@ -142,9 +178,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         onDragOver={handleDragOver}
       >
         <label
-          className={` ${
-            !isDraggingOver ? "-dashed -primary-100 opacity-25" : "-grey"
-          } flex justify-between items-center sm:flex-row flex-col sm:gap-4 cursor-pointer`}
+          className={` ${!isDraggingOver ? "-dashed -primary-100 opacity-25" : "-grey"
+            } flex justify-between items-center sm:flex-row flex-col sm:gap-4 cursor-pointer`}
         >
           <div className="flex justify-start items-center gap-3">
             <input
@@ -157,7 +192,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
                   (file) =>
                     file.type === "application/pdf" ||
                     file.type ===
-                      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
                     file.type === "application/msword" ||
                     file.type === "text/plain"
                 );
@@ -203,12 +238,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         {files.length > 0 && (
           <hr className="w-[100%] h-[2px] bg-black-40 opacity-30 mt-6 mb-5 sm:w-full sm:mb-0" />
         )}
-        {files.map((file, index) => (
+
+
+        {filesForUpload.map((file, index) => (
           <div key={index} className="mt-3">
             <div className="flex justify-between items-start gap-4 w-[80%] sm:w-full">
               <div className="flex justify-start items-center gap-2">
                 <div className="text-black-50 text-2xl">
-                  {" "}
                   <MdInsertDriveFile />
                 </div>
 
@@ -218,46 +254,21 @@ const FileUploader: React.FC<FileUploaderProps> = ({
                 <p className="ml-3 text-black-30 font-Satoshi leading-5 font-medium text-md">
                   {(file.size / (1024 * 1024)).toFixed(2)} MB
                 </p>
-                <Button
-                  isIconOnly
-                  className="ml-10 text-black-50 text-lg cursor-pointer"
-                  onClick={() => handleRemoveFile(index)}
-                >
-                  <RxCross2 />
-                </Button>
+                <div className="ml-10 text-black-50 text-lg">
+                  {!uploadComplete[file.name] ? <Spinner /> : <Button
+                    isIconOnly
+                    className="ml-10 text-black-50 text-lg cursor-pointer"
+                    onClick={() => handleRemoveFile(index)}
+                  >
+                    <RxCross2 />
+                  </Button>} {/* Show spinner only if not complete */}
+                </div>
               </div>
             </div>
 
             {index === files.length - 1 && <br />}
           </div>
         ))}
-
-        {isPending &&
-          filesForUpload.map((file, index) => (
-            <div key={index} className="mt-3">
-              <div className="flex justify-between items-start gap-4 w-[80%] sm:w-full">
-                <div className="flex justify-start items-center gap-2">
-                  <div className="text-black-50 text-2xl">
-                    {" "}
-                    <MdInsertDriveFile />
-                  </div>
-
-                  <p className="text-black-50 font-Satoshi leading-5 font-medium text-md">
-                    {file.name}
-                  </p>
-                  <p className="ml-3 text-black-30 font-Satoshi leading-5 font-medium text-md">
-                    {(file.size / (1024 * 1024)).toFixed(2)} MB
-                  </p>
-                  <div className="ml-10 text-black-50 text-lg ">
-                    {" "}
-                    <Spinner />
-                  </div>
-                </div>
-              </div>
-
-              {index === files.length - 1 && <br />}
-            </div>
-          ))}
       </div>
     </div>
   );
