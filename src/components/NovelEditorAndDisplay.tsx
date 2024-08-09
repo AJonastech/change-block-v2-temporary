@@ -39,7 +39,9 @@ console.log(novelJSONContent,"here")
           className="!p-0 m-0 shadow-none custom-editor"
         />
       ) : (
-        <Markdown className={`${className}`}>{htmlContent}</Markdown>
+        <Markdown className={`${className} mb-[3rem] pb-[3rem] `}>
+          {htmlContent}
+        </Markdown>
       )}
     </div>
   );

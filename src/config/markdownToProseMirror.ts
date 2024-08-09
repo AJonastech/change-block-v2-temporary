@@ -19,8 +19,6 @@ const markdownToProseMirror = (
     const doc = parser.parseFromString(html, "text/html");
 
     const nodeToProseMirror = (node: any): ProseMirrorNode | null => {
-      console.log({ node: node.nodeName.toLowerCase() });
-
       if (node.nodeType === Node.ELEMENT_NODE) {
         switch (node.nodeName.toLowerCase()) {
           case "h1":
@@ -90,7 +88,6 @@ const markdownToProseMirror = (
           case "img":
             return {
               type: "image",
-
               attrs: {
                 src: node.getAttribute("src") || "",
                 alt: node.getAttribute("alt") || "",
@@ -106,48 +103,106 @@ const markdownToProseMirror = (
             };
           case "br":
             return { type: "text", text: "\n" }; // Represent line break within paragraphs
+          case "table":
+            return {
+              type: "table",
+              content: parseChildren(node),
+            };
+          case "thead":
+            return {
+              type: "tableHeader",
+              content: parseChildren(node),
+            };
+          case "tbody":
+            return {
+              type: "tableBody",
+              content: parseChildren(node),
+            };
+          case "tr":
+            return {
+              type: "tableRow",
+              content: parseChildren(node),
+            };
+          case "th":
+            return {
+              type: "tableHeaderCell",
+              content: parseChildren(node),
+            };
+          case "td":
+            return {
+              type: "tableCell",
+              content: parseChildren(node),
+            };
           default:
+            // Wrap any other tags in paragraphs
             return {
               type: "paragraph",
               content: parseChildren(node),
             };
         }
       } else if (node.nodeType === Node.TEXT_NODE) {
-        // Ignore text nodes that are just newline characters or whitespace
-        if (node.textContent && node.textContent.trim() === "") {
-          return null;
+        // Return text content directly if it has meaningful text
+        if (node.textContent && node.textContent.trim() !== "") {
+          return { type: "text", text: node.textContent.trim() };
         }
-        return { type: "text", text: node.textContent || "" };
       }
       return null;
     };
 
     const parseChildren = (parent: Node): ProseMirrorNode[] => {
       const nodes: ProseMirrorNode[] = [];
+      let tempTextNodes: ProseMirrorNode[] = [];
 
       Array.from(parent.childNodes).forEach((node) => {
         const pmNode = nodeToProseMirror(node);
+
         if (pmNode) {
-          nodes.push(pmNode);
+          if (pmNode.type === "text" || pmNode.type === "strong") {
+            // Accumulate loose text or inline elements
+            tempTextNodes.push(pmNode);
+          } else {
+            // If a block element is encountered, wrap any accumulated text in a paragraph
+            if (tempTextNodes.length > 0) {
+              nodes.push({ type: "paragraph", content: tempTextNodes });
+              tempTextNodes = [];
+            }
+            nodes.push(pmNode);
+          }
         }
       });
+
+      // Wrap remaining loose text nodes in a paragraph at the end
+      if (tempTextNodes.length > 0) {
+        nodes.push({ type: "paragraph", content: tempTextNodes });
+      }
 
       return nodes;
     };
 
-    // Ensure lists have valid structures with 'listItem' children only
-    const validateLists = (nodes: ProseMirrorNode[]): ProseMirrorNode[] => {
+    // Ensure lists and tables have valid structures
+    const validateStructure = (nodes: ProseMirrorNode[]): ProseMirrorNode[] => {
       return nodes.map((node) => {
         if (node.type === "bulletList" || node.type === "orderedList") {
           node.content =
             node.content?.filter((item) => item.type === "listItem") || [];
+        } else if (node.type === "table") {
+          node.content =
+            node.content?.filter(
+              (item) => item.type === "tableHeader" || item.type === "tableBody"
+            ) || [];
+        } else if (node.type === "tableRow") {
+          node.content =
+            node.content?.filter(
+              (item) =>
+                item.type === "tableHeaderCell" || item.type === "tableCell"
+            ) || [];
         }
         return node;
       });
     };
 
     const docContent = parseChildren(doc.body);
-    const validatedContent = validateLists(docContent);
+    const validatedContent = validateStructure(docContent);
 
     return { type: "doc", content: validatedContent };
   };

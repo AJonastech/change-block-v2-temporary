@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
   .heading-h1 {
     @apply text-[54px] leading-[120%] tracking-normal;
@@ -49,15 +48,43 @@
   }
 
   .markdown ul {
-    @apply !list-disc ml-6;
+    @apply !list-disc ml-6 text-[18px] leading-[1.5] text-grey-300;
   }
 
   .markdown li {
     @apply text-grey-300 text-[18px] !list-disc my-4;
   }
 
+  .markdown ol {
+    @apply !list-disc ml-6 text-[18px] leading-[1.5] text-grey-300;
+  }
+
+  .markdown>*:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    @apply text-[18px] leading-[1.5] text-grey-300;
+  }
+
   .markdown img {
     @apply my-[1.5rem] rounded-md mx-auto !border-none;
+  }
+
+  .markdown table {
+    @apply w-full border-collapse table-auto my-6;
+  }
+
+  .markdown th {
+    @apply bg-gray-100 text-gray-900 text-start font-semibold px-4 py-2 border border-gray-700;
+  }
+
+  .markdown td {
+    @apply border border-gray-700 px-4 py-2 text-grey-300 ;
+  }
+
+  .markdown tr:nth-child(even) {
+    @apply border border-gray-900;
+  }
+
+  .markdown tr:nth-child(odd) {
+    @apply border border-gray-800;
   }
 }
 
@@ -93,9 +120,8 @@
   user-select: none;
 }
 
-
-.grid-container{
+.grid-container {
   grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
   display: grid;
-   gap:10px;
+  gap: 10px;
 }
