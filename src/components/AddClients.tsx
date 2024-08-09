@@ -1,10 +1,7 @@
+"use client"
 import React from "react";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Button,
-} from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, Button } from "@nextui-org/react";
+import { Card } from "@nextui-org/react";
 import { BiPlus } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
