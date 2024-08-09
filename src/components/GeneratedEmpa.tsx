@@ -84,7 +84,7 @@ function EmpaOverview() {
                 return (
                   <Link
                     key={id}
-                    href={`/EMPA/home?data=report&&id=${report.report_id}&&status=${report.generation_status}`}
+                    href={`/EMPA/introduction?data=report&&id=${report.report_id}&&status=${report.generation_status}`}
                     className="border-[1px] w-full border-grey/20 shadow-sm rounded-xl p-4 flex flex-col justify-start !no-underline items-start !gap-3 !space-y-0 bg-white hover:bg-G10/80 h-full"
                   >
                     <Image
