@@ -71,7 +71,7 @@ function WeeklyChannelSettingsForm() {
 
     useEffect(() => {
         if (isError) {
-           toast.error(error?.message)
+           toast.error("Sorry something went wrong")
         }
     }, [isError]);
 
