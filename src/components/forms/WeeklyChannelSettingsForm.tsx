@@ -71,14 +71,14 @@ function WeeklyChannelSettingsForm() {
 
     useEffect(() => {
         if (isError) {
-            console.error(error);
+           toast.error(error?.message)
         }
     }, [isError]);
 
     const onSubmit = (data: ChannelSettingsFormType) => {
         mutate(data);
     };
-    console.log(data)
+   
     return (
         <FormProvider {...form}>
             <form className="flex flex-col gap-10" onSubmit={form.handleSubmit(onSubmit)}>
