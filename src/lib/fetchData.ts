@@ -1,6 +1,7 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { getServerSession } from "./getServerSession";
 
-
+noStore()
 const baseUrl = process.env.BACKEND_URL;
 
 export async function fetchData(
