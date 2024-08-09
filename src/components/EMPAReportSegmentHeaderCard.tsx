@@ -21,7 +21,7 @@ const EMPAReportSegmentHeaderCard = ({
 
   return (
     <div className="relative text-dark-100   w-[calc(100%-10px)] mx-auto">
-      <div className="relative flex flex-col overflow-hidden gap-3 z-30 bg-secondary-100 px-8 pb-4 rounded-lg !space-y-0">
+      {/* <div className="relative flex flex-col overflow-hidden gap-3 z-30 bg-secondary-100 px-8 pb-4 rounded-lg !space-y-0">
         <Skeleton isLoaded={isMounted} className="rounded-lg">
           <NovelEditorAndDisplay
             novelJSONContent={titleNovelJSONContent}
@@ -39,7 +39,7 @@ const EMPAReportSegmentHeaderCard = ({
           />
         </Skeleton>
       </div>
-      <div className="absolute z-10 h-full w-[10rem] bg-primary rounded-xl -translate-x-[5px] left-0 top-0"></div>
+      <div className="absolute z-10 h-full w-[10rem] bg-primary rounded-xl -translate-x-[5px] left-0 top-0"></div> */}
     </div>
   );
 };

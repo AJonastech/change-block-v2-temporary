@@ -22,3 +22,8 @@ export async function createEmpaReport(data: any) {
 export async function deleteEmpa(reportId:string){
       return await fetchData(`/v1/empa-reports/${reportId}`, "DELETE");
 }
+
+
+export async function editEmpaReport(reportId:string,sectionId:string, subSectionId:string, data:any){
+return await fetchData(`/v1/empa-reports/${reportId}/section/${sectionId}/sub-section/${subSectionId}`, "PATCH",data)
+}
