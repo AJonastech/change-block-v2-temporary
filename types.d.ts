@@ -146,6 +146,13 @@ interface TSubSection {
 }
 
 
+enum Role {
+  OWNER = "OWNER",
+  CHIEF_OWNER = "CHIEF_OWNER",
+  EDITOR = "EDITOR",
+  REVIEWER = "REVIEWER",
+}
+
 interface UserDetails {
   full_name: string;
   email: string;
@@ -157,7 +164,7 @@ interface UserDetails {
 interface ReportUser {
   user_id: string;
   report_id: string;
-  role: "OWNER" | "CONTRIBUTOR" | "VIEWER"; // Adjust roles as needed
+  role: Role
   empa_user_id: string;
   user: UserDetails;
 }

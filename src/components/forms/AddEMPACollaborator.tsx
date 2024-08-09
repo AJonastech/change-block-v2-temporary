@@ -16,14 +16,32 @@ import usePost from "@/hooks/usePostData";
 import { inviteUserToEmpa } from "@/actions/EmpaActions";
 import { toast } from "react-toastify";
 
-const roles = ["Owner", "Editor", "Reviewer", "Remove"];
+enum Role {
+  OWNER = "OWNER",
+  CHIEF_OWNER = "CHIEF_OWNER",
+  EDITOR = "EDITOR",
+  REVIEWER = "REVIEWER",
+}
+
+const roleLabels: { [key in Role]: string } = {
+  [Role.OWNER]: "Owner",
+  [Role.CHIEF_OWNER]: "Chief Owner",
+  [Role.EDITOR]: "Editor",
+  [Role.REVIEWER]: "Reviewer",
+
+};
 
 const AddCollaborator = ({ reportId }: { reportId: string }) => {
   const [email, setEmail] = useState("");
-  const { users } = useReportStepsStore();
+  const { users, setUsers } = useReportStepsStore((state) => ({
+    users: state.users,
+    setUsers: state.setUsers,
+  }));
 
-  const handleRoleChange = (index: number, role: string) => {
-    // Handle role change logic here
+  const handleRoleChange = (index: number, role: Role) => {
+    const updatedUsers = [...users];
+    updatedUsers[index].role = role;
+    setUsers(updatedUsers);
   };
 
   const handleInviteSuccess = (data: any) => {
@@ -32,7 +50,7 @@ const AddCollaborator = ({ reportId }: { reportId: string }) => {
 
   const { mutate: handleInviteUser, isPending: isInvitingUser, isError, error } = usePost({
     handleSuccess: handleInviteSuccess,
-    mutateFn: (data: { user_email: string; role: string }) =>
+    mutateFn: (data: { user_email: string; role: Role }) =>
       inviteUserToEmpa(reportId, data),
   });
 
@@ -40,7 +58,7 @@ const AddCollaborator = ({ reportId }: { reportId: string }) => {
     if (validateEmail(email)) {
       handleInviteUser({
         user_email: email,
-        role: "REVIEWER",
+        role: Role.REVIEWER,
       });
       setEmail(""); // Clear the email input after sending the invite
     } else {
@@ -63,27 +81,17 @@ const AddCollaborator = ({ reportId }: { reportId: string }) => {
   return (
     <div className="w-full flex flex-col gap-8 pb-8 bg-white rounded">
       <div className="flex justify-between items-center border-b">
-        <h6 className="font-semibold heading-h6 text-grey-700  p-8">
+        <h6 className="font-semibold heading-h6 text-grey-700 p-8">
           Add Collaborator
         </h6>
       </div>
       <div className="flex gap-x-3 px-8">
-
         <Input
-          placeholder="Enter Email Address"
-          type="text"
-          value={email}
           onChange={(e) => setEmail(e.target.value)}
-
-          className="placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-100 !text-grey-100 placeholder:text-[18px] placeholder:leading-[25.2px] placeholder:font-bold"
-          classNames={{
-            input: ["bg-transparent !text-grey-100"],
-            innerWrapper: "bg-transparent !text-grey-100 ",
-            inputWrapper: ["bg-transparent !text-grey-100 border-[1px] py-5 px-8"],
-          }}
           variant="bordered"
+          placeholder="Enter email address"
+          value={email}
         />
-
         <Button
           className="!bg-primary text-white"
           onClick={inviteUser}
@@ -93,7 +101,7 @@ const AddCollaborator = ({ reportId }: { reportId: string }) => {
           {isInvitingUser ? "Inviting..." : "Invite"}
         </Button>
       </div>
-      <ul className=" flex flex-col gap-4 ">
+      <ul className="flex flex-col gap-4">
         {users.map((user, index) => (
           <li
             key={index}
@@ -110,15 +118,15 @@ const AddCollaborator = ({ reportId }: { reportId: string }) => {
                 {user.user.full_name}
               </span>
             </div>
-            {user.role === "OWNER" ? (
+            {user.role === Role.OWNER ? (
               <span className="border capitalize rounded-md px-4 py-1">
-                {user.role}
+                {roleLabels[user.role]}
               </span>
             ) : (
               <Dropdown>
                 <DropdownTrigger className="border rounded-lg px-4 py-1 cursor-pointer">
                   <div className="flex gap-1 items-center">
-                    <span className=""> {user.role}</span>{" "}
+                    <span className="">{roleLabels[user.role]}</span>{" "}
                     <BiChevronDown color="#5B5D58" />
                   </div>
                 </DropdownTrigger>
@@ -130,12 +138,12 @@ const AddCollaborator = ({ reportId }: { reportId: string }) => {
                   }}
                   className="bg-grey-10"
                 >
-                  {roles.map((role) => (
+                  {Object.values(Role).map((role) => (
                     <DropdownItem
                       key={role}
                       onClick={() => handleRoleChange(index, role)}
                     >
-                      {role}
+                      {roleLabels[role]}
                     </DropdownItem>
                   ))}
                 </DropdownMenu>

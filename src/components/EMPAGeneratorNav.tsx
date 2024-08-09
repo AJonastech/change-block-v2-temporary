@@ -108,11 +108,9 @@ const DraggableSubStep = ({
     <li
       ref={ref}
       style={{ opacity: isDragging ? 0 : 1 }}
-      className={`rounded-full ${
-        isDragging && "scale-105 rounded-full"
-      } group pl-[2rem] flex items-center justify-between relative w-full py-1 gap-2 ${
-        section === subStep.title ? "bg-background" : ""
-      }`}
+      className={`rounded-full ${isDragging && "scale-105 rounded-full"
+        } group pl-[2rem] flex items-center justify-between relative w-full py-1 gap-2 ${section === subStep.title ? "bg-background" : ""
+        }`}
       onMouseDown={() => {
         const initialRect = ref.current?.getBoundingClientRect();
         if (initialRect) {
@@ -123,11 +121,10 @@ const DraggableSubStep = ({
       {subStep.generation_status === "GENERATING" && <Spinner size="sm" />}
       <Link
         href={`/EMPA/${step.title}?data=report&&id=${id}&&section=${subStep.title}&&status=${status}`}
-        className={`w-full hover:text-green-700 capitalize text-nowrap ${
-          section === subStep.title
+        className={`w-full hover:text-green-700 capitalize text-nowrap ${section === subStep.title
             ? "text-primary-100 font-semibold"
             : "text-dark-100"
-        }`}
+          }`}
         onClick={() =>
           setCurrentSubStep({
             title: subStep.title,
@@ -140,11 +137,10 @@ const DraggableSubStep = ({
         {trimSentence(subStep.title, 17)}
       </Link>
       <div
-        className={`transition-all duration-300 ${
-          section === subStep.title
+        className={`transition-all duration-300 ${section === subStep.title
             ? "text-primary-100 font-semibold"
             : "opacity-0 group-hover:opacity-100"
-        }`}
+          }`}
       >
         <Button
           isIconOnly
@@ -266,20 +262,18 @@ const EMPAGeneratorNav = ({
                     <Button
                       startContent={
                         <div
-                          className={`${
-                            decodedSegment === step.title
+                          className={`${decodedSegment === step.title
                               ? "opacity-100"
                               : "opacity-70"
-                          } `}
+                            } `}
                         >
                           <step.icon />
                         </div>
                       }
-                      className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${
-                        decodedSegment === step.title
+                      className={`w-full rounded-full flex items-center px-[1rem] py-2 justify-start gap-2 bg-transparent hover text-lg capitalize ${decodedSegment === step.title
                           ? "text-grey-700 font-satoshi font-medium"
                           : "text-grey-300 font-light"
-                      } hover:bg-gray-300/20`}
+                        } hover:bg-gray-300/20`}
                       onClick={() => toggleStep(index)}
                     >
                       <span className="pl-2">{step.title}</span>
