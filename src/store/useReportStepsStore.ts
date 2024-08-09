@@ -1,5 +1,5 @@
 import create from "zustand";
-import { EMPAReportSteps } from "@/config/reportStepConfig";
+
 
 interface ReportStepsState {
   isRegenerating: boolean;
@@ -12,6 +12,8 @@ interface ReportStepsState {
   addNewSubStep: (stepIndex: number, title: string) => void;
   updateSubSteps: (stepIndex: number, newSubSteps: TSubStep[]) => void;
   deleteSubStep: (stepIndex: number, subStepTitle: string) => void;
+  users: ReportUser[]; // Array of users
+  setUsers: (users: ReportUser[]) => void; // Method to set users
 }
 
 const useReportStepsStore = create<ReportStepsState>((set) => ({
@@ -55,7 +57,6 @@ const useReportStepsStore = create<ReportStepsState>((set) => ({
         title,
         isLocked: false,
         data: `
-
 ###### Primary Activities
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sagittis. Donec ornare rutrum augue non finibus. In ullamcorper diam ut bibendum venenatis. Proin dapibus magna in mattis imperdiet. Integer quis nisi est. Nullam non nisi quis ipsum interdum consectetur. Suspendisse fringilla vitae tellus in ullamcorper. Nullam rutrum risus vitae lorem faucibus interdum. Vivamus eget vehicula ante. Etiam sagittis neque massa, nec sodales est venenatis id.
@@ -63,10 +64,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sag
 ###### Secondary Activities
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sagittis. Donec ornare rutrum augue non finibus. In ullamcorper diam ut bibendum venenatis. Proin dapibus magna in mattis imperdiet. Integer quis nisi est. Nullam non nisi quis ipsum interdum consectetur. Suspendisse fringilla vitae tellus in ullamcorper. Nullam rutrum risus vitae lorem faucibus interdum. Vivamus eget vehicula ante. Etiam sagittis neque massa, nec sodales est venenatis id.
-
-
-
-
   `,
         description: `Add Description`,
         markupTitle: `#### ${title}`,
@@ -119,6 +116,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis mollis sag
         currentSubStep: nextSubStep,
       };
     }),
+  users: [], // Initialize users as an empty array
+  setUsers: (users) => set({ users }), // Method to update users
 }));
 
 export default useReportStepsStore;

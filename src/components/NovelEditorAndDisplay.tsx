@@ -1,4 +1,3 @@
-"use client";
 import { Editor } from "novel";
 import { type Editor as TipTapEditor } from "@tiptap/core";
 import { useEffect, useState } from "react";
@@ -6,6 +5,7 @@ import Markdown from "./Markdown";
 import { parseMKD } from "@/config/parseMKD";
 import { editEmpaReport } from "@/actions/EmpaActions";
 import usePost from "@/hooks/usePostData";
+import { defaultMarkdownSerializer } from "prosemirror-markdown";
 
 type NovelEditorProps = {
   markupContent: string;
@@ -32,18 +32,21 @@ export default function NovelEditorAndDisplay({
     setHtmlContent(parseMKD(markupContent));
   }, [markupContent]);
 
-  const handleSuccess = () => {
-
-  }
+  const handleSuccess = () => {};
 
   const { mutate: updateReport } = usePost({
     handleSuccess,
     mutateFn: async (data: {
       sub_section_data: string;
     }) => {
-      await editEmpaReport(reportId, sectionId, subSectionId, data)
+      await editEmpaReport(reportId, sectionId, subSectionId, data);
     }
   });
+
+  const serializeToMarkdown = (editor: TipTapEditor) => {
+    return defaultMarkdownSerializer.serialize(editor.state.doc);
+  };
+
   return (
     <div className={`${className} markdown flex-col flex gap-3 h-full`}>
       {isEditor ? (
@@ -53,11 +56,12 @@ export default function NovelEditorAndDisplay({
             content: [novelJSONContent as any],
           }}
           onDebouncedUpdate={(editor?: TipTapEditor) => {
-            const markdownContent = editor?.getText();
+            const markdownContent = editor ? serializeToMarkdown(editor) : "";
             setHtmlContent(editor?.getHTML() as any);
             // Send the markdown content to the server
+       
             updateReport({
-              sub_section_data: markdownContent || '',
+              sub_section_data: markdownContent,
             });
           }}
           disableLocalStorage={true}

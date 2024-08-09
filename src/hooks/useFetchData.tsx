@@ -1,8 +1,9 @@
-"use client";
+"use client"
 import { getQueryClient } from "@/app/Providers";
 import { useQuery, QueryKey, UseQueryResult } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+
 
 interface ErrorWithResponse extends Error {
   response?: {
@@ -25,45 +26,40 @@ interface FetchDataResult<TData> {
 
 export const useFetchData = <TData,>(
   key: QueryKey,
-  fetchFn: () => Promise<TData> | undefined,
+  fetchFn: () => Promise<TData>,
   enabled: boolean = true
 ): FetchDataResult<TData> => {
   const queryClient = getQueryClient();
   const router = useRouter();
 
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-  }: UseQueryResult<TData, ErrorWithResponse> = useQuery<
-    TData,
-    ErrorWithResponse
-  >({
+  const { data, isLoading, isError, error, isSuccess }: UseQueryResult<TData, ErrorWithResponse> = useQuery<TData, ErrorWithResponse>({
     queryKey: key,
 
     queryFn: fetchFn,
     enabled: enabled,
     retry: 1,
     refetchOnMount: true,
+
   });
 
   useEffect(() => {
     const handleErrors = async () => {
       if (isError && error) {
+
         try {
           // Attempt to refresh the token
-          const response = await fetch("/api/auth/refresh");
+          const response = await fetch('/api/auth/refresh');
           if (!response.ok) {
-            throw new Error("Failed to refresh access token");
+            throw new Error('Failed to refresh access token');
           }
           queryClient.invalidateQueries({ queryKey: key }); // Retry the query after refreshing the token
         } catch (refreshError) {
-          console.error("Error refreshing access token", refreshError);
+          console.error('Error refreshing access token', refreshError);
           queryClient.clear();
           router.push("/login");
         }
+
+
       }
     };
 

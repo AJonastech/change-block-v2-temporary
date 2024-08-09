@@ -144,3 +144,20 @@ interface TSubSection {
   locker_id: any;
   position:number;
 }
+
+
+interface UserDetails {
+  full_name: string;
+  email: string;
+  profile_image: string;
+  is_verified: boolean;
+  user_id: string;
+}
+
+interface ReportUser {
+  user_id: string;
+  report_id: string;
+  role: "OWNER" | "CONTRIBUTOR" | "VIEWER"; // Adjust roles as needed
+  empa_user_id: string;
+  user: UserDetails;
+}

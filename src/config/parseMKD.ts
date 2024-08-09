@@ -39,6 +39,7 @@ export const parseMKD = (markdown: string): string => {
   html = html.replace(/\[(.*?)\]\((.*?)\)/gm, '<a href="$2">$1</a>');
 
   // Convert tables
+  
   html = html.replace(/((?:\|.+\|\n)+)/gm, (match) => {
     const rows = match.trim().split("\n");
     const header = rows[0];
