@@ -71,7 +71,7 @@ function WeeklyChannelSettingsForm() {
 
     useEffect(() => {
         if (isError) {
-           toast.error(error?.message || "An error occurred. Please try again.");
+           toast.error("Only @changeblock emails are allowed");
         }
     }, [isError]);
 
