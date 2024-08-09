@@ -8,16 +8,21 @@ import { ArrowDown2, ArrowUp2 } from "iconsax-react";
 import { CgClose } from "react-icons/cg";
 import EMPAQuestions from "./EMPAQuestions";
 
-
 type TCommentProps = {
   comment: TCommentType;
   handleLike: (id: number) => void;
   handleAddReply: (parentId: number, text: string) => void;
 };
 
-const Comment: React.FC<TCommentProps> = ({ comment, handleLike, handleAddReply }) => {
+const Comment: React.FC<TCommentProps> = ({
+  comment,
+  handleLike,
+  handleAddReply,
+}) => {
   const [showReplies, setShowReplies] = useState(false);
   const [replyText, setReplyText] = useState("");
+
+  console.log({ replyText });
 
   return (
     <div className="pb-4 ">
@@ -115,32 +120,42 @@ const Comment: React.FC<TCommentProps> = ({ comment, handleLike, handleAddReply 
   );
 };
 
-const EMPAComments = ({ onClick }: { onClick: () => void }) => {
+const EMPAComments = ({
+  onClick,
+  data,
+}: {
+  onClick: () => void;
+  data?: any;
+}) => {
+  console.log({ data });
   const initialComments: TCommentType[] = [
-    {
-      id: 1,
-      name: "John Doe",
-      avatar: "/assets/dorathy.png",
-      time: "2 mins",
-      text: "Lorem ipsum dolor sit amet, coetur adipiscing elit ut aliquam, purus sit amet luctus.",
-      likes: 15,
-      replies: [],
-      depth: 0,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      avatar: "/assets/rose.svg",
-      time: "2 mins",
-      text: "Lorem ipsum dolor sit amet, coetur adipiscing elit ut.",
-      likes: 15,
-      replies: [],
-      depth: 0,
-    },
+    // {
+    //   id: 1,
+    //   name: "John Doe",
+    //   avatar: "/assets/dorathy.png",
+    //   time: "2 mins",
+    //   text: "Lorem ipsum dolor sit amet, coetur adipiscing elit ut aliquam, purus sit amet luctus.",
+    //   likes: 15,
+    //   replies: [],
+    //   depth: 0,
+    // },
+    // {
+    //   id: 2,
+    //   name: "Jane Smith",
+    //   avatar: "/assets/rose.svg",
+    //   time: "2 mins",
+    //   text: "Lorem ipsum dolor sit amet, coetur adipiscing elit ut.",
+    //   likes: 15,
+    //   replies: [],
+    //   depth: 0,
+    // },
   ];
 
   const [comments, setComments] = useState<TCommentType[]>(initialComments);
   const [newComment, setNewComment] = useState("");
+
+  
+  console.log({ newComment }); 
 
   const handleLike = (id: number) => {
     const updateComments = (comments: TCommentType[]): TCommentType[] =>
@@ -164,6 +179,15 @@ const EMPAComments = ({ onClick }: { onClick: () => void }) => {
         replies: [],
         depth: 0,
       };
+      //upload new comment here
+
+
+
+    // request example:
+//     curl --location 'localhost:8004/v1/empa-reports/1f87067d-593d-4227-9897-7dd472902335/sub-section/1e15bc16-a2b1-4c65-87a5-1107aa21ad11/comments' \
+// --data '{
+//   "comment": "This is a comment"
+// }'
       setComments([...comments, newCommentObject]);
       setNewComment("");
     }
@@ -251,7 +275,7 @@ const EMPAComments = ({ onClick }: { onClick: () => void }) => {
         </Tab>
         <Tab key="questions" title="Questions">
           {/* Similar structure as comments but for questions */}
-          <EMPAQuestions/>
+          <EMPAQuestions />
         </Tab>
       </Tabs>
     </div>

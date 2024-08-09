@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Tooltip } from "@nextui-org/react";
 import {
   ChatIcon,
@@ -22,6 +22,9 @@ import { EMPAReportSteps } from "@/config/reportStepConfig";
 import { Trash } from "iconsax-react";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import EMPAConfirmation from "./EMPAConfirmation";
+import usePost from "@/hooks/usePostData";
+import { regenerateReport } from "@/actions/EmpaActions";
+import { useFetchData } from "@/hooks/useFetchData";
 
 const EMPAReportMenu = ({
   toggleChatDrawer,
@@ -33,7 +36,7 @@ const EMPAReportMenu = ({
   toggleChatDrawer: () => void;
   reportId: string;
   toggleEditor: () => void;
-  data:any
+  data: any;
   isEditor: boolean;
 }) => {
   const searchParam = useSearchParams();
@@ -41,11 +44,30 @@ const EMPAReportMenu = ({
   const { segment } = useParams();
   const decodedSection = decodeURIComponent(section as string);
   const { currentSubStep, setIsRegenerating } = useReportStepsStore();
+  const [isRegeneratingReport, setIsRegeneratingReport] = useState(false);
+
   const isDisabled =
     currentSubStep?.isLocked && currentSubStep.title === section;
   const [showPreviewReport, setShowPreviewReport] = useState(false);
   const [previewContent, setPreviewContent] = useState("");
   const [filename, setFilename] = useState("EMPA_Report.pdf");
+
+  const handleSuccess = (data: any) => {
+    console.log("Regenerated");
+  };
+
+  const {
+    data: report,
+    isError,
+    isLoading,
+    error,
+  } = useFetchData([`empa-report`], () => regenerateReport(reportId as string));
+
+  console.log({ report, isError, isLoading, error });
+
+  useEffect(() => {
+    // isLoading === false && setIsRegeneratingReport(false);
+  }, [isLoading, setIsRegeneratingReport]);
 
   const handlePreview = (type: "current" | "entire") => {
     if (type === "current") {
@@ -56,31 +78,24 @@ const EMPAReportMenu = ({
         (subStep) => subStep.title === section
       );
       setFilename(`EMPA_Report-${section}.pdf`);
-      setPreviewContent(
-        parseMKD(
-          (data as string) || ""
-        )
-      );
+      setPreviewContent(parseMKD((data as string) || ""));
     } else {
       // setPreviewContent(parseMKD(concatenateMarkdown(EMPAReportSteps)));
-      setPreviewContent(
-        parseMKD(
-          (data as string) || ""
-        )
-      );
+      setPreviewContent(parseMKD((data as string) || ""));
       setFilename("EMPA_Report.pdf");
     }
     setShowPreviewReport(true);
   };
 
-
   const handleRegeneration = (type: "current" | "entire") => {
+    //handle regeneation here
+    console.log("Regeneration");
+    setIsRegeneratingReport(true);
     setIsRegenerating(true);
-    setTimeout(() => {
-      setIsRegenerating(false);
-    }, 3000); // Mock regeneration time
+    // setTimeout(() => {
+    //   setIsRegenerating(false);
+    // }, 3000); // Mock regeneration time
   };
-
 
   return (
     <div className={`absolute top-0 right-0`}>
@@ -90,18 +105,22 @@ const EMPAReportMenu = ({
             <Tooltip content="Refresh">
               <EMPAModal
                 className="min-w-[650px]"
-                buttonElement={<Button
-                  isDisabled={isDisabled}
-                  isIconOnly
-                  className="rounded-none"
-                  variant="light"
-                >
-                  <RefreshIcon />
-                </Button>}
+                buttonElement={
+                  <Button
+                    isDisabled={isDisabled}
+                    isIconOnly
+                    className="rounded-none"
+                    variant="light"
+                  >
+                    <RefreshIcon />
+                  </Button>
+                }
               >
-                <EMPAConfirmation type="regenerate" onAction={handleRegeneration} />
+                <EMPAConfirmation
+                  type="regenerate"
+                  onAction={handleRegeneration}
+                />
               </EMPAModal>
-
             </Tooltip>
             <Tooltip content="Add Collaborator">
               <EMPAModal
@@ -139,8 +158,9 @@ const EMPAReportMenu = ({
             <ConfirmDeleteModal reportId={reportId} data={decodedSection} />
           </div>
           <EMPAModal
-            className={`${showPreviewReport ? "min-w-[968px]" : "min-w-[650px]"
-              }`}
+            className={`${
+              showPreviewReport ? "min-w-[968px]" : "min-w-[650px]"
+            }`}
             buttonElement={
               <Button
                 color="primary"
