@@ -9,6 +9,7 @@ import {
   RegulatoryIcon,
 } from "@/icons";
 import {
+  demoMkd,
   markdownContent,
   markdownContent1,
   markdownContent2,
@@ -32,7 +33,7 @@ export const EMPAReportSteps: TStep[] = [
         id: 1,
         title: "Summary of project",
         isLocked: false,
-        data: markdownContent,
+        data: demoMkd,
         description: markdownDescription,
         markupTitle: "#### Summary of project",
       },

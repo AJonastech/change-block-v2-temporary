@@ -14,6 +14,7 @@ import useIsMounted from "@/hooks/useIsMounted";
 import useReportStepsStore from "@/store/useReportStepsStore";
 
 import markdownToProseMirror from "@/config/markdownToProseMirror";
+import { demoMkd } from "@/mockdata/EMPASectionsMKD";
 
 const EMPAReportSegment = ({
   section,
@@ -24,7 +25,6 @@ const EMPAReportSegment = ({
   id: string;
   data: TSubSection;
 }) => {
-
   const { reportSteps } = useReportStepsStore();
   if (
     (!data && reportSteps.length >= 0) ||
@@ -42,6 +42,15 @@ const EMPAReportSegment = ({
   // if (!data && reportSteps.length > 0) {
   //   return;
   // }
+
+  // const der = {
+  //   id: `2f32c803-1898-423e-ace9-242cdf664011`,
+  //   title: `Hey`,
+  //   isLocked: false, // or however you determine this
+  //   sub_section_data: demoMkd, // Fix the property name here
+  //   description: "",
+  //   markupTitle: `#### Title`,
+  // };
 
   return <EMPAReportContent section={section} data={data} id={id} />;
 };
@@ -243,11 +252,9 @@ const EMPAReportContent = ({
                     {step?.title}
                   </div>
                 </Skeleton>
-
-
               </div>
               {/* Main Content Editor/Display */}
-              <div className="h-full">
+              <div className="h-full ">
                 {novelJSONContent && (
                   <div className="h-max min-h-max">
                     <NovelEditorAndDisplay
