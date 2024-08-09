@@ -6,6 +6,32 @@ import { parseMKD } from "@/config/parseMKD";
 import { editEmpaReport } from "@/actions/EmpaActions";
 import usePost from "@/hooks/usePostData";
 import { defaultMarkdownSerializer } from "prosemirror-markdown";
+import { parseHTMLToMKD } from "@/config/parseHTMLToMKD";
+
+import { MarkdownSerializer } from "prosemirror-markdown";
+import { Node as ProseMirrorNode } from "prosemirror-model";
+
+// Extend the defaultMarkdownSerializer with custom node serializers
+const customMarkdownSerializer = new MarkdownSerializer(
+  {
+    ...defaultMarkdownSerializer.nodes, // Copy existing nodes
+    orderedList(state, node) {
+      state.renderList(node, "   ", (index) => `${index + 1}. `);
+    },
+    bulletList(state, node) {
+      state.renderList(node, "   ", () => "- ");
+    },
+    listItem(state, node) {
+      state.renderContent(node);
+    },
+    // Add more custom nodes if necessary
+  },
+  defaultMarkdownSerializer.marks // Copy existing marks
+);
+
+export const serializeToMarkdown = (editor: TipTapEditor) => {
+  return customMarkdownSerializer.serialize(editor.state.doc);
+};
 
 type NovelEditorProps = {
   markupContent: string;
@@ -27,6 +53,7 @@ export default function NovelEditorAndDisplay({
   subSectionId,
 }: NovelEditorProps) {
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
+  const [markdownContent, setMarkdownContent] = useState(markupContent);
 
   useEffect(() => {
     setHtmlContent(parseMKD(markupContent));
@@ -41,10 +68,6 @@ export default function NovelEditorAndDisplay({
     },
   });
 
-  const serializeToMarkdown = (editor: TipTapEditor) => {
-    return defaultMarkdownSerializer.serialize(editor.state.doc);
-  };
-
   return (
     <div className={`${className} markdown flex-col flex gap-3 h-full`}>
       {isEditor ? (
@@ -54,14 +77,17 @@ export default function NovelEditorAndDisplay({
             content: [novelJSONContent as any],
           }}
           onDebouncedUpdate={(editor?: TipTapEditor) => {
-            const markdownContent = editor ? serializeToMarkdown(editor) : "";
-            setHtmlContent(editor?.getHTML() as any);
-            console.log({ editorText: editor?.getText });
-            // Send the markdown content to the server
+            if (editor) {
+              const markdownContent = editor.getText();
+              setMarkdownContent(markdownContent);
+              setHtmlContent(editor.getHTML() as string);
+              console.log({ markdownContent, htmlContent });
 
-            updateReport({
-              sub_section_data: markdownContent,
-            });
+              // Send the markdown content to the server
+              updateReport({
+                sub_section_data: markdownContent,
+              });
+            }
           }}
           disableLocalStorage={true}
           className="!p-0 m-0 shadow-none custom-editor"
