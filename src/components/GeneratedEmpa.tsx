@@ -80,7 +80,7 @@ function EmpaOverview() {
                 <GeneratedEmpaSkeleton key={id} />
               ))
             : reports?.map((report: Report, id: number) => {
-                console.log({ report });
+         
                 return (
                   <Link
                     key={id}

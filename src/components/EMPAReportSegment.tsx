@@ -250,6 +250,9 @@ const EMPAReportContent = ({
                 {novelJSONContent && (
                   <div className="h-max min-h-max">
                     <NovelEditorAndDisplay
+                    reportId={id}
+                    sectionId={data.section_id}
+                    subSectionId={data.sub_section_id}
                       novelJSONContent={novelJSONContent}
                       markupContent={markupContent}
                       isEditor={isEditor}
