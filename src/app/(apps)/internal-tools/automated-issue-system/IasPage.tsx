@@ -1,28 +1,34 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '@nextui-org/react'
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { sweepChannelMessages } from '@/actions/IasActions';
+import { sweepChannelMessages, sweepChatMessages } from '@/actions/IasActions';
 import usePost from '@/hooks/usePostData';
 function IasPage() {
     const router = useRouter()
-    const handleSuccess = () => {
+    const handleSuccess = (data:any) => {
    
-       
+       toast.success(data.details)
     }
 
     const { mutate: sweepChannel, error, isPending: isSweepingChannel, isSuccess, isError } = usePost({ handleSuccess, mutateFn: () => sweepChannelMessages() });
 
-    if (isError) {
-   
-        console.log(error, "The error occured here");
-    }
+    const { mutate: sweepChat, isPending: isSweepingChat, isError:isChatError} = usePost({ handleSuccess, mutateFn: () => sweepChatMessages() });
 
     const handleChannelSweep = async () => {
         await sweepChannel({})
     }
 
+    const handleChatSweep =async ()=>{
+await sweepChat({})
+    }
+
+    useEffect(()=>{
+if(isChatError){
+    toast.error("something went wrong")
+}
+    },[isChatError])
     return (
         <main className="w-full h-full bg-background  !min-w-full ">
             <div className="flex flex-col h-full !gap-12 bg-white ">
@@ -53,8 +59,8 @@ function IasPage() {
                         <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
                             Effortlessly curate and create engaging newsletters with our intuitive newsletter generator tool.
                         </p>
-                        <Button className='w-full font-satoshi text-grey-20 !bg-primary ' color='primary'>
-                            Process
+                        <Button  onClick={handleChatSweep} isLoading={isSweepingChat} isDisabled={isSweepingChat} className='w-full font-satoshi text-grey-20 !bg-primary ' color='primary'>
+                           {isSweepingChat ? "Processsing...":"Process"}
                         </Button>
                     </div>
                 </div>

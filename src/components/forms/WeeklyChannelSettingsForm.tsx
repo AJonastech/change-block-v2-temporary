@@ -9,6 +9,8 @@ import EmailTextarea from "../EmailTextArea";
 import { useFetchData } from "@/hooks/useFetchData";
 import { getAllTeams, getTeamChannels, getWeeklyChannelInsight, saveWeeklyInsightChannel } from "@/actions/IasActions";
 import usePost from "@/hooks/usePostData";
+import { toast } from "react-toastify";
+
 
 const channelSettingsFormSchema = z.object({
     team_id: z.string().min(1, "Please select a team"),
@@ -57,12 +59,12 @@ function WeeklyChannelSettingsForm() {
         !!selectedTeamId // Enable fetching only when a team is selected
     );
 
-    const handleSuccess = () => {
+    const handleSuccess = (data:any) => {
         // Handle success logic here
-        console.log("success");
+        toast.success(data.details)
     };
 
-    const { mutate, isSuccess, isError, error, isPending } = usePost({
+    const { mutate, data, isSuccess, isError, error, isPending } = usePost({
         handleSuccess,
         mutateFn: (data) => saveWeeklyInsightChannel(data),
     });
@@ -76,7 +78,7 @@ function WeeklyChannelSettingsForm() {
     const onSubmit = (data: ChannelSettingsFormType) => {
         mutate(data);
     };
-
+    console.log(data)
     return (
         <FormProvider {...form}>
             <form className="flex flex-col gap-10" onSubmit={form.handleSubmit(onSubmit)}>

@@ -10,6 +10,7 @@ import { getAllChats, getWeeklyChatInsight, saveChatDetails, saveWeeklyInsightCh
 import usePost from '@/hooks/usePostData'
 import SubmitButton from '../SubmitButton'
 import EmailTextarea from '../EmailTextArea'
+import { toast } from 'react-toastify'
 
 const chatSettingsFormSchema = z.object({
     chat_id: z.string().min(1, "Please select a chat"),
@@ -64,18 +65,24 @@ function WeeklyChatSettingsForm() {
 
 
 
-    const handleSuccess = () => {
-        console.log("Yup we are free")
+    const handleSuccess = (data:any) => {
+    toast.success(data.details)
     }
 
-    const { mutate, } = usePost({
+    const { mutate,isPending,isError:isPostError, error:postError } = usePost({
         handleSuccess,
         mutateFn: (data) => saveWeeklyInsightChat(data)
     })
     const onSubmit = (data: ChatSettingsFormType) => {
         // Do something with the data here
         mutate(data)
+
     }
+    useEffect(()=>{
+if(isPostError){
+    toast.error(postError?.message)
+}
+    },[isError])
 
     return (
         <FormProvider {...form}>
@@ -120,9 +127,9 @@ function WeeklyChatSettingsForm() {
                 />
 
                 <div className='flex items-center gap-4'>
-                    <SubmitButton color='primary' className='!bg-primary text-white'>
+                <Button  type="submit" isLoading={isPending} isDisabled={isPending} color="primary" size="lg" variant='bordered' className='!bg-primary text-white text-lg '>
                         Save
-                    </SubmitButton>
+                    </Button>
                     <Button type="reset" size="lg" variant='bordered' className='bg-transparent text-lg text-grey-100'>
                         Reset
                     </Button>

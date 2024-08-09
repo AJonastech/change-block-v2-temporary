@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useInitializeAuth } from "@/hooks/useInitializeAuth";
+import 'react-toastify/dist/ReactToastify.css';
 
 function makeQueryClient() {
   return new QueryClient({

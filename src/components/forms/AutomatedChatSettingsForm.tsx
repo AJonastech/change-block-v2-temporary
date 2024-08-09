@@ -9,6 +9,7 @@ import { useFetchData } from '@/hooks/useFetchData'
 import { getAllChats, saveChatDetails } from '@/actions/IasActions'
 import usePost from '@/hooks/usePostData'
 import SubmitButton from '../SubmitButton'
+import { toast } from 'react-toastify'
 
 const chatSettingsFormSchema = z.object({
     chat_id: z.string().min(1, "Please select a chat"),
@@ -51,8 +52,8 @@ function AutomatedChatSettingsForm() {
 
 
 
-    const handleSuccess = () => {
-        console.log("Yup we are free")
+    const handleSuccess = (data: any) => {
+        toast.success(data.details)
     }
 
     const { mutate, } = usePost({
@@ -122,7 +123,7 @@ function AutomatedChatSettingsForm() {
                 />
 
                 <div className='flex items-center gap-4'>
-                <Button type="reset" size="lg" variant='bordered' className='!bg-primary text-lg text-grey-100'>
+                    <Button type="reset" size="lg" variant='bordered' className='!bg-primary text-lg text-grey-100'>
                         Save
                     </Button>
                     <Button type="reset" size="lg" variant='bordered' className='bg-transparent text-lg text-grey-100'>

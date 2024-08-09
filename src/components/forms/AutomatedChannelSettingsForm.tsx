@@ -44,8 +44,8 @@ function AutomatedChannelSettingsForm() {
     !!selectedTeamId // Enable fetching only when a team is selected
   );
 
-const handleSuccess=()=>{
-
+const handleSuccess=(data:any)=>{
+toast.success(data.details)
 }
   const {mutate, isSuccess, isError, error} = usePost({
     handleSuccess:handleSuccess,

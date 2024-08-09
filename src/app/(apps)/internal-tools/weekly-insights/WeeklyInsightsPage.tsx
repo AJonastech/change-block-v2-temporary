@@ -1,7 +1,43 @@
+"use client"
+import { generateWeeklyChannelInsight, generateWeeklyChatInsight } from '@/actions/IasActions';
+import usePost from '@/hooks/usePostData';
 import { Button } from '@nextui-org/react'
 import React from 'react'
+import { toast } from 'react-toastify';
 
 function WeeklyInsightsPage() {
+
+    const handleChannelSuccess = (data:any) => {
+   
+       toast.success(data.details)
+    }
+
+    const { mutate: generateChannelInsight, error, isPending: isChannelPending, isSuccess, isError } = usePost({ handleSuccess:handleChannelSuccess, mutateFn: () => generateWeeklyChannelInsight() });
+
+    if (isError) {
+   
+        console.log(error, "The error occured here");
+    }
+
+    const handleChannelSweep = async () => {
+        await generateChannelInsight({})
+    }
+
+    const handleChatSuccess = (data:any) => {
+   
+        toast.success(data.details)
+     }
+ 
+     const { mutate: generateChatInsight, isPending: isChatPending } = usePost({ handleSuccess:handleChannelSuccess, mutateFn: () => generateWeeklyChatInsight() });
+ 
+     if (isError) {
+    
+         console.log(error, "The error occured here");
+     }
+ 
+     const handleChatSweep = async () => {
+         await generateChatInsight({})
+     }
     return (
         <main className="w-full h-full bg-background  !min-w-full ">
             <div className="flex flex-col h-full !gap-12 bg-white ">
@@ -19,8 +55,8 @@ function WeeklyInsightsPage() {
                         <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
                             Automatically gather key insights from your team channels, saving time and ensuring everyone stays informed.
                         </p>
-                        <Button className='w-full font-satoshi !bg-primary text-grey-20 ' color='primary'>
-                            Process
+                        <Button onClick={handleChannelSweep}  isLoading={isChannelPending} isDisabled={isChannelPending} className='w-full font-satoshi !bg-primary text-grey-20 ' color='primary'>
+                          {isChannelPending ? "Processing...":"Process"}
                         </Button>
                     </div>
                     <div className='bg-grey-10 max-w-[421px] border-[1px] border-[#C1C2C0]/30 p-4 rounded-xl'>
@@ -30,7 +66,7 @@ function WeeklyInsightsPage() {
                         <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
                             Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.
                         </p>
-                        <Button className='w-full font-satoshi !bg-primary text-grey-20 ' color='primary'>
+                        <Button onClick={handleChatSweep} className='w-full font-satoshi !bg-primary text-grey-20 ' color='primary'>
                             Process
                         </Button>
                     </div>

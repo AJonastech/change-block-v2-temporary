@@ -5,6 +5,10 @@ export async function sweepChannelMessages() {
   return await fetchData(`/v1/ias/sweep-messages`, "POST",);
 }
 
+export async function sweepChatMessages() {
+  return await fetchData(`/v1/ias/sweep-chat-messages`, "POST",);
+}
+
 export async function getAllTeams() {
   return await fetchData(`/v1/ias/teams`, "GET");
 }
@@ -38,4 +42,11 @@ export async function getWeeklyChannelInsight(){
 }
 export async function getWeeklyChatInsight(){
   return await fetchData(`/v1/weekly-insights/chat-details`, "GET")
+}
+
+export async function generateWeeklyChannelInsight(){
+  return await fetchData(`/v1/weekly-insights/channel/generate`, "POST")
+}
+export async function generateWeeklyChatInsight(){
+  return await fetchData(`/v1/weekly-insights/chat/generate`, "POST")
 }
