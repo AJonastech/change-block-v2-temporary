@@ -12,7 +12,7 @@ import {
   ModalContent,
   useDisclosure,
 } from "@nextui-org/react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation"; // Import useRouter
 import { Trash } from "iconsax-react";
 import SubmitButton from "../SubmitButton";
@@ -87,10 +87,14 @@ const ConfirmDeleteModal = ({
   };
 
   const {mutate,  error, isSuccess, isError} = usePost({
-    handleSuccess: () => {},
+    handleSuccess: (data) => {toast.success(data.detail|| "This was successful")},
     mutateFn: (data: any) => deleteEmpa(data),
   })
-
+useEffect(()=>{
+  if(isError){
+toast.error(error?.message)
+  }
+},[isError])
 
 
   return (

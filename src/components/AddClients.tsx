@@ -1,11 +1,21 @@
+"use client"
 import React from "react";
-import { Popover, PopoverTrigger, PopoverContent, Button } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, Button, Skeleton } from "@nextui-org/react";
 import { Card } from "@nextui-org/react";
 import { BiPlus } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
+import { useFetchData } from "@/hooks/useFetchData";
+import { getEmpaReports } from "@/actions/EmpaActions";
+import SlideIntoView from "./SlideIntoView";
 function AddClient() {
-    const clients = ["New Age", "Blue Oceans", "Bitter Leaf", "New Age"];
+    const skeleton = Array.from({ length: 2 });
+    const {
+        data: reports,
+        isError,
+        isLoading,
+        error,
+      } = useFetchData(["empa-reports"], () => getEmpaReports());
     return (
         <Popover className="w-full" placement="top">
             <PopoverTrigger>
@@ -15,13 +25,23 @@ function AddClient() {
                 </div>
             </PopoverTrigger>
             <PopoverContent className="w-full border-0 p-0 shadow-none ">
+            {reports?.length === 0 &&
+              skeleton.map((sk, index) => {
+                return (
+                  <>
+                    <SlideIntoView from="left" index={index}>
+                      <Skeleton className="w-[90%] h-6 rounded-md py-5 mb-1" />
+                    </SlideIntoView>
+                  </>
+                );
+              })}
                 <ul className="w-full border-[1px] py-1 bg-grey-10  min-w-[255px] rounded-xl overflow-hidden">
-                    {clients.map((client, index) => (
+                    {reports?.map((report:any, index:number) => (
                         <li
                             key={index}
                             className="flex justify-between border-[#C1C2C0]/50  border-0 items-center p-5 border-b-[1px]  last:border-b-0 cursor-pointer hover:bg-white"
                         >
-                            <span className="font-satoshi text-[15px] leading-[21px] text-grey-300">{client}</span>
+                            <span className="font-satoshi text-[15px] leading-[21px] text-grey-300">{report.client_name}</span>
                             <FaArrowRight strokeWidth={0.2} className=" h-4 w-4 font-satoshi text-grey-100" />
                         </li>
                     ))}
