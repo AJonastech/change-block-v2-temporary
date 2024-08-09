@@ -111,8 +111,8 @@ const EMPAInitiationForm: React.FC = () => {
     fetchCountries();
   }, []);
 
-  const handleSuccess = () => {
-
+  const handleSuccess = (data:any) => {
+   window.location.href = `/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`
 
   };
 
@@ -134,7 +134,7 @@ const EMPAInitiationForm: React.FC = () => {
 
     await mutate(values);
 
-    window.location.href = `/EMPA/introduction?data=report&&id=${data.report_id}&&status=GENERATING`
+ 
   };
 
   return (
