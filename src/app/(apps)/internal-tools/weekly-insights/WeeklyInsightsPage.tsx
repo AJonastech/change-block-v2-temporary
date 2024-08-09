@@ -50,7 +50,7 @@ function WeeklyInsightsPage() {
                 <div className='flex justify-center mt-10 gap-4 px-[2rem]'>
                     <div className='bg-grey-10 max-w-[421px] border-[1px] border-[#C1C2C0]/30 p-4 rounded-xl'>
                         <h6 className='heading-h6 mb-2 text-grey-500 font-generalSans font-semibold leading-[28.6px]'>
-                            Generate Insights from Team Meetings
+                            Generate Insights fromTeam Channels
                         </h6>
                         <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
                             Automatically gather key insights from your team channels, saving time and ensuring everyone stays informed.
@@ -61,7 +61,7 @@ function WeeklyInsightsPage() {
                     </div>
                     <div className='bg-grey-10 max-w-[421px] border-[1px] border-[#C1C2C0]/30 p-4 rounded-xl'>
                         <h6 className='heading-h6 mb-2 text-grey-500 font-generalSans font-semibold leading-[28.6px]'>
-                            Generate Insights from Project Discussions
+                            Generate Insights from Chat Discussions
                         </h6>
                         <p className='font-satoshi mb-6 text-grey-100 text-[15px] leading-[21px]  '>
                             Effortlessly distill key insights from team meetings, saving time and ensuring everyone stays informed.
