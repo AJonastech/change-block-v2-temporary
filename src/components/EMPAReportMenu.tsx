@@ -25,6 +25,7 @@ import EMPAConfirmation from "./EMPAConfirmation";
 
 const EMPAReportMenu = ({
   toggleChatDrawer,
+  data,
   toggleEditor,
   reportId,
   isEditor,
@@ -32,6 +33,7 @@ const EMPAReportMenu = ({
   toggleChatDrawer: () => void;
   reportId: string;
   toggleEditor: () => void;
+  data:any
   isEditor: boolean;
 }) => {
   const searchParam = useSearchParams();
@@ -56,11 +58,16 @@ const EMPAReportMenu = ({
       setFilename(`EMPA_Report-${section}.pdf`);
       setPreviewContent(
         parseMKD(
-          ((currentSection.markupTitle + currentSection?.data) as string) || ""
+          (data as string) || ""
         )
       );
     } else {
-      setPreviewContent(parseMKD(concatenateMarkdown(EMPAReportSteps)));
+      // setPreviewContent(parseMKD(concatenateMarkdown(EMPAReportSteps)));
+      setPreviewContent(
+        parseMKD(
+          (data as string) || ""
+        )
+      );
       setFilename("EMPA_Report.pdf");
     }
     setShowPreviewReport(true);
