@@ -89,6 +89,7 @@ const AddCollaborator = ({ reportId }: { reportId: string }) => {
         <Input
           onChange={(e) => setEmail(e.target.value)}
           variant="bordered"
+          className="!text-grey-100"
           placeholder="Enter email address"
           value={email}
         />
