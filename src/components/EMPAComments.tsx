@@ -267,6 +267,7 @@ const EMPAComments = ({
             <Button
               isIconOnly
               onClick={handleAddComment}
+              color="primary"
               className="bg-primary text-white ml-2  h-16 w-16 rounded-xl"
             >
               <AiOutlineSend />

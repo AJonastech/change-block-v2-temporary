@@ -258,9 +258,9 @@ const EMPAReportContent = ({
                 {novelJSONContent && (
                   <div className="h-max min-h-max">
                     <NovelEditorAndDisplay
-                    reportId={id}
-                    sectionId={data.section_id}
-                    subSectionId={data.sub_section_id}
+                      reportId={id}
+                      sectionId={data.section_id}
+                      subSectionId={data.sub_section_id}
                       novelJSONContent={novelJSONContent}
                       markupContent={markupContent}
                       isEditor={isEditor}
@@ -269,7 +269,7 @@ const EMPAReportContent = ({
                 )}
               </div>
               {/* Comments Drawer */}
-              <div className="w-full">
+              <div className="w-full absolute bottom-[4rem]">
                 <CommentsDrawer
                   onClick={toggleChatDrawer}
                   isOpen={isChatDrawerOpen}
