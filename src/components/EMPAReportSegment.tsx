@@ -205,6 +205,7 @@ const EMPAReportContent = ({
           <div>
             <EMPAReportMenu
               reportId={id}
+              data={data.sub_section_data}
               toggleChatDrawer={toggleChatDrawer}
               toggleEditor={toggleEditor}
               isEditor={isEditor}
