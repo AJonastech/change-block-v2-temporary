@@ -24,7 +24,7 @@ export default function NovelEditorAndDisplay({
   reportId,
   sectionId,
   className,
-  subSectionId
+  subSectionId,
 }: NovelEditorProps) {
   const [htmlContent, setHtmlContent] = useState(parseMKD(markupContent));
 
@@ -36,11 +36,9 @@ export default function NovelEditorAndDisplay({
 
   const { mutate: updateReport } = usePost({
     handleSuccess,
-    mutateFn: async (data: {
-      sub_section_data: string;
-    }) => {
+    mutateFn: async (data: { sub_section_data: string }) => {
       await editEmpaReport(reportId, sectionId, subSectionId, data);
-    }
+    },
   });
 
   const serializeToMarkdown = (editor: TipTapEditor) => {
@@ -58,8 +56,9 @@ export default function NovelEditorAndDisplay({
           onDebouncedUpdate={(editor?: TipTapEditor) => {
             const markdownContent = editor ? serializeToMarkdown(editor) : "";
             setHtmlContent(editor?.getHTML() as any);
+            console.log({ editorText: editor?.getText });
             // Send the markdown content to the server
-       
+
             updateReport({
               sub_section_data: markdownContent,
             });
