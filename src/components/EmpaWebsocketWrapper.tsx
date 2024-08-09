@@ -28,7 +28,7 @@ interface Data {
     date_created: string;
     date_updated: string;
     sections: Section[];
-    users: User[];
+    users: ReportUser[];
     invitations: any[];
     user_role: UserRole;
 }
@@ -46,11 +46,11 @@ interface Section {
 
 interface User {
     user_id: string;
-    report_id: string;
-    role: string;
-    empa_user_id: string;
-    user: User2;
-}
+    full_name: string;
+    email: string;
+    profile_image: string;
+    is_verified: boolean;
+  }
 
 interface User2 {
     full_name: string;
@@ -94,7 +94,7 @@ function EmpaWebsocketWrapper({
         }
     });
 
-    const setReportSteps = useReportStepsStore((state) => state.setReportSteps);
+    const {setReportSteps,setUsers} = useReportStepsStore()
 
     const connectionStatus = {
         [ReadyState.CONNECTING]: "Connecting",
@@ -127,7 +127,7 @@ function EmpaWebsocketWrapper({
                 })),
                 icon: () => <></>, // Add the icon property here
             }));
-
+            setUsers(data.users);
             setReportSteps(transformedSteps);
         }
     }, [lastJsonMessage, setReportSteps]);

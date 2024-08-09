@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -10,90 +11,54 @@ import {
 } from "@nextui-org/react";
 import { Avatar } from "@nextui-org/react";
 import { BiChevronDown } from "react-icons/bi";
-
-type Collaborator = {
-  name: string;
-  email: string;
-  role: string;
-  image: string;
-};
-
-const collaboratorsData: Collaborator[] = [
-  {
-    name: "Dorathy Aphonso",
-    email: "dorathy@example.com",
-    role: "Owner",
-    image: "/assets/dorathy.png",
-  },
-  {
-    name: "Emmanuelle Gates",
-    email: "emmanuelle@example.com",
-    role: "Reviewer",
-    image: "/assets/emmanuelle.svg",
-  },
-  {
-    name: "Rose Milner",
-    email: "rose@example.com",
-    role: "Editor",
-    image: "/assets/rose.svg",
-  },
-  {
-    name: "Martinez Emi",
-    email: "martinez@example.com",
-    role: "Reviewer",
-    image: "/assets/martinez.svg",
-  },
-  {
-    name: "Phil Oceans",
-    email: "phil@example.com",
-    role: "Editor",
-    image: "/assets/dorathy.png",
-  },
-  {
-    name: "Mary Green",
-    email: "mary@example.com",
-    role: "Editor",
-    image: "/assets/emmanuelle.svg",
-  },
-  {
-    name: "Marcus Alonso",
-    email: "marcus@example.com",
-    role: "Reviewer",
-    image: "/assets/martinez.svg",
-  },
-];
+import useReportStepsStore from "@/store/useReportStepsStore";
+import usePost from "@/hooks/usePostData";
+import { inviteUserToEmpa } from "@/actions/EmpaActions";
+import { toast } from "react-toastify";
 
 const roles = ["Owner", "Editor", "Reviewer", "Remove"];
 
-const AddCollaborator = () => {
-  const [collaborators, setCollaborators] =
-    useState<Collaborator[]>(collaboratorsData);
+const AddCollaborator = ({ reportId }: { reportId: string }) => {
   const [email, setEmail] = useState("");
+  const { users } = useReportStepsStore();
 
   const handleRoleChange = (index: number, role: string) => {
-    const updatedCollaborators = [...collaborators];
-    if (role === "Remove") {
-      updatedCollaborators.splice(index, 1);
-    } else {
-      updatedCollaborators[index].role = role;
-    }
-    setCollaborators(updatedCollaborators);
+    // Handle role change logic here
   };
 
-  const handleAddCollaborator = () => {
-    if (email) {
-      setCollaborators([
-        ...collaborators,
-        {
-          name: email,
-          email,
-          role: "Editor",
-          image: "https://via.placeholder.com/150",
-        },
-      ]);
-      setEmail("");
+  const handleInviteSuccess = (data: any) => {
+    toast.success(data.details);
+  };
+
+  const { mutate: handleInviteUser, isPending: isInvitingUser, isError, error } = usePost({
+    handleSuccess: handleInviteSuccess,
+    mutateFn: (data: { user_email: string; role: string }) =>
+      inviteUserToEmpa(reportId, data),
+  });
+
+  const inviteUser = async () => {
+    if (validateEmail(email)) {
+      handleInviteUser({
+        user_email: email,
+        role: "REVIEWER",
+      });
+      setEmail(""); // Clear the email input after sending the invite
+    } else {
+      toast.error("Please enter a valid email address.");
     }
   };
+
+  const validateEmail = (email: string) => {
+    const re =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message);
+    }
+  }, [isError]);
 
   return (
     <div className="w-full flex flex-col gap-8 pb-8 bg-white rounded">
@@ -102,23 +67,34 @@ const AddCollaborator = () => {
           Add Collaborator
         </h6>
       </div>
-      <div className="flex px-8">
+      <div className="flex gap-x-3 px-8">
+
         <Input
           placeholder="Enter Email Address"
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-100 placeholder:text-[18px] placeholder:leading-[25.2px] placeholder:font-bold  "
+
+          className="placeholder:text-lg placeholder:font-satoshi placeholder:text-grey-100 !text-grey-100 placeholder:text-[18px] placeholder:leading-[25.2px] placeholder:font-bold"
           classNames={{
-            input: ["bg-transparent"],
-            innerWrapper: "bg-transparent ",
-            inputWrapper: ["bg-transparent border-[1px] !h-20 py-5 px-8"],
+            input: ["bg-transparent !text-grey-100"],
+            innerWrapper: "bg-transparent !text-grey-100 ",
+            inputWrapper: ["bg-transparent !text-grey-100 border-[1px] py-5 px-8"],
           }}
           variant="bordered"
         />
+
+        <Button
+          className="!bg-primary text-white"
+          onClick={inviteUser}
+          isLoading={isInvitingUser}
+          isDisabled={!validateEmail(email) || isInvitingUser} // Disable button if email is invalid
+        >
+          {isInvitingUser ? "Inviting..." : "Invite"}
+        </Button>
       </div>
       <ul className=" flex flex-col gap-4 ">
-        {collaborators.map((collaborator, index) => (
+        {users.map((user, index) => (
           <li
             key={index}
             className="flex items-center justify-between px-8 hover:bg-gray-100 transition-all duration-200"
@@ -127,22 +103,22 @@ const AddCollaborator = () => {
               <Avatar
                 size="lg"
                 className="size-[52px]"
-                src={collaborator.image}
-                alt={collaborator.name}
+                src={user.user.profile_image}
+                alt={user.user.full_name}
               />
               <span className="ml-4 text-grey-700 font-bold text-lg">
-                {collaborator.name}
+                {user.user.full_name}
               </span>
             </div>
-            {collaborator.role === "Owner" ? (
-              <span className="border rounded-md px-4 py-1">
-                {collaborator.role}
+            {user.role === "OWNER" ? (
+              <span className="border capitalize rounded-md px-4 py-1">
+                {user.role}
               </span>
             ) : (
               <Dropdown>
                 <DropdownTrigger className="border rounded-lg px-4 py-1 cursor-pointer">
                   <div className="flex gap-1 items-center">
-                    <span className=""> {collaborator.role}</span>{" "}
+                    <span className=""> {user.role}</span>{" "}
                     <BiChevronDown color="#5B5D58" />
                   </div>
                 </DropdownTrigger>

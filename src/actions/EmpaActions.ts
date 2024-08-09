@@ -10,8 +10,8 @@ export async function getEmpaReport(id: string) {
   return await fetchData(`/v1/empa-reports/${id}`, "GET");
 }
 
-export async function uploadFile(data: any,onProgress: (progress: number) => void) {
-  return await fetchFile(`/v1/misc/upload`, "POST", data,onProgress);
+export async function uploadFile(data: any, onProgress: (progress: number) => void) {
+  return await fetchFile(`/v1/misc/upload`, "POST", data, onProgress);
 }
 
 export async function createEmpaReport(data: any) {
@@ -19,11 +19,16 @@ export async function createEmpaReport(data: any) {
 }
 
 
-export async function deleteEmpa(reportId:string){
-      return await fetchData(`/v1/empa-reports/${reportId}`, "DELETE");
+export async function deleteEmpa(reportId: string) {
+  return await fetchData(`/v1/empa-reports/${reportId}`, "DELETE");
 }
 
 
-export async function editEmpaReport(reportId:string,sectionId:string, subSectionId:string, data:any){
-return await fetchData(`/v1/empa-reports/${reportId}/section/${sectionId}/sub-section/${subSectionId}`, "PATCH",data)
+export async function editEmpaReport(reportId: string, sectionId: string, subSectionId: string, data: any) {
+  return await fetchData(`/v1/empa-reports/${reportId}/section/${sectionId}/sub-section/${subSectionId}`, "PATCH", data)
+}
+
+
+export async function inviteUserToEmpa(reportId: string, data: any) {
+  return await fetchData(`/v1/empa-reports/${reportId}/user`,"POST", data)
 }

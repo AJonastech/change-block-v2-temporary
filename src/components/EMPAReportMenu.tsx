@@ -108,7 +108,7 @@ const EMPAReportMenu = ({
                 className="min-w-[700px] w-[700px]"
                 buttonIcon={<AddUserIcon />}
               >
-                <AddCollaborator />
+                <AddCollaborator  reportId={reportId}/>
               </EMPAModal>
             </Tooltip>
             <Tooltip content="Open Chat">
