@@ -356,7 +356,7 @@ const EMPAGeneratorNav = ({
               Question Box
             </span>
           </Link>
-          <AddClient />
+          <AddClient reportId={id} />
         </div>
       </div>
     </DndProvider>
