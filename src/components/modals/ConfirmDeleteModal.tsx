@@ -45,38 +45,38 @@ const ConfirmDeleteModal = ({
   const handleDeleteDoccument = async () => {
     await new Promise((resolve) => setTimeout(resolve, 3000));
     try {
-      if (currentSubStep) {
-        const stepIndex = reportSteps.findIndex((step) =>
-          step.substeps.some(
-            (substep) => substep.title === currentSubStep.title
-          )
-        );
+      // if (currentSubStep) {
+      //   const stepIndex = reportSteps.findIndex((step) =>
+      //     step.substeps.some(
+      //       (substep) => substep.title === currentSubStep.title
+      //     )
+      //   );
 
-        if (stepIndex !== -1) {
-          deleteSubStep(stepIndex, data);
+      //   if (stepIndex !== -1) {
+      //     deleteSubStep(stepIndex, data);
 
-          // Navigate to the next item
-          const nextStepIndex = stepIndex % reportSteps.length;
-          const nextSubStep = reportSteps[nextStepIndex].substeps[1];
-          console.log({ nextSubStep });
-          if (nextSubStep) {
-            const nextPath = `/EMPA/${decodedSegment}?data=report&&section=${encodeURIComponent(
-              nextSubStep.title
-            )}`;
-            router.push(nextPath);
-          } else {
-            // Navigate to the next item
-            const nextStepIndex = stepIndex + (1 % reportSteps.length);
-            const nextSubStep = reportSteps[nextStepIndex].substeps[0];
-            const nextPath = `/EMPA/${
-              reportSteps[nextStepIndex].title
-            }?data=report&&section=${encodeURIComponent(nextSubStep.title)}`;
-            router.push(nextPath); // Fallback route
-          }
+      //     // Navigate to the next item
+      //     const nextStepIndex = stepIndex % reportSteps.length;
+      //     const nextSubStep = reportSteps[nextStepIndex].substeps[1];
+      //     console.log({ nextSubStep });
+      //     if (nextSubStep) {
+      //       const nextPath = `/EMPA/${decodedSegment}?data=report&&section=${encodeURIComponent(
+      //         nextSubStep.title
+      //       )}`;
+      //       router.push(nextPath);
+      //     } else {
+      //       // Navigate to the next item
+      //       const nextStepIndex = stepIndex + (1 % reportSteps.length);
+      //       const nextSubStep = reportSteps[nextStepIndex].substeps[0];
+      //       const nextPath = `/EMPA/${
+      //         reportSteps[nextStepIndex].title
+      //       }?data=report&&section=${encodeURIComponent(nextSubStep.title)}`;
+      //       router.push(nextPath); // Fallback route
+      //     }
 
           
-        }
-      }
+      //   }
+      // }
       await mutate(reportId)
       onConfirmClose();
       router.push(`/EMPA`);

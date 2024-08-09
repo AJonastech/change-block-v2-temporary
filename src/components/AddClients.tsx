@@ -6,11 +6,11 @@ import { BiPlus } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 import { useFetchData } from "@/hooks/useFetchData";
-import { getEmpaReport } from "@/actions/EmpaActions";
+import { getEmpaReport, getEmpaReports } from "@/actions/EmpaActions";
 import useReportStepsStore from "@/store/useReportStepsStore";
 
 function AddClient({ reportId }: { reportId?: string }) {
-  const clients = ["New Age", "Blue Oceans", "Bitter Leaf", "New Age"];
+ 
   const {
     data: report,
     isError,
@@ -18,6 +18,10 @@ function AddClient({ reportId }: { reportId?: string }) {
     error,
   } = useFetchData([`empa-report`], () => getEmpaReport(reportId as string));
 
+  const {
+    data: reports,
+   
+  } = useFetchData(["empa-reports"], () => getEmpaReports());
   return (
     <Popover className="w-full" placement="top">
       <PopoverTrigger>
@@ -32,13 +36,13 @@ function AddClient({ reportId }: { reportId?: string }) {
       </PopoverTrigger>
       <PopoverContent className="w-full border-0 p-0 shadow-none ">
         <ul className="w-full border-[1px] py-1 bg-grey-10  min-w-[255px] rounded-xl overflow-hidden">
-          {clients.map((client, index) => (
+          {reports?.map((report:any, index:number) => (
             <li
               key={index}
               className="flex justify-between border-[#C1C2C0]/50  border-0 items-center p-5 border-b-[1px]  last:border-b-0 cursor-pointer hover:bg-white"
             >
               <span className="font-satoshi text-[15px] leading-[21px] text-grey-300">
-                {client}
+                {report.client_name}
               </span>
               <FaArrowRight
                 strokeWidth={0.2}
